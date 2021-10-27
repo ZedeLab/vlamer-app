@@ -2,9 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Provider as PageProvider, Headline } from "react-native-paper";
-import Login from "./src/components/screens";
+import { NavigationContainer } from "@react-navigation/native";
+
 import * as Front from "expo-font";
 import AppLoading from "expo-app-loading";
+import RouteStack from "./src/components/routes";
 
 const fetchFonts = () => {
   return Front.loadAsync({
@@ -30,10 +32,9 @@ export default function App() {
 
   return (
     <PageProvider>
-      <View style={styles.container}>
-        <Login />
-        <StatusBar style='auto' />
-      </View>
+      <NavigationContainer>
+        <RouteStack />
+      </NavigationContainer>
     </PageProvider>
   );
 }
