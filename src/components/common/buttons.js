@@ -28,10 +28,12 @@ const defaultStyles = StyleSheet.create({
     borderRadius: 15,
   },
   buttonText: {
-    fontSize: 18,
+    fontFamily: "courier-prime",
+    fontSize: 15,
+    letterSpacing: 2,
     color: "#fff",
-    fontWeight: "bold",
+
     alignSelf: "center",
-    textTransform: "uppercase",
+    textTransform: "capitalize",
   },
 });

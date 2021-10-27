@@ -29,5 +29,6 @@ const defaultStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     fontSize: 16,
+    fontFamily: "courier-prime",
   },
 });
