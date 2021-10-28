@@ -3,6 +3,7 @@ import { StyleSheet, View, ImageBackground } from "react-native";
 import { Button, Subheading } from "react-native-paper";
 import { PrimaryButton } from "../common/buttons";
 import { InputText } from "../common/inputs";
+import { PageAux } from "../hoc/PageAux";
 
 class Login extends Component {
   constructor(props) {
@@ -12,18 +13,18 @@ class Login extends Component {
       password: "",
     };
     this.image = {
-      uri: "https://d33wubrfki0l68.cloudfront.net/3697f8a424a77e6e5b422007590aedb27abca140/2cad2/static/constellations-4eee0ff82aba4d347fc46bb276834140.jpg",
+      uri: "https://images.unsplash.com/photo-1567201864585-6baec9110dac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MTZ8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80",
     };
   }
 
   render() {
     return (
-      <ImageBackground
-        source={this.image}
-        resizeMode='cover'
-        style={styles.container}
-      >
-        <View style={styles.container}>
+      <PageAux>
+        <ImageBackground
+          source={this.image}
+          resizeMode='cover'
+          style={styles.container}
+        >
           <Subheading style={styles.text}> Welcome back! </Subheading>
           <InputText
             style={styles.item}
@@ -50,8 +51,8 @@ class Login extends Component {
           >
             Login
           </PrimaryButton>
-        </View>
-      </ImageBackground>
+        </ImageBackground>
+      </PageAux>
     );
   }
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
+import theme from "../../utils/theme";
 
 export const InputText = (props) => {
   const { style, children, ...restProps } = props;
@@ -19,15 +20,15 @@ export const InputText = (props) => {
 
 const defaultStyles = StyleSheet.create({
   textInput: {
-    margin: 15,
-    paddingTop: 15,
-    paddingBottom: 15,
-    backgroundColor: "#fff",
+    margin: theme.spacing(1),
+    padding: theme.spacing(0.7),
+
+    backgroundColor: theme.colors.background,
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 15,
+    borderWidth: theme.spacing(0.01),
+    borderRadius: theme.spacing(1),
     fontSize: 16,
     fontFamily: "courier-prime",
   },

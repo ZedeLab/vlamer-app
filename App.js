@@ -6,7 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import * as Front from "expo-font";
 import AppLoading from "expo-app-loading";
-import RouteStack from "./src/components/routes";
+import RouteStack from "./src/routes";
+import theme from "./src/utils/theme";
 
 const fetchFonts = () => {
   return Front.loadAsync({
@@ -31,7 +32,7 @@ export default function App() {
   }
 
   return (
-    <PageProvider>
+    <PageProvider theme={theme}>
       <NavigationContainer>
         <RouteStack />
       </NavigationContainer>

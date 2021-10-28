@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import theme from "../../utils/theme";
 
 export const PrimaryButton = ({ style, children, ...restProps }) => {
   return (
@@ -18,13 +19,12 @@ const defaultStyles = StyleSheet.create({
     alignSelf: "center",
     width: "50%",
     elevation: 8,
-    backgroundColor: "#009688",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.spacing(1),
+    paddingVertical: theme.spacing(1),
+    borderColor: theme.colors.primary,
 
-    borderColor: "#009688",
-    borderWidth: 1,
+    margin: theme.spacing(1),
     borderRadius: 15,
   },
   buttonText: {
