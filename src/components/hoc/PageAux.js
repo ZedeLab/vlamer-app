@@ -9,7 +9,7 @@ export const PageAux = (props) => {
   return (
     <View {...restProps} style={{ ...style, ...styles.container }}>
       {!fullScreen && <Header />}
-      {children}
+      <View style={styles.mainScreen}>{children}</View>
       {!fullScreen && <Footer />}
     </View>
   );
@@ -21,6 +21,10 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     justifyContent: "center",
     backgroundColor: theme.colors.background,
+  },
+  mainScreen: {
+    padding: theme.spacing(1),
+    overflow: "hidden",
   },
 });
 

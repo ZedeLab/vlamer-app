@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     position: "absolute",
+    zIndex: 1000,
     left: 0,
     right: 0,
     bottom: 0,

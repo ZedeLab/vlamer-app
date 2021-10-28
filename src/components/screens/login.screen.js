@@ -19,7 +19,7 @@ class Login extends Component {
 
   render() {
     return (
-      <PageAux fullScreen>
+      <View style={styles.container}>
         <ImageBackground
           source={this.image}
           resizeMode='cover'
@@ -52,7 +52,7 @@ class Login extends Component {
             Login
           </PrimaryButton>
         </ImageBackground>
-      </PageAux>
+      </View>
     );
   }
 }
