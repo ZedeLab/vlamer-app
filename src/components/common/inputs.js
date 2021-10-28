@@ -7,6 +7,7 @@ export const InputText = (props) => {
   return (
     <TextInput
       //   inlineImageLeft={<TextInput.Icon name='eye' />}
+
       mode='outlined'
       placeholder=''
       autoComplete='password'

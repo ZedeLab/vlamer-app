@@ -1,16 +1,21 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
 import theme from "../../utils/theme";
 import Header from "../sections/Header";
 import Footer from "../sections/Footer";
 
-export const PageAux = (props) => {
+export const FullscreenAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;
   return (
     <View {...restProps} style={{ ...style, ...styles.container }}>
-      <Header />
-      <View style={styles.mainScreen}>{children}</View>
-      <Footer />
+      <SafeAreaView style={styles.top}>
+        <StatusBar
+          animated={true}
+          backgroundColor={theme.colors.background}
+          barStyle='dark-content'
+        />
+      </SafeAreaView>
+      <View style={styles.container}>{children}</View>
     </View>
   );
 };
@@ -22,10 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: theme.colors.background,
   },
-  mainScreen: {
-    padding: theme.spacing(1),
-    overflow: "hidden",
-  },
 });
 
-export default PageAux;
+export default FullscreenAux;

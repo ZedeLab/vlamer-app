@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ImageBackground } from "react-native";
-import { Button, Subheading } from "react-native-paper";
-import { PrimaryButton } from "../common/buttons";
-import { InputText } from "../common/inputs";
+
+import { FullscreenAux } from "../hoc/FullscreenAux";
 import { PageAux } from "../hoc/PageAux";
+import { LogInForm } from "../sections/forms/login";
 
 class Login extends Component {
   constructor(props) {
@@ -19,40 +19,15 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <FullscreenAux>
         <ImageBackground
           source={this.image}
           resizeMode='cover'
           style={styles.container}
         >
-          <Subheading style={styles.text}> Welcome back! </Subheading>
-          <InputText
-            style={styles.item}
-            placeholder='username or email'
-            value={this.state.user}
-            onChangeText={(newValue) =>
-              this.setState({ ...this.state, user: newValue })
-            }
-          />
-          <InputText
-            style={styles.item}
-            placeholder='password'
-            secureTextEntry={true}
-            value={this.state.password}
-            onChangeText={(newValue) =>
-              this.setState({ ...this.state, password: newValue })
-            }
-          />
-
-          <PrimaryButton
-            icon='account'
-            style={styles.item}
-            onPress={() => this.props.navigation.navigate("Home")}
-          >
-            Login
-          </PrimaryButton>
+          <LogInForm navigation={this.props.navigation} />
         </ImageBackground>
-      </View>
+      </FullscreenAux>
     );
   }
 }
