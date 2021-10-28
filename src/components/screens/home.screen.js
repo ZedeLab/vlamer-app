@@ -2,16 +2,17 @@ import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { Subheading } from "react-native-paper";
 import { PrimaryButton } from "../common/buttons";
+import PageAux from "../hoc/PageAux";
 
 class Home extends Component {
   render() {
     return (
-      <View style={styles.container}>
+      <PageAux>
         <Subheading style={styles.text}> Home Page </Subheading>
         <PrimaryButton onPress={() => this.props.navigation.navigate("Login")}>
           Logout
         </PrimaryButton>
-      </View>
+      </PageAux>
     );
   }
 }

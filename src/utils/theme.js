@@ -9,6 +9,8 @@ export default theme = {
     accent: "#f1c40f",
     background: "#F7F7F9",
     divider: "#D8D9D4",
+    textPrimary: "#F7F7F9",
+    textSecondary: "#0E141A",
   },
   spacing: (size) => size * 16,
 };
