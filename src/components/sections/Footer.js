@@ -7,25 +7,31 @@ import { Ionicons } from "@expo/vector-icons";
 const Footer = () => (
   <Appbar style={{ ...styles.bottom, ...styles.footer }}>
     <Ionicons
-      size={24}
+      size={20}
       style={styles.icon}
       name='home'
       onPress={() => console.log("Pressed delete")}
     />
     <Ionicons
-      size={24}
+      size={20}
       style={styles.icon}
       name='search'
       onPress={() => console.log("Pressed delete")}
     />
     <Ionicons
-      size={24}
+      size={22}
+      style={styles.icon}
+      name='add-circle-outline'
+      onPress={() => console.log("Pressed delete")}
+    />
+    <Ionicons
+      size={20}
       style={styles.icon}
       name='notifications'
       onPress={() => console.log("Pressed delete")}
     />
     <Ionicons
-      size={24}
+      size={20}
       style={styles.icon}
       name='settings'
       onPress={() => console.log("Pressed delete")}
@@ -37,12 +43,13 @@ export default Footer;
 
 const styles = StyleSheet.create({
   footer: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(0.6),
     paddingHorizontal: theme.spacing(1),
     alignItems: "center",
     justifyContent: "space-between",
     alignItems: "flex-end",
     backgroundColor: theme.colors.background,
+    ...theme.shadows[2],
   },
   bottom: {
     position: "absolute",
@@ -52,6 +59,6 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   icon: {
-    color: theme.colors.textSecondary,
+    color: theme.colors.textDisabled,
   },
 });

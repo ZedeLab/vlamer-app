@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import theme from "../../utils/theme";
-import Header from "../common/Header";
-import Footer from "../common/Footer";
+import Header from "../sections/Header";
+import Footer from "../sections/Footer";
 
 export const PageAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;

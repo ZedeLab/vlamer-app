@@ -4,6 +4,7 @@ import { StatusBar, StyleSheet } from "react-native";
 import theme from "../../utils/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { MainLogo } from "../common/logos";
 
 const Header = () => (
   <SafeAreaView style={styles.top}>
@@ -13,13 +14,7 @@ const Header = () => (
       barStyle='dark-content'
     />
     <Appbar style={styles.header}>
-      <Ionicons
-        size={24}
-        style={styles.menuIcon}
-        color='black'
-        name='ios-menu-outline'
-        onPress={() => console.log("Pressed delete")}
-      />
+      <MainLogo />
       <Avatar.Image
         style={styles.avatar}
         size={34}
@@ -34,12 +29,14 @@ export default Header;
 const styles = StyleSheet.create({
   header: {
     // height: theme.spacing(5),
-
+    ...theme.shadows[0],
     justifyContent: "space-between",
     alignItems: "flex-end",
     backgroundColor: theme.colors.background,
   },
   top: {
+    backgroundColor: theme.colors.background,
+    ...theme.shadows[2],
     position: "absolute",
     zIndex: 1000,
     left: 0,
@@ -48,6 +45,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     margin: theme.spacing(0.5),
+    ...theme.shadows[2],
   },
   menuIcon: {
     color: theme.colors.textSecondary,
