@@ -21,14 +21,15 @@ const defaultStyles = StyleSheet.create({
     elevation: 8,
     backgroundColor: theme.colors.primary,
     borderRadius: theme.spacing(1),
-    paddingVertical: theme.spacing(1),
+    paddingVertical: theme.spacing(0.7),
     borderColor: theme.colors.primary,
 
     margin: theme.spacing(1),
-    borderRadius: 15,
+    borderRadius: theme.spacing(1),
+    ...theme.shadows[2],
   },
   buttonText: {
-    fontFamily: "courier-prime",
+    fontFamily: "openSans",
     fontSize: 15,
     letterSpacing: 2,
     color: "#fff",

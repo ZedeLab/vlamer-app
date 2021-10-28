@@ -5,10 +5,12 @@ export default theme = {
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
+    common: "#fff",
     primary: "#0E141A",
     primary_light: "#223140",
     accent: "#36B8A0",
     background: "#F7F7F9",
+    paper: "#EAEAEB",
     divider: "#D8D9D4",
     textPrimary: "#F7F7F9",
     textSecondary: "#0E141A",

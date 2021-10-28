@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     height: theme.spacing(2),
   },
   logoText: {
-    fontFamily: "courier-prime",
+    fontFamily: "openSans",
     fontSize: theme.spacing(1.1),
     textTransform: "capitalize",
     paddingHorizontal: theme.spacing(1),

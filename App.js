@@ -11,10 +11,10 @@ import theme from "./src/utils/theme";
 
 const fetchFonts = () => {
   return Front.loadAsync({
-    "courier-prime": require("./assets/fonts/Courier_Prime/CourierPrime-Regular.ttf"),
-    "courier-prime-bold": require("./assets/fonts/Courier_Prime/CourierPrime-Bold.ttf"),
+    openSans: require("./assets/fonts/OpenSans/OpenSans-Regular.ttf"),
+    "openSans-bold": require("./assets/fonts/OpenSans/OpenSans-Bold.ttf"),
     "playfair-display": require("./assets/fonts/Playfair_Display/PlayfairDisplaySC-Regular.ttf"),
-    "playfair-display-bold": require("./assets/fonts/Courier_Prime/CourierPrime-Bold.ttf"),
+    "playfair-display-bold": require("./assets/fonts/Playfair_Display/PlayfairDisplaySC-Bold.ttf"),
   });
 };
 

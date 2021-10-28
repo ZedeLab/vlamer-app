@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
-import { Button, Subheading } from "react-native-paper";
+import { Button, Subheading, Surface } from "react-native-paper";
 import { PrimaryButton } from "../../../common/buttons";
 import { InputText } from "../../../common/inputs";
 import * as formikHelpers from "./__formik-helper";
@@ -15,7 +15,7 @@ export const LogInForm = ({ navigation }) => {
       validationSchema={formikHelpers.validationSchema}
     >
       {({ handleChange, values, handleSubmit, errors }) => (
-        <View>
+        <Surface style={styles.container}>
           {errors[formikHelpers.fieldNames.email] && (
             <Text style={styles.errorText}>
               {errors[formikHelpers.fieldNames.email]}
@@ -23,7 +23,8 @@ export const LogInForm = ({ navigation }) => {
           )}
           <InputText
             style={styles.item}
-            placeholder='username or email'
+            label={formikHelpers.fieldNames.email}
+            placeholder='jone@doe.com'
             onChangeText={handleChange(formikHelpers.fieldNames.email)}
             value={values[formikHelpers.fieldNames.email]}
           />
@@ -34,7 +35,8 @@ export const LogInForm = ({ navigation }) => {
           )}
           <InputText
             style={styles.item}
-            placeholder='password'
+            label={formikHelpers.fieldNames.password}
+            placeholder='min 6 characters'
             secureTextEntry={true}
             onChangeText={handleChange(formikHelpers.fieldNames.password)}
             value={values[formikHelpers.fieldNames.password]}
@@ -47,23 +49,17 @@ export const LogInForm = ({ navigation }) => {
           >
             Login
           </PrimaryButton>
-        </View>
+        </Surface>
       )}
     </Formik>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  container: {
+    paddingVertical: theme.spacing(1),
   },
+
   errorText: {
     fontSize: theme.spacing(0.8),
     color: theme.colors.error,
