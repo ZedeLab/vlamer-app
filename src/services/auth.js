@@ -62,8 +62,24 @@ function useProvideAuth() {
     }
   };
 
+  const signUpWithEmail = async (email, password) => {
+    try {
+      const account = await auth().createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      console.log(account);
+      return account;
+    } catch (error) {
+      // dispatch(setSignInError('Wrong credentials'));
+      // setLoading(false);
+      console.log("Wrong credentials: ", error);
+    }
+  };
+
   return {
     user,
+    signUpWithEmail,
     signInWithEmail,
     signInWithFacebook,
     signInWithGoogle,

@@ -22,7 +22,7 @@ class Register extends Component {
       <FullscreenAux>
         <View style={styles.container}>
           <LottieView
-            source={require("../../../assets/lottie/coin_hand.json")}
+            source={require("../../../assets/lottie/wave.json")}
             autoPlay
             loop
             style={styles.waveAnim}
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   waveAnim: {
-    // paddingTop: theme.spacing(6),
-    width: "50%",
+    marginTop: theme.spacing(1),
+    width: "70%",
     alignSelf: "center",
   },
 });

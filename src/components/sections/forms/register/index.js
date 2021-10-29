@@ -10,11 +10,24 @@ import { InputText } from "../../../common/inputs";
 import * as formikHelpers from "./__formik-helper";
 import { StyleSheet, View, Text } from "react-native";
 import theme from "../../../../utils/theme";
+import { useAuth } from "../../../../services/auth";
 
 export const RegisterForm = ({ navigation }) => {
+  const { signUpWithEmail } = useAuth();
+
+  const onSubmitHandler = async (values, actions) => {
+    const {
+      [formikHelpers.fieldNames.email]: email,
+      [formikHelpers.fieldNames.password]: password,
+    } = values;
+    console.log(values);
+    const user = await signUpWithEmail(email, password);
+    console.log(user);
+  };
+
   return (
     <Surface style={styles.container}>
-      {/* <FacebookLoginButton
+      <FacebookLoginButton
         style={styles.item}
         onPress={() => console.log("Facebook login")}
       ></FacebookLoginButton>
@@ -28,11 +41,11 @@ export const RegisterForm = ({ navigation }) => {
         <Divider style={styles.divider} />
         <Text> Or </Text>
         <Divider style={styles.divider} />
-      </View> */}
+      </View>
 
       <Formik
         initialValues={formikHelpers.initialValues}
-        onSubmit={(values, actions) => navigation.navigate("Home")}
+        onSubmit={onSubmitHandler}
         validationSchema={formikHelpers.validationSchema}
       >
         {({ handleChange, values, handleSubmit, errors }) => (
@@ -44,7 +57,7 @@ export const RegisterForm = ({ navigation }) => {
             )}
             <InputText
               label={formikHelpers.fieldNames.name}
-              placeholder='jone@doe.com'
+              placeholder='Jone Doe'
               onChangeText={handleChange(formikHelpers.fieldNames.name)}
               value={values[formikHelpers.fieldNames.name]}
             />
@@ -55,22 +68,11 @@ export const RegisterForm = ({ navigation }) => {
             )}
             <InputText
               label={formikHelpers.fieldNames.email}
-              placeholder='min 6 characters'
-              secureTextEntry={true}
+              placeholder='jone@doe.com'
               onChangeText={handleChange(formikHelpers.fieldNames.email)}
               value={values[formikHelpers.fieldNames.email]}
             />
-            {errors[formikHelpers.fieldNames.gender] && (
-              <Text style={styles.errorText}>
-                {errors[formikHelpers.fieldNames.gender]}
-              </Text>
-            )}
-            <InputText
-              label={formikHelpers.fieldNames.gender}
-              placeholder='jone@doe.com'
-              onChangeText={handleChange(formikHelpers.fieldNames.gender)}
-              value={values[formikHelpers.fieldNames.gender]}
-            />
+
             {errors[formikHelpers.fieldNames.password] && (
               <Text style={styles.errorText}>
                 {errors[formikHelpers.fieldNames.password]}
@@ -78,7 +80,8 @@ export const RegisterForm = ({ navigation }) => {
             )}
             <InputText
               label={formikHelpers.fieldNames.password}
-              placeholder='jone@doe.com'
+              placeholder='min 6 character'
+              secureTextEntry={true}
               onChangeText={handleChange(formikHelpers.fieldNames.password)}
               value={values[formikHelpers.fieldNames.password]}
             />
@@ -89,7 +92,8 @@ export const RegisterForm = ({ navigation }) => {
             )}
             <InputText
               label={formikHelpers.fieldNames.confirmPassword}
-              placeholder='jone@doe.com'
+              placeholder='min 6 characterAbel'
+              secureTextEntry={true}
               onChangeText={handleChange(
                 formikHelpers.fieldNames.confirmPassword
               )}
