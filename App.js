@@ -8,6 +8,7 @@ import * as Front from "expo-font";
 import AppLoading from "expo-app-loading";
 import RouteStack from "./src/routes";
 import theme from "./src/utils/theme";
+import { AuthContext, AuthProvider } from "./src/services/auth";
 
 const fetchFonts = () => {
   return Front.loadAsync({
@@ -33,9 +34,11 @@ export default function App() {
 
   return (
     <PageProvider theme={theme}>
-      <NavigationContainer>
-        <RouteStack />
-      </NavigationContainer>
+      <AuthProvider>
+        <NavigationContainer>
+          <RouteStack />
+        </NavigationContainer>
+      </AuthProvider>
     </PageProvider>
   );
 }

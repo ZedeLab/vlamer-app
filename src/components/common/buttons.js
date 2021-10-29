@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, TouchableHighlight, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import theme from "../../utils/theme";
 import { Ionicons } from "@expo/vector-icons";
 
 export const PrimaryButton = ({ style, children, ...restProps }) => {
   return (
-    <Button
+    <TouchableHighlight
       {...restProps}
       style={{
         ...style,
@@ -15,31 +15,39 @@ export const PrimaryButton = ({ style, children, ...restProps }) => {
       }}
     >
       <Text style={defaultStyles.buttonText}>{children}</Text>
-    </Button>
+    </TouchableHighlight>
   );
 };
 
 export const FacebookLoginButton = ({ style, ...restProps }) => {
   return (
-    <Button
+    <TouchableHighlight
       {...restProps}
       style={{ ...style, ...defaultStyles.button, ...defaultStyles.facebook }}
     >
-      <Ionicons size={20} style={defaultStyles.icon} name='logo-facebook' />
-      <Text style={defaultStyles.buttonText}>Login with Facebook</Text>
-    </Button>
+      <View style={defaultStyles.buttonContent}>
+        <Ionicons size={20} style={defaultStyles.icon} name='logo-facebook' />
+        <Text style={defaultStyles.buttonText}>Login with Facebook</Text>
+      </View>
+    </TouchableHighlight>
   );
 };
 
 export const GoogleLoginButton = ({ style, ...restProps }) => {
   return (
-    <Button
+    <TouchableHighlight
       {...restProps}
       style={{ ...style, ...defaultStyles.button, ...defaultStyles.google }}
     >
-      <Ionicons size={20} style={defaultStyles.icon_dark} name='logo-google' />
-      <Text style={defaultStyles.buttonText_dark}>Login with Google</Text>
-    </Button>
+      <View style={defaultStyles.buttonContent}>
+        <Ionicons
+          size={20}
+          style={defaultStyles.icon_dark}
+          name='logo-google'
+        />
+        <Text style={defaultStyles.buttonText_dark}>Login with Google</Text>
+      </View>
+    </TouchableHighlight>
   );
 };
 
@@ -52,7 +60,13 @@ const defaultStyles = StyleSheet.create({
     borderRadius: theme.spacing(1),
     margin: theme.spacing(1),
     borderRadius: theme.spacing(1),
+    paddingVertical: theme.spacing(0.3),
     ...theme.shadows[1],
+  },
+  buttonContent: {
+    alignSelf: "center",
+    flexDirection: "row",
+    paddingVertical: theme.spacing(0.3),
   },
   facebook: {
     backgroundColor: "#4267b2",
@@ -75,6 +89,7 @@ const defaultStyles = StyleSheet.create({
     letterSpacing: 2,
     alignSelf: "center",
     textTransform: "capitalize",
+    paddingHorizontal: theme.spacing(1),
   },
   buttonText_dark: {
     fontFamily: "openSans",
@@ -83,6 +98,7 @@ const defaultStyles = StyleSheet.create({
     letterSpacing: 2,
     alignSelf: "center",
     textTransform: "capitalize",
+    paddingHorizontal: theme.spacing(1),
   },
   icon: {
     color: theme.colors.textPrimary,

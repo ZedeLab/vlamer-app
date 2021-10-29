@@ -10,18 +10,37 @@ import { InputText } from "../../../common/inputs";
 import * as formikHelpers from "./__formik-helper";
 import { StyleSheet, View, Text } from "react-native";
 import theme from "../../../../utils/theme";
+import { useAuth } from "../../../../services/auth";
 
 export const LogInForm = ({ navigation }) => {
+  const { signInWithFacebook, signInWithEmail, signInWithGoogle } = useAuth();
+
+  const googleAuthHandler = async () => {
+    const user = await signInWithGoogle();
+    console.log(user);
+  };
+
+  const facebookAuthHandler = () => {
+    signInWithFacebook();
+  };
+
+  const onSubmitHandler = async (values, actions) => {
+    const {
+      [formikHelpers.fieldNames.email]: email,
+      [formikHelpers.fieldNames.password]: password,
+    } = values;
+    console.log(values);
+    const user = await signInWithEmail(email, password);
+    console.log(user);
+  };
+
   return (
     <Surface style={styles.container}>
       <FacebookLoginButton
         style={styles.item}
-        onPress={() => console.log("Facebook login")}
+        onPress={facebookAuthHandler}
       ></FacebookLoginButton>
-      <GoogleLoginButton
-        style={styles.item}
-        onPress={() => console.log("Google login")}
-      >
+      <GoogleLoginButton style={styles.item} onPress={googleAuthHandler}>
         Login with Google
       </GoogleLoginButton>
       <View style={styles.dividersContainer}>
@@ -32,7 +51,7 @@ export const LogInForm = ({ navigation }) => {
 
       <Formik
         initialValues={formikHelpers.initialValues}
-        onSubmit={(values, actions) => navigation.navigate("Home")}
+        onSubmit={onSubmitHandler}
         validationSchema={formikHelpers.validationSchema}
       >
         {({ handleChange, values, handleSubmit, errors }) => (
