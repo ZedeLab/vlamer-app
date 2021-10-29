@@ -6,8 +6,9 @@ import { FullscreenAux } from "../hoc/FullscreenAux";
 import { PageAux } from "../hoc/PageAux";
 import { LogInForm } from "../sections/forms/login";
 import theme from "../../utils/theme";
+import { RegisterForm } from "../sections/forms/register";
 
-class Login extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,12 +22,12 @@ class Login extends Component {
       <FullscreenAux>
         <View style={styles.container}>
           <LottieView
-            source={require("../../../assets/lottie/bot.json")}
+            source={require("../../../assets/lottie/coin_hand.json")}
             autoPlay
             loop
-            style={styles.botAnim}
+            style={styles.waveAnim}
           />
-          <LogInForm navigation={this.props.navigation} />
+          <RegisterForm navigation={this.props.navigation} />
         </View>
       </FullscreenAux>
     );
@@ -39,11 +40,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "transparent",
   },
-  botAnim: {
-    marginTop: theme.spacing(2),
-    width: "60%",
+  waveAnim: {
+    // paddingTop: theme.spacing(6),
+    width: "50%",
     alignSelf: "center",
   },
 });
 
-export default Login;
+export default Register;
