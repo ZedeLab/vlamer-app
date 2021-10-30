@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ImageBackground,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from "react-native";
 import LottieView from "lottie-react-native";
 
 import { FullscreenAux } from "../hoc/FullscreenAux";
@@ -22,12 +30,16 @@ class Register extends Component {
       <FullscreenAux>
         <View style={styles.container}>
           <LottieView
-            source={require("../../../assets/lottie/wave.json")}
+            source={require("../../../assets/lottie/bot2.json")}
             autoPlay
             loop
             style={styles.waveAnim}
           />
-          <RegisterForm navigation={this.props.navigation} />
+          <KeyboardAvoidingView behavior='position'>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <RegisterForm navigation={this.props.navigation} />
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </View>
       </FullscreenAux>
     );
@@ -42,7 +54,7 @@ const styles = StyleSheet.create({
   },
   waveAnim: {
     marginTop: theme.spacing(1),
-    width: "70%",
+    width: "50%",
     alignSelf: "center",
   },
 });

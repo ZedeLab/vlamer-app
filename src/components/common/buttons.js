@@ -81,6 +81,7 @@ const defaultStyles = StyleSheet.create({
   primaryButton: {
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,
+    paddingVertical: theme.spacing(0.8),
   },
   buttonText: {
     fontFamily: "openSans",

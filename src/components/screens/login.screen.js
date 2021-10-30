@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import LottieView from "lottie-react-native";
 
 import { FullscreenAux } from "../hoc/FullscreenAux";
@@ -26,7 +34,12 @@ class Login extends Component {
             loop
             style={styles.botAnim}
           />
-          <LogInForm navigation={this.props.navigation} />
+
+          <KeyboardAvoidingView behavior='position'>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <LogInForm navigation={this.props.navigation} />
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </View>
       </FullscreenAux>
     );

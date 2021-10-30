@@ -1,14 +1,31 @@
-import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import theme from "../../utils/theme";
 
 export const InputText = (props) => {
   const { style, label, children, ...restProps } = props;
+
+  const [keyBoardShowing, setKeyBoardShowing] = useState(false);
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidShow", () => setKeyBoardShowing(true));
+    Keyboard.addListener("keyboardDidHide", () => setKeyBoardShowing(false));
+  }, []);
+
   return (
     <View style={defaultStyles.container}>
       <Text style={defaultStyles.label}> {label} </Text>
       <TextInput
-        autoComplete='password'
+        // keyboardShouldPersistTaps={false}
         {...restProps}
         style={{ ...defaultStyles.textInput, ...style }}
       >
@@ -21,6 +38,11 @@ export const InputText = (props) => {
 const defaultStyles = StyleSheet.create({
   container: {
     paddingHorizontal: theme.spacing(1),
+  },
+  inner: {
+    padding: 24,
+    flex: 1,
+    justifyContent: "space-around",
   },
   textInput: {
     padding: theme.spacing(0.5),
