@@ -30,8 +30,11 @@ export const LogInForm = ({ navigation }) => {
       [formikHelpers.fieldNames.password]: password,
     } = values;
     console.log(values);
-    const user = await signInWithEmail(email, password);
-    console.log(user);
+    const account = await signInWithEmail(email, password);
+
+    if (account) {
+      navigation.navigate("Home");
+    }
   };
 
   return (
