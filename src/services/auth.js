@@ -12,7 +12,12 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Google from "expo-google-app-auth";
 import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
 import { addNewUser, getUserByEmail } from "./db";
-import { selectError, notifyError, notifyErrorResolved } from "../store/errors";
+import { selectError, notifyError } from "../store/errors";
+import {
+  notifyLoadingFinish,
+  notifyLoadingStart,
+  selectLoading,
+} from "../store/loading";
 
 const authContext = createContext();
 
@@ -27,15 +32,17 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const errors = useSelector(selectError);
+  const loading = useSelector(selectLoading);
+
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  console.log(errors);
+
   const signInWithFacebook = () => {
     console.log("Sing in with Facebook");
   };
 
   const signInWithGoogle = async () => {
+    dispatch(notifyLoadingStart({ type: "auth" }));
     try {
       const result = await Google.logInAsync({
         androidClientId: GOOGLE_ANDROID_CLIENT_ID,
@@ -46,12 +53,15 @@ function useProvideAuth() {
         const { email } = googleAccount.user;
 
         const account = await getUserByEmail(email);
+        dispatch(notifyLoadingFinish());
         return account;
       } else {
-        notifyError({
-          type: "auth",
-          message: "Problem authenticating your google account",
-        });
+        dispatch(
+          notifyError({
+            type: "auth",
+            message: "Problem authenticating your google account",
+          })
+        );
       }
     } catch (error) {
       dispatch(
@@ -61,14 +71,18 @@ function useProvideAuth() {
         })
       );
     }
+    dispatch(notifyLoadingFinish());
   };
 
   const signInWithEmail = async (email, password) => {
+    dispatch(notifyLoadingStart({ type: "auth" }));
     try {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
+      dispatch(notifyLoadingFinish());
       return account;
     } catch (error) {
+      dispatch(notifyLoadingFinish());
       dispatch(
         notifyError({
           type: "auth",
@@ -79,6 +93,7 @@ function useProvideAuth() {
   };
 
   const signUpWithEmail = async (firstName, lastName, email, password) => {
+    dispatch(notifyLoadingStart({ type: "auth" }));
     try {
       const auth = getAuth();
       const account = await createUserWithEmailAndPassword(
@@ -93,12 +108,19 @@ function useProvideAuth() {
         email,
       });
 
+      dispatch(notifyLoadingFinish());
       if (newAccount) return newAccount;
       else {
         console.log("Problem adding account: ", error);
       }
     } catch (error) {
-      console.log("Wrong credentials: ", error);
+      dispatch(
+        notifyError({
+          type: "auth",
+          message: "Account already exist",
+        })
+      );
+      dispatch(notifyLoadingFinish());
     }
   };
 

@@ -14,24 +14,23 @@ import { FullscreenAux } from "../hoc/FullscreenAux";
 import { PageAux } from "../hoc/PageAux";
 import { LogInForm } from "../sections/forms/login";
 import theme from "../../utils/theme";
+import { LottieAnimation } from "../common/animations";
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: "",
-      password: "",
-    };
   }
 
   render() {
     return (
       <FullscreenAux>
         <View style={styles.container}>
-          <LottieView
-            source={require("../../../assets/lottie/bot.json")}
-            autoPlay
-            loop
+          <LottieAnimation
+            src={require("../../../assets/lottie/bot.json")}
+            loadFallBack={{
+              type: "auth",
+              src: require("../../../assets/lottie/wave.json"),
+            }}
             style={styles.botAnim}
           />
 

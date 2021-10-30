@@ -14,24 +14,20 @@ import theme from "../../utils/theme";
 export const InputText = (props) => {
   const { style, label, children, ...restProps } = props;
 
-  const [keyBoardShowing, setKeyBoardShowing] = useState(false);
-
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => setKeyBoardShowing(true));
-    Keyboard.addListener("keyboardDidHide", () => setKeyBoardShowing(false));
-  }, []);
-
   return (
-    <View style={defaultStyles.container}>
-      <Text style={defaultStyles.label}> {label} </Text>
-      <TextInput
-        // keyboardShouldPersistTaps={false}
-        {...restProps}
-        style={{ ...defaultStyles.textInput, ...style }}
-      >
-        {children}
-      </TextInput>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={defaultStyles.container}>
+        <Text style={defaultStyles.label}> {label} </Text>
+        <TextInput
+          keyboardType='ascii-capable'
+          {...restProps}
+          underlineColorAndroid='transparent'
+          style={{ ...defaultStyles.textInput, ...style }}
+        >
+          {children}
+        </TextInput>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

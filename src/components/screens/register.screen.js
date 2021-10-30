@@ -15,6 +15,7 @@ import { PageAux } from "../hoc/PageAux";
 import { LogInForm } from "../sections/forms/login";
 import theme from "../../utils/theme";
 import { RegisterForm } from "../sections/forms/register";
+import { LottieAnimation } from "../common/animations";
 
 class Register extends Component {
   constructor(props) {
@@ -29,11 +30,13 @@ class Register extends Component {
     return (
       <FullscreenAux>
         <View style={styles.container}>
-          <LottieView
-            source={require("../../../assets/lottie/bot2.json")}
-            autoPlay
-            loop
-            style={styles.waveAnim}
+          <LottieAnimation
+            src={require("../../../assets/lottie/bot2.json")}
+            loadFallBack={{
+              type: "auth",
+              src: require("../../../assets/lottie/wave.json"),
+            }}
+            style={styles.botAnim}
           />
           <KeyboardAvoidingView behavior='position'>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -52,9 +55,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "transparent",
   },
-  waveAnim: {
+  botAnim: {
     marginTop: theme.spacing(1),
-    width: "50%",
+    width: "40%",
     alignSelf: "center",
   },
 });

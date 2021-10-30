@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import { Button, Divider, Subheading, Surface } from "react-native-paper";
+import { useSelector, useDispatch } from "react-redux";
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -12,9 +13,20 @@ import { StyleSheet, View, Text } from "react-native";
 import theme from "../../../../utils/theme";
 import { useAuth } from "../../../../services/auth";
 import { addNewUser } from "../../../../services/db";
+import { notifyErrorResolved, selectError } from "../../../../store/errors";
 
 export const RegisterForm = ({ navigation }) => {
   const { signUpWithEmail } = useAuth();
+  const errors = useSelector(selectError);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (errors.type !== null) {
+      setTimeout(() => {
+        dispatch(notifyErrorResolved());
+      }, 5000);
+    }
+  }, [errors]);
 
   const onSubmitHandler = async (values, actions) => {
     const {
@@ -48,7 +60,9 @@ export const RegisterForm = ({ navigation }) => {
         <Text> Or </Text>
         <Divider style={styles.divider} />
       </View> */}
-
+      {errors?.type !== null && (
+        <Text style={styles.errorText}> {errors.message} </Text>
+      )}
       <Formik
         initialValues={formikHelpers.initialValues}
         onSubmit={async (values, actions) => onSubmitHandler(values, actions)}
@@ -64,6 +78,7 @@ export const RegisterForm = ({ navigation }) => {
             <InputText
               label={formikHelpers.fieldNames.firstName}
               placeholder='Jon'
+              autoComplete='name'
               onChangeText={handleChange(formikHelpers.fieldNames.firstName)}
               value={values[formikHelpers.fieldNames.firstName]}
             />
@@ -75,6 +90,7 @@ export const RegisterForm = ({ navigation }) => {
             <InputText
               label={formikHelpers.fieldNames.lastName}
               placeholder='Doe'
+              autoComplete='name'
               onChangeText={handleChange(formikHelpers.fieldNames.lastName)}
               value={values[formikHelpers.fieldNames.lastName]}
             />
@@ -86,6 +102,7 @@ export const RegisterForm = ({ navigation }) => {
             <InputText
               label={formikHelpers.fieldNames.email}
               placeholder='jon@doe.com'
+              autoComplete='email'
               onChangeText={handleChange(formikHelpers.fieldNames.email)}
               value={values[formikHelpers.fieldNames.email]}
             />
@@ -119,8 +136,7 @@ export const RegisterForm = ({ navigation }) => {
             <PrimaryButton
               icon='account'
               style={styles.item}
-              // onPress={onSubmitHandler}
-              onPress={async (v, actions) => onSubmitHandler(values, actions)}
+              onPress={handleSubmit}
             >
               Register
             </PrimaryButton>
