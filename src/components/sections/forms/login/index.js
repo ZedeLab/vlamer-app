@@ -27,6 +27,7 @@ export const LogInForm = ({ navigation }) => {
 
   const { signInWithFacebook, signInWithEmail, signInWithGoogle } = useAuth();
 
+  // Close error message after 5 sec of showing (if available)
   useEffect(() => {
     if (errors.type !== null) {
       setTimeout(() => {
@@ -36,7 +37,11 @@ export const LogInForm = ({ navigation }) => {
   }, [errors]);
 
   const googleAuthHandler = async () => {
-    const user = await signInWithGoogle();
+    const account = await signInWithGoogle();
+
+    if (account) {
+      navigation.navigate("Home");
+    }
   };
 
   const facebookAuthHandler = () => {

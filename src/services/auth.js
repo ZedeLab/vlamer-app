@@ -5,12 +5,13 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithCustomToken,
 } from "firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
 
 import * as Google from "expo-google-app-auth";
 import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
-import { addNewUser } from "./db";
+import { addNewUser, getUserByEmail } from "./db";
 import { selectError, notifyError, notifyErrorResolved } from "../store/errors";
 
 const authContext = createContext();
@@ -41,15 +42,24 @@ function useProvideAuth() {
         scopes: ["profile", "email"],
       });
 
-      if (result.type === "success") {
-        console.log(result);
+      if (googleAccount.type === "success") {
+        const { email } = googleAccount.user;
+
+        const account = await getUserByEmail(email);
+        return account;
       } else {
-        console.log(result);
+        notifyError({
+          type: "auth",
+          message: "Problem authenticating your google account",
+        });
       }
     } catch (error) {
-      // dispatch(setSignInError('Wrong credentials'));
-      // setLoading(false);
-      console.log("Wrong credentials: ", error);
+      dispatch(
+        notifyError({
+          type: "auth",
+          message: "Problem fetching google account",
+        })
+      );
     }
   };
 
