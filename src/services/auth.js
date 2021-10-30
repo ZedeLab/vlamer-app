@@ -5,11 +5,11 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithCustomToken,
 } from "firebase/auth";
 
 import * as Google from "expo-google-app-auth";
 import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
+import { addNewUser } from "./db";
 
 const authContext = createContext();
 
@@ -53,7 +53,6 @@ function useProvideAuth() {
     try {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
-      console.log(account);
       return account;
     } catch (error) {
       // dispatch(setSignInError('Wrong credentials'));
@@ -62,17 +61,26 @@ function useProvideAuth() {
     }
   };
 
-  const signUpWithEmail = async (email, password) => {
+  const signUpWithEmail = async (firstName, lastName, email, password) => {
     try {
-      const account = await auth().createUserWithEmailAndPassword(
+      const auth = getAuth();
+      const account = await createUserWithEmailAndPassword(
+        auth,
         email,
         password
       );
-      console.log(account);
-      return account;
+
+      const [newAccount, error] = await addNewUser({
+        firstName,
+        lastName,
+        email,
+      });
+
+      if (newAccount) return newAccount;
+      else {
+        console.log("Problem adding account: ", error);
+      }
     } catch (error) {
-      // dispatch(setSignInError('Wrong credentials'));
-      // setLoading(false);
       console.log("Wrong credentials: ", error);
     }
   };

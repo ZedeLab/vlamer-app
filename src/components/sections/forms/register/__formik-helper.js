@@ -1,15 +1,16 @@
 import { object, string, ref as yupRef } from "yup";
 
 export const fieldNames = {
-  name: "User's name",
+  firstName: "First name",
+  lastName: "Last name",
   email: "Email address",
   password: "Password",
-
   confirmPassword: "Confirmation password",
 };
 
 export const initialValues = {
-  [fieldNames.name]: "",
+  [fieldNames.firstName]: "",
+  [fieldNames.lastName]: "",
   [fieldNames.email]: "",
 
   [fieldNames.password]: "",
@@ -17,7 +18,8 @@ export const initialValues = {
 };
 
 export const validationSchema = object({
-  [fieldNames.name]: string().required(),
+  [fieldNames.firstName]: string().required(),
+  [fieldNames.lastName]: string().required(),
   [fieldNames.email]: string().required().email(),
 
   [fieldNames.password]: string().required().min(6),

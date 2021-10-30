@@ -11,23 +11,29 @@ import * as formikHelpers from "./__formik-helper";
 import { StyleSheet, View, Text } from "react-native";
 import theme from "../../../../utils/theme";
 import { useAuth } from "../../../../services/auth";
+import { addNewUser } from "../../../../services/db";
 
 export const RegisterForm = ({ navigation }) => {
   const { signUpWithEmail } = useAuth();
 
   const onSubmitHandler = async (values, actions) => {
     const {
+      [formikHelpers.fieldNames.firstName]: firstName,
+      [formikHelpers.fieldNames.lastName]: lastName,
       [formikHelpers.fieldNames.email]: email,
       [formikHelpers.fieldNames.password]: password,
     } = values;
-    console.log(values);
-    const user = await signUpWithEmail(email, password);
-    console.log(user);
+
+    const account = await signUpWithEmail(firstName, lastName, email, password);
+
+    if (account) {
+      navigation.navigate("Home");
+    }
   };
 
   return (
     <Surface style={styles.container}>
-      <FacebookLoginButton
+      {/* <FacebookLoginButton
         style={styles.item}
         onPress={() => console.log("Facebook login")}
       ></FacebookLoginButton>
@@ -41,25 +47,36 @@ export const RegisterForm = ({ navigation }) => {
         <Divider style={styles.divider} />
         <Text> Or </Text>
         <Divider style={styles.divider} />
-      </View>
+      </View> */}
 
       <Formik
         initialValues={formikHelpers.initialValues}
-        onSubmit={onSubmitHandler}
+        onSubmit={async (values, actions) => onSubmitHandler(values, actions)}
         validationSchema={formikHelpers.validationSchema}
       >
         {({ handleChange, values, handleSubmit, errors }) => (
           <View>
-            {errors[formikHelpers.fieldNames.name] && (
+            {errors[formikHelpers.fieldNames.firstName] && (
               <Text style={styles.errorText}>
-                {errors[formikHelpers.fieldNames.name]}
+                {errors[formikHelpers.fieldNames.firstName]}
               </Text>
             )}
             <InputText
-              label={formikHelpers.fieldNames.name}
-              placeholder='Jone Doe'
-              onChangeText={handleChange(formikHelpers.fieldNames.name)}
-              value={values[formikHelpers.fieldNames.name]}
+              label={formikHelpers.fieldNames.firstName}
+              placeholder='Jon'
+              onChangeText={handleChange(formikHelpers.fieldNames.firstName)}
+              value={values[formikHelpers.fieldNames.firstName]}
+            />
+            {errors[formikHelpers.fieldNames.lastName] && (
+              <Text style={styles.errorText}>
+                {errors[formikHelpers.fieldNames.lastName]}
+              </Text>
+            )}
+            <InputText
+              label={formikHelpers.fieldNames.lastName}
+              placeholder='Doe'
+              onChangeText={handleChange(formikHelpers.fieldNames.lastName)}
+              value={values[formikHelpers.fieldNames.lastName]}
             />
             {errors[formikHelpers.fieldNames.email] && (
               <Text style={styles.errorText}>
@@ -68,7 +85,7 @@ export const RegisterForm = ({ navigation }) => {
             )}
             <InputText
               label={formikHelpers.fieldNames.email}
-              placeholder='jone@doe.com'
+              placeholder='jon@doe.com'
               onChangeText={handleChange(formikHelpers.fieldNames.email)}
               value={values[formikHelpers.fieldNames.email]}
             />
@@ -102,7 +119,8 @@ export const RegisterForm = ({ navigation }) => {
             <PrimaryButton
               icon='account'
               style={styles.item}
-              onPress={handleSubmit}
+              // onPress={onSubmitHandler}
+              onPress={async (v, actions) => onSubmitHandler(values, actions)}
             >
               Register
             </PrimaryButton>
