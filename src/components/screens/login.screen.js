@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   botAnim: {
-    marginTop: theme.spacing(2),
-    width: "60%",
+    marginTop: theme.spacing(1),
+    width: "55%",
     alignSelf: "center",
   },
 });

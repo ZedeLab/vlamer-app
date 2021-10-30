@@ -6,36 +6,11 @@ import { Ionicons } from "@expo/vector-icons";
 
 const Footer = () => (
   <Appbar style={{ ...styles.bottom, ...styles.footer }}>
-    <Ionicons
-      size={20}
-      style={styles.icon}
-      name='home'
-      onPress={() => console.log("Pressed delete")}
-    />
-    <Ionicons
-      size={20}
-      style={styles.icon}
-      name='search'
-      onPress={() => console.log("Pressed delete")}
-    />
-    <Ionicons
-      size={22}
-      style={styles.icon}
-      name='add-circle-outline'
-      onPress={() => console.log("Pressed delete")}
-    />
-    <Ionicons
-      size={20}
-      style={styles.icon}
-      name='notifications'
-      onPress={() => console.log("Pressed delete")}
-    />
-    <Ionicons
-      size={20}
-      style={styles.icon}
-      name='settings'
-      onPress={() => console.log("Pressed delete")}
-    />
+    <Ionicons size={20} style={styles.icon} name='home' />
+    <Ionicons size={20} style={styles.icon} name='search' />
+    <Ionicons size={22} style={styles.icon} name='add-circle-outline' />
+    <Ionicons size={20} style={styles.icon} name='notifications' />
+    <Ionicons size={20} style={styles.icon} name='settings' />
   </Appbar>
 );
 

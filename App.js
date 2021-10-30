@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Provider as PageProvider, Headline } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
+import { Provider as StateProvider } from "react-redux";
 
 import * as Front from "expo-font";
 import AppLoading from "expo-app-loading";
 import RouteStack from "./src/routes";
 import theme from "./src/utils/theme";
 import { AuthContext, AuthProvider } from "./src/services/auth";
+import { store } from "./src/store/store";
 
 const fetchFonts = () => {
   return Front.loadAsync({
@@ -33,13 +35,15 @@ export default function App() {
   }
 
   return (
-    <PageProvider theme={theme}>
-      <AuthProvider>
-        <NavigationContainer>
-          <RouteStack />
-        </NavigationContainer>
-      </AuthProvider>
-    </PageProvider>
+    <StateProvider store={store}>
+      <PageProvider theme={theme}>
+        <AuthProvider>
+          <NavigationContainer>
+            <RouteStack />
+          </NavigationContainer>
+        </AuthProvider>
+      </PageProvider>
+    </StateProvider>
   );
 }
 

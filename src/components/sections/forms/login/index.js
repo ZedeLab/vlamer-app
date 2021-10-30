@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
-import { Button, Divider, Subheading, Surface } from "react-native-paper";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  Button,
+  Divider,
+  Snackbar,
+  Subheading,
+  Surface,
+} from "react-native-paper";
 import {
   FacebookLoginButton,
   GoogleLoginButton,
@@ -11,13 +19,24 @@ import * as formikHelpers from "./__formik-helper";
 import { StyleSheet, View, Text } from "react-native";
 import theme from "../../../../utils/theme";
 import { useAuth } from "../../../../services/auth";
+import { notifyErrorResolved, selectError } from "../../../../store/errors";
 
 export const LogInForm = ({ navigation }) => {
+  const errors = useSelector(selectError);
+  const dispatch = useDispatch();
+
   const { signInWithFacebook, signInWithEmail, signInWithGoogle } = useAuth();
+
+  useEffect(() => {
+    if (errors.type !== null) {
+      setTimeout(() => {
+        dispatch(notifyErrorResolved());
+      }, 5000);
+    }
+  }, [errors]);
 
   const googleAuthHandler = async () => {
     const user = await signInWithGoogle();
-    console.log(user);
   };
 
   const facebookAuthHandler = () => {
@@ -29,7 +48,6 @@ export const LogInForm = ({ navigation }) => {
       [formikHelpers.fieldNames.email]: email,
       [formikHelpers.fieldNames.password]: password,
     } = values;
-    console.log(values);
     const account = await signInWithEmail(email, password);
 
     if (account) {
@@ -39,6 +57,9 @@ export const LogInForm = ({ navigation }) => {
 
   return (
     <Surface style={styles.container}>
+      {errors?.type !== null && (
+        <Text style={styles.errorText}> {errors.message} </Text>
+      )}
       <FacebookLoginButton
         style={styles.item}
         onPress={facebookAuthHandler}

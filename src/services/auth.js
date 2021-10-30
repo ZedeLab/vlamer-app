@@ -6,10 +6,12 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useSelector, useDispatch } from "react-redux";
 
 import * as Google from "expo-google-app-auth";
 import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
 import { addNewUser } from "./db";
+import { selectError, notifyError, notifyErrorResolved } from "../store/errors";
 
 const authContext = createContext();
 
@@ -23,9 +25,11 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
+  const errors = useSelector(selectError);
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  console.log(errors);
   const signInWithFacebook = () => {
     console.log("Sing in with Facebook");
   };
@@ -55,9 +59,12 @@ function useProvideAuth() {
       const account = await signInWithEmailAndPassword(auth, email, password);
       return account;
     } catch (error) {
-      // dispatch(setSignInError('Wrong credentials'));
-      // setLoading(false);
-      console.log("Wrong credentials: ", error);
+      dispatch(
+        notifyError({
+          type: "auth",
+          message: "Wrong credentials",
+        })
+      );
     }
   };
 
