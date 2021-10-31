@@ -20,10 +20,11 @@ const styles = StyleSheet.create({
   footer: {
     paddingBottom: theme.spacing(0.6),
     paddingHorizontal: theme.spacing(1),
+    paddingVertical: theme.spacing(0.8),
     alignItems: "center",
     justifyContent: "space-between",
-    alignItems: "flex-end",
-    backgroundColor: theme.colors.background,
+    alignItems: "center",
+    backgroundColor: theme.colors.primary_light,
     ...theme.shadows[2],
   },
   bottom: {
@@ -34,6 +35,6 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   icon: {
-    color: theme.colors.textDisabled,
+    color: theme.colors.textPrimary,
   },
 });

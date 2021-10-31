@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Subheading } from "react-native-paper";
 import theme from "../../utils/theme";
+import { CompleteRegistrationBanner } from "../common/banners";
 import { PrimaryButton } from "../common/buttons";
 import PageAux from "../hoc/PageAux";
 
@@ -45,6 +46,7 @@ class Home extends Component {
   render() {
     return (
       <PageAux>
+        <CompleteRegistrationBanner />
         <FlatList
           data={DATA}
           renderItem={this.renderItem}

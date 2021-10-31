@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import slx from "classnames";
+import { ScrollView, StyleSheet, View } from "react-native";
 import theme from "../../utils/theme";
 import Header from "../sections/Header";
 import Footer from "../sections/Footer";
@@ -7,9 +8,9 @@ import Footer from "../sections/Footer";
 export const PageAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;
   return (
-    <View {...restProps} style={{ ...style, ...styles.container }}>
+    <View {...restProps} style={styles.container}>
       <Header />
-      <View style={styles.mainScreen}>{children}</View>
+      <ScrollView style={styles.mainScreen}>{children}</ScrollView>
       <Footer />
     </View>
   );
@@ -25,6 +26,7 @@ const styles = StyleSheet.create({
   mainScreen: {
     padding: theme.spacing(1),
     overflow: "hidden",
+    marginBottom: theme.spacing(3.6),
   },
 });
 
