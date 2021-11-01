@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { LogBox, StyleSheet, Text, View } from 'react-native';
 import { Provider as PageProvider, Headline } from 'react-native-paper';
 
 import { Provider as StateProvider } from 'react-redux';
@@ -12,6 +12,7 @@ import theme from './src/utils/theme';
 import { AuthContext, AuthProvider } from './src/services/auth';
 import { store } from './src/store/store';
 
+LogBox.ignoreAllLogs();
 const fetchFonts = () => {
   return Front.loadAsync({
     openSans: require('./assets/fonts/OpenSans/OpenSans-Regular.ttf'),

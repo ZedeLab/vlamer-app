@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "baseUrl": ".",
+    "paths": {
+      "@vm-store/*": ["src/store/*"],
+      "@vm-components/*": ["src/components/*"],
+      "@vm-utils/*": ["src/utils/*"],
+
+      "@vm-services/*": ["src/services/*"],
+      "@vm-assets/*": ["assets/*"]
+    },
+
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
