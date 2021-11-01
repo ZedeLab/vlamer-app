@@ -1,36 +1,83 @@
 import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { HomeScreen, LoginScreen, RegisterScreen } from "./components/screens";
+import { useAuth } from "./services/auth";
 
-const Stack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
-const RouteStack = () => {
+export const AuthStackScreen = () => {
   return (
-    <Stack.Navigator
-      initialRouteName='Home'
+    <AuthStack.Navigator
+      initialRouteName='Login'
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen
+      <AuthStack.Screen
         name='Login'
         component={LoginScreen}
         options={{ title: "login" }}
       />
-      <Stack.Screen
+      <AuthStack.Screen
         name='Register'
         component={RegisterScreen}
         options={{ title: "register" }}
       />
-      <Stack.Screen
+    </AuthStack.Navigator>
+  );
+};
+
+const HomeStack = createStackNavigator();
+
+export const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <HomeStack.Screen
         name='Home'
         component={HomeScreen}
         options={{ title: "Home" }}
       />
-    </Stack.Navigator>
+    </HomeStack.Navigator>
   );
 };
 
-export default RouteStack;
+const RootStack = createStackNavigator();
+
+export default () => {
+  const { user } = useAuth();
+
+  return (
+    <NavigationContainer>
+      <RootStack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        {user ? (
+          <RootStack.Screen
+            name='App'
+            component={HomeStackScreen}
+            options={{
+              animationEnabled: false,
+            }}
+          />
+        ) : (
+          <RootStack.Screen
+            name='Auth'
+            component={AuthStackScreen}
+            options={{
+              animationEnabled: false,
+            }}
+          />
+        )}
+      </RootStack.Navigator>
+    </NavigationContainer>
+  );
+};

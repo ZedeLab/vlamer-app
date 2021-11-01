@@ -52,7 +52,7 @@ const defaultStyles = StyleSheet.create({
   },
   label: {
     marginBottom: theme.spacing(0.5),
-    color: theme.colors.textDisabled,
+    color: theme.colors.textPrimary,
     letterSpacing: theme.spacing(0.1),
     fontSize: theme.spacing(0.8),
     fontFamily: "openSans",

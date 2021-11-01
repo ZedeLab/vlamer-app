@@ -86,7 +86,7 @@ const defaultStyles = StyleSheet.create({
   buttonText: {
     fontFamily: "openSans",
     fontSize: theme.spacing(0.8),
-    color: theme.colors.textPrimary,
+    color: theme.colors.textSecondary,
     letterSpacing: 2,
     alignSelf: "center",
     textTransform: "capitalize",
@@ -95,16 +95,16 @@ const defaultStyles = StyleSheet.create({
   buttonText_dark: {
     fontFamily: "openSans",
     fontSize: theme.spacing(0.8),
-    color: theme.colors.textSecondary,
+    color: theme.colors.textPrimary,
     letterSpacing: 2,
     alignSelf: "center",
     textTransform: "capitalize",
     paddingHorizontal: theme.spacing(1),
   },
   icon: {
-    color: theme.colors.textPrimary,
+    color: theme.colors.textSecondary,
   },
   icon_dark: {
-    color: theme.colors.textSecondary,
+    color: theme.colors.textPrimary,
   },
 });

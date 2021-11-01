@@ -54,6 +54,7 @@ function useProvideAuth() {
 
         const account = await getUserByEmail(email);
         dispatch(notifyLoadingFinish());
+        setUser(account);
         return account;
       } else {
         dispatch(
@@ -80,6 +81,7 @@ function useProvideAuth() {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
       dispatch(notifyLoadingFinish());
+      setUser(account);
       return account;
     } catch (error) {
       dispatch(notifyLoadingFinish());
@@ -107,7 +109,7 @@ function useProvideAuth() {
         lastName,
         email,
       });
-
+      setUser(account);
       dispatch(notifyLoadingFinish());
       if (newAccount) return newAccount;
       else {

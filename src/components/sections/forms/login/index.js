@@ -20,11 +20,12 @@ import { StyleSheet, View, Text } from "react-native";
 import theme from "../../../../utils/theme";
 import { useAuth } from "../../../../services/auth";
 import { notifyErrorResolved, selectError } from "../../../../store/errors";
+import { useNavigation } from "@react-navigation/core";
 
-export const LogInForm = ({ navigation }) => {
+export const LogInForm = (props) => {
   const errors = useSelector(selectError);
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const { signInWithFacebook, signInWithEmail, signInWithGoogle } = useAuth();
 
   // Close error message after 5 sec of showing (if available)
@@ -40,7 +41,7 @@ export const LogInForm = ({ navigation }) => {
     const account = await signInWithGoogle();
 
     if (account) {
-      navigation.navigate("Home");
+      navigation.navigate("App", { screen: "Home" });
     }
   };
 
@@ -56,7 +57,7 @@ export const LogInForm = ({ navigation }) => {
     const account = await signInWithEmail(email, password);
 
     if (account) {
-      navigation.navigate("Home");
+      navigation.navigate("App", { screen: "Home" });
     }
   };
 

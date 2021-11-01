@@ -39,7 +39,7 @@ export const RegisterForm = ({ navigation }) => {
     const account = await signUpWithEmail(firstName, lastName, email, password);
 
     if (account) {
-      navigation.navigate("Home");
+      navigation.navigate("App", { screen: "Home" });
     }
   };
 
