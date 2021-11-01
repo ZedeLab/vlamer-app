@@ -10,7 +10,7 @@ export const PageAux = (props) => {
   return (
     <View {...restProps} style={styles.container}>
       <Header />
-      <ScrollView style={styles.mainScreen}>{children}</ScrollView>
+      <View style={styles.mainScreen}>{children}</View>
       <Footer />
     </View>
   );
@@ -25,8 +25,6 @@ const styles = StyleSheet.create({
   },
   mainScreen: {
     padding: theme.spacing(1),
-    overflow: "hidden",
-    marginBottom: theme.spacing(3.6),
   },
 });
 

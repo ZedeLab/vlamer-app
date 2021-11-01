@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.common,
   },
   tinyLogo: {
     width: theme.spacing(2),

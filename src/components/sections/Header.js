@@ -10,7 +10,7 @@ const Header = () => (
   <SafeAreaView style={styles.top}>
     <StatusBar
       animated={true}
-      backgroundColor={theme.colors.background}
+      backgroundColor={theme.colors.common}
       barStyle='dark-content'
     />
     <Appbar style={styles.header}>
@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     ...theme.shadows[0],
     justifyContent: "space-between",
     alignItems: "flex-end",
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.common,
   },
   top: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.common,
     ...theme.shadows[2],
     position: "absolute",
     zIndex: 1000,

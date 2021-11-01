@@ -5,7 +5,7 @@ import { Banner, Headline, Subheading } from "react-native-paper";
 import theme from "../../utils/theme";
 
 export const CompleteRegistrationBanner = (props) => {
-  const [visible, setVisible] = React.useState(true);
+  const [visible, setVisible] = React.useState(false);
 
   return (
     <Banner
@@ -45,20 +45,21 @@ export const CompleteRegistrationBanner = (props) => {
 
 const styles = StyleSheet.create({
   containerActive: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(15),
   },
   containerOff: {
-    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(5),
   },
   container: {
     justifyContent: "flex-start",
-    ...theme.shadows[2],
+    borderRadius: theme.shapes.borderRadios,
+    ...theme.shadows[1],
   },
   title: {
     fontFamily: "openSans-bold",
 
     fontSize: theme.spacing(1.1),
-    color: theme.colors.textDisabled,
+    color: theme.colors.textPrimary,
     letterSpacing: 2,
     alignSelf: "center",
     textTransform: "capitalize",
@@ -67,6 +68,6 @@ const styles = StyleSheet.create({
   textContainer: {},
   content: {
     fontSize: theme.spacing(0.9),
-    color: theme.colors.textDisabled,
+    color: theme.colors.textPrimary,
   },
 });

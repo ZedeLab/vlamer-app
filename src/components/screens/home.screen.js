@@ -4,52 +4,31 @@ import { Subheading } from "react-native-paper";
 import theme from "../../utils/theme";
 import { CompleteRegistrationBanner } from "../common/banners";
 import { PrimaryButton } from "../common/buttons";
+import VlamPosts from "../common/cards/VlamPostCard";
 import PageAux from "../hoc/PageAux";
-
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "Section 1",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Section 2",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Section 3",
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abbsfsa",
-    title: "Section 4",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91afsdf63",
-    title: "Section 5",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-156571e29d72",
-    title: "Section 6",
-  },
-];
-
-const Item = ({ title }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
+import DATA from "../../utils/__mock__/feeds.json";
 
 class Home extends Component {
-  renderItem({ item }) {
-    return <Item title={item.title} />;
+  _renderItem({ item }) {
+    return (
+      <VlamPosts
+        firstName={item.firstName}
+        userName={item.userName}
+        userAvatar={item.userAvatar}
+        postedAt={item.postedAt}
+        vlamType={item.vlamType}
+        description={item.description}
+      />
+    );
   }
+
   render() {
     return (
       <PageAux>
         <CompleteRegistrationBanner />
         <FlatList
           data={DATA}
-          renderItem={this.renderItem}
+          renderItem={this._renderItem}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
         />
@@ -79,7 +58,7 @@ const styles = StyleSheet.create({
     height: theme.spacing(8),
     justifyContent: "center",
   },
-  title: {
+  firstName: {
     fontSize: 32,
   },
 });

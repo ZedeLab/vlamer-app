@@ -11,12 +11,17 @@ export default theme = {
     accent: "#36B8A0",
     background: "#F7F7F9",
     paper: "#EAEAEB",
-    divider: "#D8D9D4",
-    textPrimary: "#F7F7F9",
-    textSecondary: "#0E141A",
-    textDisabled: "#464646",
+    divider: "#36B8A0",
+    success: "#4caf50",
+    textPrimary: "#223140",
+    textSecondary: "#fff",
+    textDisabled: "#B8B8B8",
+    error: "#f44336",
   },
   spacing: (size) => size * 16,
+  shapes: {
+    borderRadios: 8,
+  },
   shadows: [
     {
       shadowColor: "#36B8A0",
