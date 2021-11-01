@@ -1,5 +1,4 @@
 import React from "react";
-import slx from "classnames";
 import { ScrollView, StyleSheet, View } from "react-native";
 import theme from "../../utils/theme";
 import Header from "../sections/Header";
@@ -11,7 +10,6 @@ export const PageAux = (props) => {
     <View {...restProps} style={styles.container}>
       <Header />
       <View style={styles.mainScreen}>{children}</View>
-      <Footer />
     </View>
   );
 };

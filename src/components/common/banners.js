@@ -1,5 +1,5 @@
 import * as React from "react";
-import slx from "classnames";
+
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Banner, Headline, Subheading } from "react-native-paper";
 import theme from "../../utils/theme";
