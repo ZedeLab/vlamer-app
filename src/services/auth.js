@@ -1,23 +1,19 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
-import { initializeApp } from "firebase/app";
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import { initializeApp } from 'firebase/app';
 
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithCustomToken,
-} from "firebase/auth";
-import { useSelector, useDispatch } from "react-redux";
+} from 'firebase/auth';
+import { useSelector, useDispatch } from 'react-redux';
 
-import * as Google from "expo-google-app-auth";
-import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
-import { addNewUser, getUserByEmail } from "./db";
-import { selectError, notifyError } from "../store/errors";
-import {
-  notifyLoadingFinish,
-  notifyLoadingStart,
-  selectLoading,
-} from "../store/loading";
+import * as Google from 'expo-google-app-auth';
+import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
+import { addNewUser, getUserByEmail } from './db';
+import { selectError, notifyError } from '../store/errors';
+import { notifyLoadingFinish, notifyLoadingStart, selectLoading } from '../store/loading';
 
 const authContext = createContext();
 
@@ -38,18 +34,18 @@ function useProvideAuth() {
   const [user, setUser] = useState(null);
 
   const signInWithFacebook = () => {
-    console.log("Sing in with Facebook");
+    console.log('Sing in with Facebook');
   };
 
   const signInWithGoogle = async () => {
-    dispatch(notifyLoadingStart({ type: "auth" }));
+    dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
       const result = await Google.logInAsync({
         androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-        scopes: ["profile", "email"],
+        scopes: ['profile', 'email'],
       });
 
-      if (googleAccount.type === "success") {
+      if (googleAccount.type === 'success') {
         const { email } = googleAccount.user;
 
         const account = await getUserByEmail(email);
@@ -59,16 +55,16 @@ function useProvideAuth() {
       } else {
         dispatch(
           notifyError({
-            type: "auth",
-            message: "Problem authenticating your google account",
+            type: 'auth',
+            message: 'Problem authenticating your google account',
           })
         );
       }
     } catch (error) {
       dispatch(
         notifyError({
-          type: "auth",
-          message: "Problem fetching google account",
+          type: 'auth',
+          message: 'Problem fetching google account',
         })
       );
     }
@@ -76,7 +72,7 @@ function useProvideAuth() {
   };
 
   const signInWithEmail = async (email, password) => {
-    dispatch(notifyLoadingStart({ type: "auth" }));
+    dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
@@ -87,22 +83,18 @@ function useProvideAuth() {
       dispatch(notifyLoadingFinish());
       dispatch(
         notifyError({
-          type: "auth",
-          message: "Wrong credentials",
+          type: 'auth',
+          message: 'Wrong credentials',
         })
       );
     }
   };
 
   const signUpWithEmail = async (firstName, lastName, email, password) => {
-    dispatch(notifyLoadingStart({ type: "auth" }));
+    dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
       const auth = getAuth();
-      const account = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const account = await createUserWithEmailAndPassword(auth, email, password);
 
       const [newAccount, error] = await addNewUser({
         firstName,
@@ -113,13 +105,13 @@ function useProvideAuth() {
       dispatch(notifyLoadingFinish());
       if (newAccount) return newAccount;
       else {
-        console.log("Problem adding account: ", error);
+        console.log('Problem adding account: ', error);
       }
     } catch (error) {
       dispatch(
         notifyError({
-          type: "auth",
-          message: "Account already exist",
+          type: 'auth',
+          message: 'Account already exist',
         })
       );
       dispatch(notifyLoadingFinish());

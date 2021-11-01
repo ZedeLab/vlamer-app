@@ -1,8 +1,8 @@
-import React from "react";
-import { SafeAreaView, StatusBar, StyleSheet, View } from "react-native";
-import theme from "../../utils/theme";
-import Header from "../sections/Header";
-import Footer from "../sections/Footer";
+import React from 'react';
+import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
+import theme from '../../utils/theme';
+import Header from '../sections/Header';
+import Footer from '../sections/Footer';
 
 export const FullscreenAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;
@@ -12,7 +12,7 @@ export const FullscreenAux = (props) => {
         <StatusBar
           animated={true}
           backgroundColor={theme.colors.background}
-          barStyle='dark-content'
+          barStyle="dark-content"
         />
       </SafeAreaView>
       <View style={styles.container}>{children}</View>
@@ -23,8 +23,8 @@ export const FullscreenAux = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: "stretch",
-    justifyContent: "center",
+    alignSelf: 'stretch',
+    justifyContent: 'center',
     backgroundColor: theme.colors.background,
   },
 });

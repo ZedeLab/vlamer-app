@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   type: null,
-  message: "",
+  message: '',
 };
 
 export const errorsSlice = createSlice({
-  name: "errors",
+  name: 'errors',
   initialState,
   reducers: {
     notifyError: (state, action) => {

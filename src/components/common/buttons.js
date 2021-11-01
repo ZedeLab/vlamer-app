@@ -1,8 +1,8 @@
-import React from "react";
-import { StyleSheet, TouchableHighlight, Text, View } from "react-native";
-import { Button } from "react-native-paper";
-import theme from "../../utils/theme";
-import { Ionicons } from "@expo/vector-icons";
+import React from 'react';
+import { StyleSheet, TouchableHighlight, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
+import theme from '../../utils/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 export const PrimaryButton = ({ style, children, ...restProps }) => {
   return (
@@ -26,7 +26,7 @@ export const FacebookLoginButton = ({ style, ...restProps }) => {
       style={{ ...style, ...defaultStyles.button, ...defaultStyles.facebook }}
     >
       <View style={defaultStyles.buttonContent}>
-        <Ionicons size={20} style={defaultStyles.icon} name='logo-facebook' />
+        <Ionicons size={20} style={defaultStyles.icon} name="logo-facebook" />
         <Text style={defaultStyles.buttonText}>Login with Facebook</Text>
       </View>
     </TouchableHighlight>
@@ -40,11 +40,7 @@ export const GoogleLoginButton = ({ style, ...restProps }) => {
       style={{ ...style, ...defaultStyles.button, ...defaultStyles.google }}
     >
       <View style={defaultStyles.buttonContent}>
-        <Ionicons
-          size={20}
-          style={defaultStyles.icon_dark}
-          name='logo-google'
-        />
+        <Ionicons size={20} style={defaultStyles.icon_dark} name="logo-google" />
         <Text style={defaultStyles.buttonText_dark}>Login with Google</Text>
       </View>
     </TouchableHighlight>
@@ -53,10 +49,10 @@ export const GoogleLoginButton = ({ style, ...restProps }) => {
 
 const defaultStyles = StyleSheet.create({
   button: {
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
     elevation: 1,
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     borderRadius: theme.spacing(1),
     margin: theme.spacing(1),
     borderRadius: theme.spacing(1),
@@ -64,14 +60,14 @@ const defaultStyles = StyleSheet.create({
     ...theme.shadows[1],
   },
   buttonContent: {
-    alignSelf: "center",
-    flexDirection: "row",
+    alignSelf: 'center',
+    flexDirection: 'row',
     paddingVertical: theme.spacing(0.3),
   },
   facebook: {
-    backgroundColor: "#4267b2",
-    color: "white",
-    borderColor: "#4267b2",
+    backgroundColor: '#4267b2',
+    color: 'white',
+    borderColor: '#4267b2',
   },
 
   google: {
@@ -84,21 +80,21 @@ const defaultStyles = StyleSheet.create({
     paddingVertical: theme.spacing(0.8),
   },
   buttonText: {
-    fontFamily: "openSans",
+    fontFamily: 'openSans',
     fontSize: theme.spacing(0.8),
     color: theme.colors.textSecondary,
     letterSpacing: 2,
-    alignSelf: "center",
-    textTransform: "capitalize",
+    alignSelf: 'center',
+    textTransform: 'capitalize',
     paddingHorizontal: theme.spacing(1),
   },
   buttonText_dark: {
-    fontFamily: "openSans",
+    fontFamily: 'openSans',
     fontSize: theme.spacing(0.8),
     color: theme.colors.textPrimary,
     letterSpacing: 2,
-    alignSelf: "center",
-    textTransform: "capitalize",
+    alignSelf: 'center',
+    textTransform: 'capitalize',
     paddingHorizontal: theme.spacing(1),
   },
   icon: {

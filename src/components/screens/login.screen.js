@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,14 +7,14 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-} from "react-native";
-import LottieView from "lottie-react-native";
+} from 'react-native';
+import LottieView from 'lottie-react-native';
 
-import { FullscreenAux } from "../hoc/FullscreenAux";
-import { PageAux } from "../hoc/PageAux";
-import { LogInForm } from "../sections/forms/login";
-import theme from "../../utils/theme";
-import { LottieAnimation } from "../common/animations";
+import { FullscreenAux } from '../hoc/FullscreenAux';
+import { PageAux } from '../hoc/PageAux';
+import { LogInForm } from '../sections/forms/login';
+import theme from '../../utils/theme';
+import { LottieAnimation } from '../common/animations';
 
 class Login extends Component {
   constructor(props) {
@@ -26,15 +26,15 @@ class Login extends Component {
       <FullscreenAux>
         <View style={styles.container}>
           <LottieAnimation
-            src={require("../../../assets/lottie/bot.json")}
+            src={require('../../../assets/lottie/bot.json')}
             loadFallBack={{
-              type: "auth",
-              src: require("../../../assets/lottie/wave.json"),
+              type: 'auth',
+              src: require('../../../assets/lottie/wave.json'),
             }}
             style={styles.botAnim}
           />
 
-          <KeyboardAvoidingView behavior='position'>
+          <KeyboardAvoidingView behavior="position">
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <LogInForm navigation={this.props.navigation} />
             </TouchableWithoutFeedback>
@@ -48,13 +48,13 @@ class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "transparent",
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
   },
   botAnim: {
     marginTop: theme.spacing(1),
-    width: "55%",
-    alignSelf: "center",
+    width: '55%',
+    alignSelf: 'center',
   },
 });
 

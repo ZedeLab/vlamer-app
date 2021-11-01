@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,8 +8,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-} from "react-native";
-import theme from "../../utils/theme";
+} from 'react-native';
+import theme from '../../utils/theme';
 
 export const InputText = (props) => {
   const { style, label, children, ...restProps } = props;
@@ -19,9 +19,9 @@ export const InputText = (props) => {
       <View style={defaultStyles.container}>
         <Text style={defaultStyles.label}> {label} </Text>
         <TextInput
-          keyboardType='ascii-capable'
+          keyboardType="ascii-capable"
           {...restProps}
-          underlineColorAndroid='transparent'
+          underlineColorAndroid="transparent"
           style={{ ...defaultStyles.textInput, ...style }}
         >
           {children}
@@ -38,23 +38,23 @@ const defaultStyles = StyleSheet.create({
   inner: {
     padding: 24,
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: 'space-around',
   },
   textInput: {
     padding: theme.spacing(0.5),
     backgroundColor: theme.colors.paper,
     marginBottom: theme.spacing(1),
-    borderColor: "transparent",
+    borderColor: 'transparent',
     borderWidth: theme.spacing(0.01),
     borderRadius: theme.spacing(0.5),
     fontSize: theme.spacing(0.8),
-    fontFamily: "openSans",
+    fontFamily: 'openSans',
   },
   label: {
     marginBottom: theme.spacing(0.5),
     color: theme.colors.textPrimary,
     letterSpacing: theme.spacing(0.1),
     fontSize: theme.spacing(0.8),
-    fontFamily: "openSans",
+    fontFamily: 'openSans',
   },
 });

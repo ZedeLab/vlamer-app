@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,22 +7,22 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-} from "react-native";
-import LottieView from "lottie-react-native";
+} from 'react-native';
+import LottieView from 'lottie-react-native';
 
-import { FullscreenAux } from "../hoc/FullscreenAux";
-import { PageAux } from "../hoc/PageAux";
-import { LogInForm } from "../sections/forms/login";
-import theme from "../../utils/theme";
-import { RegisterForm } from "../sections/forms/register";
-import { LottieAnimation } from "../common/animations";
+import { FullscreenAux } from '../hoc/FullscreenAux';
+import { PageAux } from '../hoc/PageAux';
+import { LogInForm } from '../sections/forms/login';
+import theme from '../../utils/theme';
+import { RegisterForm } from '../sections/forms/register';
+import { LottieAnimation } from '../common/animations';
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "",
-      password: "",
+      user: '',
+      password: '',
     };
   }
 
@@ -31,14 +31,14 @@ class Register extends Component {
       <FullscreenAux>
         <View style={styles.container}>
           <LottieAnimation
-            src={require("../../../assets/lottie/bot2.json")}
+            src={require('../../../assets/lottie/bot2.json')}
             loadFallBack={{
-              type: "auth",
-              src: require("../../../assets/lottie/wave.json"),
+              type: 'auth',
+              src: require('../../../assets/lottie/wave.json'),
             }}
             style={styles.botAnim}
           />
-          <KeyboardAvoidingView behavior='position'>
+          <KeyboardAvoidingView behavior="position">
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <RegisterForm navigation={this.props.navigation} />
             </TouchableWithoutFeedback>
@@ -52,13 +52,13 @@ class Register extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "transparent",
+    justifyContent: 'space-between',
+    backgroundColor: 'transparent',
   },
   botAnim: {
     marginTop: theme.spacing(1),
-    width: "40%",
-    alignSelf: "center",
+    width: '40%',
+    alignSelf: 'center',
   },
 });
 

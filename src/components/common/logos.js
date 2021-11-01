@@ -1,7 +1,7 @@
-import React from "react";
-import { Image, View, Text, StyleSheet } from "react-native";
-import theme from "../../utils/theme";
-import LogoImage from "../../../assets/logo.png";
+import React from 'react';
+import { Image, View, Text, StyleSheet } from 'react-native';
+import theme from '../../utils/theme';
+import LogoImage from '../../../assets/logo.png';
 export const MainLogo = (props) => {
   return (
     <View style={styles.container}>
@@ -15,9 +15,9 @@ const styles = StyleSheet.create({
   container: {
     paddingBottom: theme.spacing(0.6),
     paddingHorizontal: theme.spacing(1),
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     backgroundColor: theme.colors.common,
   },
   tinyLogo: {
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
     height: theme.spacing(2),
   },
   logoText: {
-    fontFamily: "openSans",
+    fontFamily: 'openSans',
     fontSize: theme.spacing(1.1),
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
     paddingHorizontal: theme.spacing(1),
   },
 });

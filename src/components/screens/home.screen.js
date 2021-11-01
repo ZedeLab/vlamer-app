@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { Subheading } from "react-native-paper";
-import theme from "../../utils/theme";
-import { CompleteRegistrationBanner } from "../common/banners";
-import { PrimaryButton } from "../common/buttons";
-import VlamPosts from "../common/cards/VlamPostCard";
-import PageAux from "../hoc/PageAux";
-import DATA from "../../utils/__mock__/feeds.json";
+import React, { Component } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Subheading } from 'react-native-paper';
+import theme from '../../utils/theme';
+import { CompleteRegistrationBanner } from '../common/banners';
+import { PrimaryButton } from '../common/buttons';
+import VlamPosts from '../common/cards/VlamPostCard';
+import PageAux from '../hoc/PageAux';
+import DATA from '../../utils/__mock__/feeds.json';
 
 class Home extends Component {
   _renderItem({ item }) {
@@ -40,23 +40,23 @@ class Home extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: "stretch",
-    justifyContent: "center",
-    backgroundColor: "transparent",
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
 
   text: {
-    textAlign: "center",
-    fontFamily: "playfair-display",
+    textAlign: 'center',
+    fontFamily: 'playfair-display',
     letterSpacing: 2,
-    color: "#fff",
+    color: '#fff',
     marginBottom: 25,
     fontSize: 25,
   },
   item: {
-    width: "90%",
+    width: '90%',
     height: theme.spacing(8),
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   firstName: {
     fontSize: 32,

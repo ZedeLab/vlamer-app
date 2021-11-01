@@ -1,7 +1,7 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { Card } from "react-native-paper";
-import theme from "../../utils/theme";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Card } from 'react-native-paper';
+import theme from '../../utils/theme';
 
 const CardWrapper = (props) => {
   const { children, ...restProps } = props;

@@ -1,45 +1,30 @@
-import * as React from "react";
-import { Appbar, Avatar } from "react-native-paper";
-import {
-  StatusBar,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import theme from "../../utils/theme";
-import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { MainLogo } from "../common/logos";
-import { AvatarIcon } from "../common/icons";
-import { useNavigation } from "@react-navigation/core";
+import * as React from 'react';
+import { Appbar, Avatar } from 'react-native-paper';
+import { StatusBar, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import theme from '../../utils/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MainLogo } from '../common/logos';
+import { AvatarIcon } from '../common/icons';
+import { useNavigation } from '@react-navigation/core';
 
 const Header = (props) => {
   const navigator = useNavigation();
   return (
     <SafeAreaView style={styles.top}>
-      <StatusBar
-        animated={true}
-        backgroundColor={theme.colors.common}
-        barStyle='dark-content'
-      />
+      <StatusBar animated={true} backgroundColor={theme.colors.common} barStyle="dark-content" />
       <Appbar style={styles.header}>
         <MainLogo />
 
         <View style={styles.ctaContainer}>
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("App", { screen: "Chat" })}
-          >
-            <Ionicons
-              name='chatbubble-ellipses-outline'
-              size={20}
-              color='black'
-            />
+          <TouchableWithoutFeedback onPress={() => navigation.navigate('App', { screen: 'Chat' })}>
+            <Ionicons name="chatbubble-ellipses-outline" size={20} color="black" />
           </TouchableWithoutFeedback>
 
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("App", { screen: "Message" })}
+            onPress={() => navigation.navigate('App', { screen: 'Message' })}
           >
-            <Ionicons name='settings' size={20} style={styles.icon} />
+            <Ionicons name="settings" size={20} style={styles.icon} />
           </TouchableWithoutFeedback>
         </View>
       </Appbar>
@@ -53,14 +38,14 @@ const styles = StyleSheet.create({
   header: {
     // height: theme.spacing(5),
     ...theme.shadows[2],
-    justifyContent: "space-between",
-    alignItems: "flex-end",
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     backgroundColor: theme.colors.common,
   },
   top: {
     backgroundColor: theme.colors.common,
     // ...theme.shadows[2],
-    position: "absolute",
+    position: 'absolute',
     zIndex: 1000,
     left: 0,
     right: 0,
@@ -71,9 +56,9 @@ const styles = StyleSheet.create({
     ...theme.shadows[2],
   },
   ctaContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     width: theme.spacing(4),
-    alignItems: "center",
+    alignItems: 'center',
   },
   icon: {
     color: theme.colors.textPrimary,

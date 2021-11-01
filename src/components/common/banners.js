@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Image, StyleSheet, Text, View } from "react-native";
-import { Banner, Headline, Subheading } from "react-native-paper";
-import theme from "../../utils/theme";
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Banner, Headline, Subheading } from 'react-native-paper';
+import theme from '../../utils/theme';
 
 export const CompleteRegistrationBanner = (props) => {
   const [visible, setVisible] = React.useState(false);
@@ -10,24 +10,21 @@ export const CompleteRegistrationBanner = (props) => {
   return (
     <Banner
       visible={visible}
-      style={
-        (styles.container,
-        visible ? styles.containerActive : styles.containerOff)
-      }
+      style={(styles.container, visible ? styles.containerActive : styles.containerOff)}
       actions={[
         {
-          label: "Send again",
+          label: 'Send again',
 
           onPress: () => setVisible(false),
         },
         {
-          label: "Dismiss",
+          label: 'Dismiss',
           onPress: () => setVisible(false),
         },
       ]}
       icon={({ size }) => (
         <Image
-          source={require("../../../assets/logo.png")}
+          source={require('../../../assets/logo.png')}
           style={{
             width: size,
             height: size,
@@ -51,18 +48,18 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing(5),
   },
   container: {
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
     borderRadius: theme.shapes.borderRadios,
     ...theme.shadows[1],
   },
   title: {
-    fontFamily: "openSans-bold",
+    fontFamily: 'openSans-bold',
 
     fontSize: theme.spacing(1.1),
     color: theme.colors.textPrimary,
     letterSpacing: 2,
-    alignSelf: "center",
-    textTransform: "capitalize",
+    alignSelf: 'center',
+    textTransform: 'capitalize',
     marginBottom: theme.spacing(0.7),
   },
   textContainer: {},

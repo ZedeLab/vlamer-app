@@ -1,20 +1,20 @@
-import { object, string, ref as yupRef } from "yup";
+import { object, string, ref as yupRef } from 'yup';
 
 export const fieldNames = {
-  firstName: "First name",
-  lastName: "Last name",
-  email: "Email address",
-  password: "Password",
-  confirmPassword: "Confirmation password",
+  firstName: 'First name',
+  lastName: 'Last name',
+  email: 'Email address',
+  password: 'Password',
+  confirmPassword: 'Confirmation password',
 };
 
 export const initialValues = {
-  [fieldNames.firstName]: "",
-  [fieldNames.lastName]: "",
-  [fieldNames.email]: "",
+  [fieldNames.firstName]: '',
+  [fieldNames.lastName]: '',
+  [fieldNames.email]: '',
 
-  [fieldNames.password]: "",
-  [fieldNames.confirmPassword]: "",
+  [fieldNames.password]: '',
+  [fieldNames.confirmPassword]: '',
 };
 
 export const validationSchema = object({
@@ -25,6 +25,6 @@ export const validationSchema = object({
   [fieldNames.password]: string().required().min(6),
   [fieldNames.confirmPassword]: string().oneOf(
     [yupRef(`${[fieldNames.password]}`), null],
-    "Passwords must match"
+    'Passwords must match'
   ),
 });

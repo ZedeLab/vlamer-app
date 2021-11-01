@@ -1,7 +1,7 @@
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import {
   HomeScreen,
@@ -13,33 +13,29 @@ import {
   NotificationScreen,
   ChatScreen,
   ProfileScreen,
-} from "./components/screens";
-import { useAuth } from "./services/auth";
+} from './components/screens';
+import { useAuth } from './services/auth';
 
-import { PixelRatio, StyleSheet, Text, View } from "react-native";
-import theme from "./utils/theme";
-import { AvatarIcon, TabBarIcon } from "./components/common/icons";
-import Header from "./components/sections/Header";
+import { PixelRatio, StyleSheet, Text, View } from 'react-native';
+import theme from './utils/theme';
+import { AvatarIcon, TabBarIcon } from './components/common/icons';
+import Header from './components/sections/Header';
 
 const AuthStack = createStackNavigator();
 
 export const AuthStackScreen = () => {
   return (
     <AuthStack.Navigator
-      initialRouteName='Login'
+      initialRouteName="Login"
       screenOptions={{
         headerShown: false,
       }}
     >
+      <AuthStack.Screen name="Login" component={LoginScreen} options={{ title: 'login' }} />
       <AuthStack.Screen
-        name='Login'
-        component={LoginScreen}
-        options={{ title: "login" }}
-      />
-      <AuthStack.Screen
-        name='Register'
+        name="Register"
         component={RegisterScreen}
-        options={{ title: "register" }}
+        options={{ title: 'register' }}
       />
     </AuthStack.Navigator>
   );
@@ -51,15 +47,11 @@ export const HomeStackScreen = ({ route }) => {
   return (
     <HomeStack.Navigator
       screenOptions={{
-        headerShown: route.name === "Home",
+        headerShown: route.name === 'Home',
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <HomeStack.Screen
-        name='Home'
-        component={HomeScreen}
-        options={{ title: "Home" }}
-      />
+      <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
     </HomeStack.Navigator>
   );
 };
@@ -70,11 +62,11 @@ export const SearchStackScreen = ({ route }) => {
   return (
     <SearchStack.Navigator
       screenOptions={{
-        headerShown: route.name === "Search",
+        headerShown: route.name === 'Search',
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <SearchStack.Screen name='Search' component={SearchScreen} />
+      <SearchStack.Screen name="Search" component={SearchScreen} />
     </SearchStack.Navigator>
   );
 };
@@ -85,11 +77,11 @@ export const ExploreStackScreen = ({ route }) => {
   return (
     <ExploreStack.Navigator
       screenOptions={{
-        headerShown: route.name === "Explore",
+        headerShown: route.name === 'Explore',
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <ExploreStack.Screen name='Explore' component={ExploreScreen} />
+      <ExploreStack.Screen name="Explore" component={ExploreScreen} />
     </ExploreStack.Navigator>
   );
 };
@@ -100,14 +92,11 @@ export const NotificationStackScreen = ({ route }) => {
   return (
     <NotificationStack.Navigator
       screenOptions={{
-        headerShown: route.name === "Notification",
+        headerShown: route.name === 'Notification',
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <NotificationStack.Screen
-        name='Notification'
-        component={NotificationScreen}
-      />
+      <NotificationStack.Screen name="Notification" component={NotificationScreen} />
     </NotificationStack.Navigator>
   );
 };
@@ -118,11 +107,11 @@ export const SettingsStackScreen = ({ route }) => {
   return (
     <SettingsStack.Navigator
       screenOptions={{
-        headerShown: route.name === "Settings",
+        headerShown: route.name === 'Settings',
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <SettingsStack.Screen name='Settings' component={SettingsScreen} />
+      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
     </SettingsStack.Navigator>
   );
 };
@@ -133,11 +122,11 @@ export const ProfileStackScreen = ({ route }) => {
   return (
     <ProfileStack.Navigator
       screenOptions={{
-        headerShown: route.name === "Profile",
+        headerShown: route.name === 'Profile',
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <SettingsStack.Screen name='Profile' component={ProfileScreen} />
+      <SettingsStack.Screen name="Profile" component={ProfileScreen} />
     </ProfileStack.Navigator>
   );
 };
@@ -153,7 +142,7 @@ export const ChatStackScreen = () => {
         }
       }
     >
-      <SettingsChatStackStack.Screen name='Chat' component={ChatScreen} />
+      <SettingsChatStackStack.Screen name="Chat" component={ChatScreen} />
     </ChatStack.Navigator>
   );
 };
@@ -162,7 +151,7 @@ const TabsStack = createMaterialBottomTabNavigator();
 const TabsStackScreen = () => (
   <TabsStack.Navigator
     activeColor={theme.colors.accent}
-    inactiveColor={"red"}
+    inactiveColor={'red'}
     labeled={false}
     barStyle={{
       backgroundColor: theme.colors.primary_light,
@@ -175,55 +164,47 @@ const TabsStackScreen = () => (
   >
     <TabsStack.Screen
       options={{
-        tabBarLabel: "Home",
+        tabBarLabel: 'Home',
         tabBarIcon: (iconProps) => (
-          <TabBarIcon iconName='home' style={styles.barIcon} {...iconProps} />
+          <TabBarIcon iconName="home" style={styles.barIcon} {...iconProps} />
         ),
       }}
-      name='Home'
+      name="Home"
       component={HomeStackScreen}
     />
     <TabsStack.Screen
       options={{
-        tabBarLabel: "Search",
+        tabBarLabel: 'Search',
         tabBarIcon: (iconProps) => (
-          <TabBarIcon iconName='search' style={styles.barIcon} {...iconProps} />
+          <TabBarIcon iconName="search" style={styles.barIcon} {...iconProps} />
         ),
       }}
-      name='Search'
+      name="Search"
       component={SearchStackScreen}
     />
     <TabsStack.Screen
       options={{
-        tabBarLabel: "Explore",
+        tabBarLabel: 'Explore',
         tabBarIcon: (iconProps) => (
-          <TabBarIcon
-            iconName='add-circle-outline'
-            style={styles.barIcon}
-            {...iconProps}
-          />
+          <TabBarIcon iconName="add-circle-outline" style={styles.barIcon} {...iconProps} />
         ),
       }}
-      name='Explore'
+      name="Explore"
       component={ExploreStackScreen}
     />
     <TabsStack.Screen
       options={{
-        tabBarLabel: "Notification",
+        tabBarLabel: 'Notification',
         tabBarIcon: (iconProps) => (
-          <TabBarIcon
-            iconName='notifications'
-            style={styles.barIcon}
-            {...iconProps}
-          />
+          <TabBarIcon iconName="notifications" style={styles.barIcon} {...iconProps} />
         ),
       }}
-      name='Notification'
+      name="Notification"
       component={NotificationStackScreen}
     />
     <TabsStack.Screen
       options={{
-        tabBarLabel: "Profile",
+        tabBarLabel: 'Profile',
         tabBarIcon: ({ focused }) => (
           // <TabBarIcon iconName='settings' style={styles.barIcon} {...iconProps} />
           <View
@@ -241,7 +222,7 @@ const TabsStackScreen = () => (
           </View>
         ),
       }}
-      name='Profile'
+      name="Profile"
       component={ProfileStackScreen}
     />
   </TabsStack.Navigator>
@@ -260,14 +241,14 @@ export default () => {
         }}
       >
         <RootStack.Screen
-          name='App'
+          name="App"
           component={TabsStackScreen}
           options={{
             animationEnabled: true,
           }}
         />
         <RootStack.Screen
-          name='Auth'
+          name="Auth"
           component={AuthStackScreen}
           options={{
             animationEnabled: false,
@@ -288,7 +269,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
   },
   avatarContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
     borderWidth: 1,
     padding: theme.spacing(0.2),
     marginBottom: theme.spacing(0.4),

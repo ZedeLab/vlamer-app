@@ -1,23 +1,23 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Provider as PageProvider, Headline } from "react-native-paper";
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Provider as PageProvider, Headline } from 'react-native-paper';
 
-import { Provider as StateProvider } from "react-redux";
+import { Provider as StateProvider } from 'react-redux';
 
-import * as Front from "expo-font";
-import AppLoading from "expo-app-loading";
-import AuthStack from "./src/routes";
-import theme from "./src/utils/theme";
-import { AuthContext, AuthProvider } from "./src/services/auth";
-import { store } from "./src/store/store";
+import * as Front from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import AuthStack from './src/routes';
+import theme from './src/utils/theme';
+import { AuthContext, AuthProvider } from './src/services/auth';
+import { store } from './src/store/store';
 
 const fetchFonts = () => {
   return Front.loadAsync({
-    openSans: require("./assets/fonts/OpenSans/OpenSans-Regular.ttf"),
-    "openSans-bold": require("./assets/fonts/OpenSans/OpenSans-Bold.ttf"),
-    "playfair-display": require("./assets/fonts/Playfair_Display/PlayfairDisplaySC-Regular.ttf"),
-    "playfair-display-bold": require("./assets/fonts/Playfair_Display/PlayfairDisplaySC-Bold.ttf"),
+    openSans: require('./assets/fonts/OpenSans/OpenSans-Regular.ttf'),
+    'openSans-bold': require('./assets/fonts/OpenSans/OpenSans-Bold.ttf'),
+    'playfair-display': require('./assets/fonts/Playfair_Display/PlayfairDisplaySC-Regular.ttf'),
+    'playfair-display-bold': require('./assets/fonts/Playfair_Display/PlayfairDisplaySC-Bold.ttf'),
   });
 };
 
@@ -48,8 +48,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -1,22 +1,22 @@
-import { DefaultTheme } from "react-native-paper";
+import { DefaultTheme } from 'react-native-paper';
 
 export default theme = {
   ...DefaultTheme,
   roundness: 2,
   colors: {
     ...DefaultTheme.colors,
-    common: "#fff",
-    primary: "#0E141A",
-    primary_light: "#223140",
-    accent: "#36B8A0",
-    background: "#F7F7F9",
-    paper: "#EAEAEB",
-    divider: "#36B8A0",
-    success: "#4caf50",
-    textPrimary: "#223140",
-    textSecondary: "#fff",
-    textDisabled: "#B8B8B8",
-    error: "#f44336",
+    common: '#fff',
+    primary: '#0E141A',
+    primary_light: '#223140',
+    accent: '#36B8A0',
+    background: '#F7F7F9',
+    paper: '#EAEAEB',
+    divider: '#36B8A0',
+    success: '#4caf50',
+    textPrimary: '#223140',
+    textSecondary: '#fff',
+    textDisabled: '#B8B8B8',
+    error: '#f44336',
   },
   spacing: (size) => size * 16,
   shapes: {
@@ -24,7 +24,7 @@ export default theme = {
   },
   shadows: [
     {
-      shadowColor: "#36B8A0",
+      shadowColor: '#36B8A0',
       shadowOffset: {
         width: 0,
         height: 0,
@@ -35,7 +35,7 @@ export default theme = {
       elevation: 0,
     },
     {
-      shadowColor: "#36B8A0",
+      shadowColor: '#36B8A0',
       shadowOffset: {
         width: 0,
         height: 1,
@@ -46,7 +46,7 @@ export default theme = {
       elevation: 2,
     },
     {
-      shadowColor: "#36B8A0",
+      shadowColor: '#36B8A0',
       shadowOffset: {
         width: 0,
         height: 2,
@@ -57,7 +57,7 @@ export default theme = {
       elevation: 5,
     },
     {
-      shadowColor: "#36B8A0",
+      shadowColor: '#36B8A0',
       shadowOffset: {
         width: 0,
         height: 3,
@@ -68,7 +68,7 @@ export default theme = {
       elevation: 7,
     },
     {
-      shadowColor: "#36B8A0",
+      shadowColor: '#36B8A0',
       shadowOffset: {
         width: 0,
         height: 5,

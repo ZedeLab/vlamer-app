@@ -1,8 +1,8 @@
-import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import theme from "../../utils/theme";
-import Header from "../sections/Header";
-import Footer from "../sections/Footer";
+import React from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import theme from '../../utils/theme';
+import Header from '../sections/Header';
+import Footer from '../sections/Footer';
 
 export const PageAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;
@@ -16,8 +16,8 @@ export const PageAux = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: "stretch",
-    justifyContent: "center",
+    alignSelf: 'stretch',
+    justifyContent: 'center',
     backgroundColor: theme.colors.background,
   },
   mainScreen: {

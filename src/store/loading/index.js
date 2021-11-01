@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   type: null,
@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export const loadingSlice = createSlice({
-  name: "loading",
+  name: 'loading',
   initialState,
   reducers: {
     notifyLoadingStart: (state, action) => {
