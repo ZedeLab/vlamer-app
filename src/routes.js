@@ -3,16 +3,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { HomeScreen, LoginScreen, RegisterScreen } from "./components/screens";
+import {
+  HomeScreen,
+  LoginScreen,
+  RegisterScreen,
+  SearchScreen,
+  SettingsScreen,
+  ExploreScreen,
+  NotificationScreen,
+} from "./components/screens";
 import { useAuth } from "./services/auth";
-import SearchScreen from "./components/screens/search.screen";
 
 import { StyleSheet } from "react-native";
 import theme from "./utils/theme";
 import { TabBarIcon } from "./components/common/icons";
-import SettingsScreen from "./components/screens/settings.screen";
-import ExploreScreen from "./components/screens/explore.screen";
-import NotificationScreen from "./components/screens/notification.screen";
+import Header from "./components/sections/Header";
 
 const AuthStack = createStackNavigator();
 
@@ -181,14 +186,15 @@ export default () => {
     <NavigationContainer>
       <RootStack.Navigator
         screenOptions={{
-          headerShown: false,
+          // headerShown: false,
+          header: (headerProps) => <Header {...headerProps} />,
         }}
       >
         <RootStack.Screen
           name='App'
           component={TabsStackScreen}
           options={{
-            animationEnabled: false,
+            animationEnabled: true,
           }}
         />
         <RootStack.Screen

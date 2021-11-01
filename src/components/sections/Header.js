@@ -6,37 +6,39 @@ import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MainLogo } from "../common/logos";
 
-const Header = () => (
-  <SafeAreaView style={styles.top}>
-    <StatusBar
-      animated={true}
-      backgroundColor={theme.colors.common}
-      barStyle='dark-content'
-    />
-    <Appbar style={styles.header}>
-      <MainLogo />
-      <Avatar.Image
-        style={styles.avatar}
-        size={34}
-        source={require("../../../assets/avatar_f.jpg")}
+const Header = (props) => {
+  return (
+    <SafeAreaView style={styles.top}>
+      <StatusBar
+        animated={true}
+        backgroundColor={theme.colors.common}
+        barStyle='dark-content'
       />
-    </Appbar>
-  </SafeAreaView>
-);
+      <Appbar style={styles.header}>
+        <MainLogo />
+        <Avatar.Image
+          style={styles.avatar}
+          size={34}
+          source={require("../../../assets/avatar_f.jpg")}
+        />
+      </Appbar>
+    </SafeAreaView>
+  );
+};
 
 export default Header;
 
 const styles = StyleSheet.create({
   header: {
     // height: theme.spacing(5),
-    ...theme.shadows[0],
+    ...theme.shadows[2],
     justifyContent: "space-between",
     alignItems: "flex-end",
     backgroundColor: theme.colors.common,
   },
   top: {
     backgroundColor: theme.colors.common,
-    ...theme.shadows[2],
+    // ...theme.shadows[2],
     position: "absolute",
     zIndex: 1000,
     left: 0,

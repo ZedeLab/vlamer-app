@@ -11,6 +11,7 @@ import {
   Paragraph,
 } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/core";
 
 const VlamPostCard = (props) => {
   const {
@@ -22,7 +23,7 @@ const VlamPostCard = (props) => {
     description,
     ...restProps
   } = props;
-
+  const navigation = useNavigation();
   return (
     <CardWrapper>
       <View style={styles.headerContainer}>
