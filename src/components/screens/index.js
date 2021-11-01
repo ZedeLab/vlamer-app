@@ -8,3 +8,5 @@ export { default as SearchScreen } from "./search.screen";
 export { default as ExploreScreen } from "./explore.screen";
 export { default as NotificationScreen } from "./notification.screen";
 export { default as SettingsScreen } from "./settings.screen";
+export { default as ChatScreen } from "./chat.screen";
+export { default as ProfileScreen } from "./profile.screen";

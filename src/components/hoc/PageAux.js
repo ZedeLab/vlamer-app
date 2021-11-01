@@ -8,7 +8,6 @@ export const PageAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;
   return (
     <View {...restProps} style={styles.container}>
-      <Header />
       <View style={styles.mainScreen}>{children}</View>
     </View>
   );

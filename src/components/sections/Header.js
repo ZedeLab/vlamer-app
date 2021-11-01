@@ -1,12 +1,20 @@
 import * as React from "react";
 import { Appbar, Avatar } from "react-native-paper";
-import { StatusBar, StyleSheet } from "react-native";
+import {
+  StatusBar,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import theme from "../../utils/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MainLogo } from "../common/logos";
+import { AvatarIcon } from "../common/icons";
+import { useNavigation } from "@react-navigation/core";
 
 const Header = (props) => {
+  const navigator = useNavigation();
   return (
     <SafeAreaView style={styles.top}>
       <StatusBar
@@ -16,11 +24,24 @@ const Header = (props) => {
       />
       <Appbar style={styles.header}>
         <MainLogo />
-        <Avatar.Image
-          style={styles.avatar}
-          size={34}
-          source={require("../../../assets/avatar_f.jpg")}
-        />
+
+        <View style={styles.ctaContainer}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("App", { screen: "Chat" })}
+          >
+            <Ionicons
+              name='chatbubble-ellipses-outline'
+              size={20}
+              color='black'
+            />
+          </TouchableWithoutFeedback>
+
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("App", { screen: "Message" })}
+          >
+            <Ionicons name='settings' size={20} style={styles.icon} />
+          </TouchableWithoutFeedback>
+        </View>
       </Appbar>
     </SafeAreaView>
   );
@@ -49,8 +70,14 @@ const styles = StyleSheet.create({
     margin: theme.spacing(0.5),
     ...theme.shadows[2],
   },
-  menuIcon: {
-    color: theme.colors.textSecondary,
+  ctaContainer: {
+    flexDirection: "row",
+    width: theme.spacing(4),
+    alignItems: "center",
+  },
+  icon: {
+    color: theme.colors.textPrimary,
     margin: theme.spacing(0.5),
+    marginLeft: theme.spacing(0.9),
   },
 });
