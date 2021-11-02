@@ -1,8 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import theme from '../../utils/theme';
-import Header from '../sections/Header';
-import Footer from '../sections/Footer';
 
 export const PageAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;
@@ -21,7 +19,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   mainScreen: {
-    padding: theme.spacing(1),
+    paddingHorizontal: theme.spacing(1),
   },
 });
 

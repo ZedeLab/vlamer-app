@@ -5,7 +5,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithCustomToken,
+  onAuthStateChanged,
+  signOut as signOutFirebase,
 } from 'firebase/auth';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -37,10 +38,23 @@ function useProvideAuth() {
     console.log('Sing in with Facebook');
   };
 
+  useEffect(async () => {
+    const auth = getAuth();
+    const unsubscribe = await onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   const signInWithGoogle = async () => {
     dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
-      const result = await Google.logInAsync({
+      const googleAccount = await Google.logInAsync({
         androidClientId: GOOGLE_ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
@@ -118,8 +132,14 @@ function useProvideAuth() {
     }
   };
 
+  const signOut = async () => {
+    const auth = getAuth();
+    return await signOutFirebase(auth);
+  };
+
   return {
     user,
+    signOut,
     signUpWithEmail,
     signInWithEmail,
     signInWithFacebook,

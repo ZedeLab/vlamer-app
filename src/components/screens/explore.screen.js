@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import PageAux from '../hoc/PageAux';
 

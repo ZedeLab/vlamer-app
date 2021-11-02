@@ -8,23 +8,18 @@ import { MainLogo } from '../common/logos';
 import { AvatarIcon } from '../common/icons';
 import { useNavigation } from '@react-navigation/core';
 
-const Header = (props) => {
-  const navigator = useNavigation();
+const Header = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.top}>
       <StatusBar animated={true} backgroundColor={theme.colors.common} barStyle="dark-content" />
       <Appbar style={styles.header}>
         <MainLogo />
-
         <View style={styles.ctaContainer}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate('App', { screen: 'Chat' })}>
-            <Ionicons name="chatbubble-ellipses-outline" size={20} color="black" />
+          <TouchableWithoutFeedback onPress={() => navigation.push('Chat')}>
+            <Ionicons name="chatbubble-ellipses-outline" size={23} color="black" />
           </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('App', { screen: 'Message' })}
-          >
-            <Ionicons name="settings" size={20} style={styles.icon} />
+          <TouchableWithoutFeedback onPress={() => navigation.push('Settings')}>
+            <Ionicons name="settings" size={23} style={styles.icon} />
           </TouchableWithoutFeedback>
         </View>
       </Appbar>
@@ -44,12 +39,6 @@ const styles = StyleSheet.create({
   },
   top: {
     backgroundColor: theme.colors.common,
-    // ...theme.shadows[2],
-    position: 'absolute',
-    zIndex: 1000,
-    left: 0,
-    right: 0,
-    top: 0,
   },
   avatar: {
     margin: theme.spacing(0.5),
@@ -57,8 +46,9 @@ const styles = StyleSheet.create({
   },
   ctaContainer: {
     flexDirection: 'row',
-    width: theme.spacing(4),
+    width: theme.spacing(5),
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   icon: {
     color: theme.colors.textPrimary,

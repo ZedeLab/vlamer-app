@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing(15),
   },
   containerOff: {
-    marginBottom: theme.spacing(5),
+    marginBottom: theme.spacing(0.3),
   },
   container: {
     justifyContent: 'flex-start',

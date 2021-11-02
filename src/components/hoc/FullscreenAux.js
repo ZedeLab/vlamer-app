@@ -1,8 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 import theme from '../../utils/theme';
-import Header from '../sections/Header';
-import Footer from '../sections/Footer';
 
 export const FullscreenAux = (props) => {
   const { children, fullScreen, style, ...restProps } = props;

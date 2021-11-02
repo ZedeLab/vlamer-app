@@ -3,12 +3,11 @@
     "rootDir": "./",
     "baseUrl": ".",
     "paths": {
-      "@vm-store/*": ["src/store/*"],
-      "@vm-components/*": ["src/components/*"],
-      "@vm-utils/*": ["src/utils/*"],
-
-      "@vm-services/*": ["src/services/*"],
-      "@vm-assets/*": ["assets/*"]
+      // "@vm-store/*": ["src/store/*"],
+      // "@vm-components/*": ["src/components/*"],
+      // "@vm-utils/*": ["src/utils/*"],
+      // "@vm-services/*": ["src/services/*"],
+      // "@vm-assets/*": ["assets/*"]
     },
 
     "strict": true,
