@@ -6,9 +6,12 @@ import {
   ExploreScreen,
   NotificationScreen,
   ProfileScreen,
+  UserProfileScreen,
 } from '../../components/screens';
 
 import Header from '../../components/sections/Header';
+import { Text } from 'react-native';
+import ProfileViewHeader from '../../components/sections/ProfileViewHeader';
 
 const HomeStack = createStackNavigator();
 export const HomeStackScreen = ({ route }) => {
@@ -66,16 +69,19 @@ export const NotificationStackScreen = ({ route }) => {
   );
 };
 
-const ProfileStack = createStackNavigator();
-export const ProfileStackScreen = ({ route }) => {
+const UserProfileStack = createStackNavigator();
+
+export const UserProfileStackScreen = ({ route, navigation }) => {
   return (
-    <ProfileStack.Navigator
+    <UserProfileStack.Navigator
       screenOptions={{
-        headerShown: route.name === 'Profile',
-        header: (headerProps) => <Header {...headerProps} />,
+        headerShown: route.name === 'User',
+        header: (headerProps) => (
+          <ProfileViewHeader current navigation={navigation} {...headerProps} />
+        ),
       }}
     >
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-    </ProfileStack.Navigator>
+      <UserProfileStack.Screen name="User" component={UserProfileScreen} />
+    </UserProfileStack.Navigator>
   );
 };

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "bd7acbea-c1b1-46c2-avz5-3adf53abb28ba",
+    "username": "abeloman",
+    "firstName": "abel",
+    "userName": "sintaro",
+    "email": "abel@test.test",
+    "bio": "Lets support the awsome team behind Next.Js 💙 and who knows you might go home with  15k😍",
+    "userAvatar": "https://basaschools.co.za/wp-content/uploads/2021/04/boy-avator.png",
+    "followers": 2000,
+    "following": 200,
+    "volt": {
+      "total": 150,
+      "active": 25
+    }
+  },
+  {
+    "id": "bd7acbea-c1b1-46c2-aed5-3adffcabb28ba",
+    "username": "emmy",
+    "firstName": "emma",
+    "userName": "watson",
+    "email": "emma@test.test",
+    "bio": "Lets support the awsome team behind Next.Js 💙 and who knows you might go home with  15k😍",
+    "userAvatar": "https://i.pinimg.com/474x/82/ab/35/82ab3533ee71daf256f23c1ccf20ad6f--avatar-maker.jpg",
+    "followers": 5420,
+    "following": 56,
+    "volt": {
+      "total": 300,
+      "active": 10
+    }
+  },
+  {
+    "id": "bd7acbea-c1b1-46c2-aed5-aaaf53abb28ba",
+    "username": "dissnuts",
+    "firstName": "rock",
+    "userName": "dwage",
+    "email": "rock@test.test",
+    "bio": "Lets support the awsome team behind Next.Js 💙 and who knows you might go home with  15k😍",
+    "userAvatar": "https://basaschools.co.za/wp-content/uploads/2021/04/boy-avator.png",
+    "followers": 65,
+    "following": 17,
+    "volt": {
+      "total": 5,
+      "active": 2
+    }
+  },
+  {
+    "id": "bd7acbea-c1b1-46c2-aed5-3adf53cff28ba",
+    "username": "chooo",
+    "firstName": "choe",
+    "userName": "simon",
+    "email": "choe@test.test",
+    "bio": "Lets support the awsome team behind Next.Js 💙 and who knows you might go home with  15k😍",
+    "userAvatar": "https://basaschools.co.za/wp-content/uploads/2021/04/boy-avator.png",
+    "followers": 354,
+    "following": 1650,
+    "volt": {
+      "total": 8000,
+      "active": 650
+    }
+  }
+]

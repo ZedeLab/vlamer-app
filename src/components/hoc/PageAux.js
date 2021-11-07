@@ -1,25 +1,28 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import theme from '../../utils/theme';
 
 export const PageAux = (props) => {
-  const { children, fullScreen, style, ...restProps } = props;
-  return (
-    <View {...restProps} style={styles.container}>
-      <View style={styles.mainScreen}>{children}</View>
-    </View>
-  );
+  const { children, fullScreen, noGutter, style: propStyle, ...restProps } = props;
+
+  const customStyle = noGutter
+    ? { ...styles.container, ...propStyle }
+    : { ...styles.container, ...propStyle, ...styles.gutter };
+
+  return <View style={customStyle}>{children}</View>;
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignSelf: 'stretch',
+    flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: theme.colors.background,
   },
-  mainScreen: {
-    paddingHorizontal: theme.spacing(1),
+  gutter: {
+    marginTop: 0,
+    paddingHorizontal: theme.spacing(0.8),
   },
 });
 

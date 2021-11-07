@@ -11,6 +11,7 @@ import theme from '../../../../utils/theme';
 import { useAuth } from '../../../../services/auth';
 import { notifyErrorResolved, selectError } from '../../../../store/errors';
 import { useNavigation } from '@react-navigation/core';
+import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
 
 export const LogInForm = (props) => {
   const errors = useSelector(selectError);
@@ -28,11 +29,13 @@ export const LogInForm = (props) => {
   }, [errors]);
 
   const googleAuthHandler = async () => {
+    dispatch(notifyLoadingStart({ type: 'auth' }));
     const account = await signInWithGoogle();
 
     if (account) {
       navigation.navigate('App', { screen: 'Home' });
     }
+    dispatch(notifyLoadingFinish());
   };
 
   const facebookAuthHandler = () => {
@@ -40,6 +43,7 @@ export const LogInForm = (props) => {
   };
 
   const onSubmitHandler = async (values, actions) => {
+    dispatch(notifyLoadingStart({ type: 'auth' }));
     const {
       [formikHelpers.fieldNames.email]: email,
       [formikHelpers.fieldNames.password]: password,
@@ -49,6 +53,7 @@ export const LogInForm = (props) => {
     if (account) {
       navigation.navigate('App', { screen: 'Home' });
     }
+    dispatch(notifyLoadingFinish());
   };
 
   return (

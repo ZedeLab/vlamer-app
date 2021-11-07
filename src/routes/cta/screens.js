@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { SettingsScreen, ChatScreen } from './components/screens';
+import { SettingsScreen, ChatScreen, ProfileScreen } from '../../components/screens';
 
 import Header from '../../components/sections/Header';
+import { UserProfileScreen } from '../../components/screens';
+import ProfileViewHeader from '../../components/sections/ProfileViewHeader';
 
 const SettingsStack = createStackNavigator();
 
@@ -32,5 +34,19 @@ export const ChatStackScreen = () => {
     >
       <ChatStack.Screen name="Chat" component={ChatScreen} />
     </ChatStack.Navigator>
+  );
+};
+
+const ProfileStack = createStackNavigator();
+
+export const ProfileStackScreen = ({ route, navigation }) => {
+  return (
+    <ProfileStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+    </ProfileStack.Navigator>
   );
 };

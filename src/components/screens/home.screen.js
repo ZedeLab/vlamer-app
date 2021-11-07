@@ -4,12 +4,16 @@ import { Subheading } from 'react-native-paper';
 import theme from '../../utils/theme';
 import { CompleteRegistrationBanner } from '../common/banners';
 import { PrimaryButton } from '../common/buttons';
-import VlamPosts from '../common/cards/VlamPostCard';
+import VlamPosts from '../sections/cards/VlamPostCard';
 import PageAux from '../hoc/PageAux';
 import DATA from '../../utils/__mock__/feeds.json';
+import { useNavigation } from '@react-navigation/core';
+import { useStaticData } from '../../services/staticURLs';
 
-class Home extends Component {
-  _renderItem({ item }) {
+export default Home = () => {
+  const navigation = useNavigation();
+
+  const renderVlams = ({ item }) => {
     return (
       <VlamPosts
         firstName={item.firstName}
@@ -18,24 +22,23 @@ class Home extends Component {
         postedAt={item.postedAt}
         vlamType={item.vlamType}
         description={item.description}
+        navigation={navigation}
       />
     );
-  }
+  };
 
-  render() {
-    return (
-      <PageAux>
-        <CompleteRegistrationBanner />
-        <FlatList
-          data={DATA}
-          renderItem={this._renderItem}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-        />
-      </PageAux>
-    );
-  }
-}
+  return (
+    <PageAux>
+      <CompleteRegistrationBanner />
+      <FlatList
+        data={DATA}
+        renderItem={renderVlams}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+      />
+    </PageAux>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -62,5 +65,3 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
 });
-
-export default Home;

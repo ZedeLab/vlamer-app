@@ -4,17 +4,52 @@ import { Button } from 'react-native-paper';
 import theme from '../../utils/theme';
 import { Ionicons } from '@expo/vector-icons';
 
-export const PrimaryButton = ({ style, children, ...restProps }) => {
+export const PrimaryButton = ({ style, outlined, children, ...restProps }) => {
   return (
     <TouchableHighlight
       {...restProps}
-      style={{
-        ...style,
-        ...defaultStyles.button,
-        ...defaultStyles.primaryButton,
-      }}
+      style={
+        outlined
+          ? {
+              ...defaultStyles.button,
+              ...style,
+              ...defaultStyles.outlinedPrimary,
+            }
+          : {
+              ...defaultStyles.button,
+              ...defaultStyles.primaryButton,
+              ...style,
+            }
+      }
     >
-      <Text style={defaultStyles.buttonText}>{children}</Text>
+      <Text style={outlined ? defaultStyles.buttonText_outlined : defaultStyles.buttonText}>
+        {children}
+      </Text>
+    </TouchableHighlight>
+  );
+};
+
+export const SecondaryButton = ({ style, outlined, children, ...restProps }) => {
+  return (
+    <TouchableHighlight
+      {...restProps}
+      style={
+        outlined
+          ? {
+              ...defaultStyles.button,
+              ...style,
+              ...defaultStyles.outlinedSecondary,
+            }
+          : {
+              ...defaultStyles.button,
+              ...style,
+              ...defaultStyles.secondaryButton,
+            }
+      }
+    >
+      <Text style={outlined ? defaultStyles.buttonText_outlined : defaultStyles.buttonText}>
+        {children}
+      </Text>
     </TouchableHighlight>
   );
 };
@@ -57,7 +92,6 @@ const defaultStyles = StyleSheet.create({
     margin: theme.spacing(1),
     borderRadius: theme.spacing(1),
     paddingVertical: theme.spacing(0.3),
-    ...theme.shadows[1],
   },
   buttonContent: {
     alignSelf: 'center',
@@ -78,9 +112,15 @@ const defaultStyles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,
     paddingVertical: theme.spacing(0.8),
+    ...theme.shadows[4],
   },
+  secondaryButton: {
+    backgroundColor: theme.colors.accent,
+    borderColor: theme.colors.primary,
+  },
+
   buttonText: {
-    fontFamily: 'openSans',
+    fontFamily: 'openSans-bold',
     fontSize: theme.spacing(0.8),
     color: theme.colors.textSecondary,
     letterSpacing: 2,
@@ -89,6 +129,37 @@ const defaultStyles = StyleSheet.create({
     paddingHorizontal: theme.spacing(1),
   },
   buttonText_dark: {
+    fontFamily: 'openSans-bold',
+    fontSize: theme.spacing(0.8),
+    color: theme.colors.textPrimary,
+    letterSpacing: 2,
+    alignSelf: 'center',
+    textTransform: 'capitalize',
+    // paddingHorizontal: theme.spacing(1),
+  },
+  icon: {
+    color: theme.colors.textSecondary,
+  },
+  icon_dark: {
+    color: theme.colors.textPrimary,
+  },
+
+  outlinedPrimary: {
+    backgroundColor: 'transparent',
+    borderColor: theme.colors.accent,
+    borderWidth: theme.spacing(0.05),
+
+    borderRadius: theme.shapes.borderRadios,
+  },
+
+  outlinedSecondary: {
+    backgroundColor: 'transparent',
+    borderColor: theme.colors.primary,
+    borderWidth: theme.spacing(0.05),
+    borderRadius: theme.shapes.borderRadios,
+  },
+
+  buttonText_outlined: {
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.8),
     color: theme.colors.textPrimary,
@@ -96,11 +167,5 @@ const defaultStyles = StyleSheet.create({
     alignSelf: 'center',
     textTransform: 'capitalize',
     paddingHorizontal: theme.spacing(1),
-  },
-  icon: {
-    color: theme.colors.textSecondary,
-  },
-  icon_dark: {
-    color: theme.colors.textPrimary,
   },
 });

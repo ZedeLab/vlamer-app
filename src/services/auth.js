@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-import { initializeApp } from 'firebase/app';
+import { v4 as uuid } from 'uuid';
 
 import {
   getAuth,
@@ -12,9 +12,17 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
-import { addNewUser, getUserByEmail } from './db';
+import { addNewUser, addNewUserConnection, getUserByEmail, getUserConnections } from './db';
 import { selectError, notifyError } from '../store/errors';
+import {
+  resetCurrentUserConnections,
+  setCurrentUserConnections,
+  setCurrentUser,
+  resetCurrentUser,
+} from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart, selectLoading } from '../store/loading';
+
+import { useStaticData } from './staticURLs';
 
 const authContext = createContext();
 
@@ -28,9 +36,7 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const errors = useSelector(selectError);
-  const loading = useSelector(selectLoading);
-
+  const { getRandomAvatar, getRandomCoverImage } = useStaticData();
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
 
@@ -40,19 +46,48 @@ function useProvideAuth() {
 
   useEffect(async () => {
     const auth = getAuth();
-    const unsubscribe = await onAuthStateChanged(auth, (user) => {
+    const unsubscribe = await onAuthStateChanged(auth, async (user) => {
+      dispatch(notifyLoadingStart({ type: 'auth' }));
+
       if (user) {
-        setUser(user);
+        const [account, error] = await getUserByEmail(user.email);
+
+        if (account) {
+          const [connections, connectionsError] = await getUserConnections(account.id);
+
+          if (connections) {
+            dispatch(setCurrentUserConnections(connections));
+            dispatch(setCurrentUser(account));
+            setUser(account);
+          } else {
+            console.log(connectionsError);
+            dispatch(
+              notifyError({
+                type: 'auth',
+                message: 'Problem fetching account connections',
+              })
+            );
+          }
+        } else {
+          dispatch(
+            notifyError({
+              type: 'auth',
+              message: 'Problem fetching account',
+            })
+          );
+        }
       } else {
         setUser(null);
+        dispatch(resetCurrentUser());
+        dispatch(resetCurrentUserConnections());
       }
+      dispatch(notifyLoadingFinish());
     });
 
     return unsubscribe;
   }, []);
 
   const signInWithGoogle = async () => {
-    dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
       const googleAccount = await Google.logInAsync({
         androidClientId: GOOGLE_ANDROID_CLIENT_ID,
@@ -63,8 +98,7 @@ function useProvideAuth() {
         const { email } = googleAccount.user;
 
         const account = await getUserByEmail(email);
-        dispatch(notifyLoadingFinish());
-        setUser(account);
+
         return account;
       } else {
         dispatch(
@@ -82,19 +116,15 @@ function useProvideAuth() {
         })
       );
     }
-    dispatch(notifyLoadingFinish());
   };
 
   const signInWithEmail = async (email, password) => {
-    dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
-      dispatch(notifyLoadingFinish());
-      setUser(account);
-      return account;
+
+      return account.user;
     } catch (error) {
-      dispatch(notifyLoadingFinish());
       dispatch(
         notifyError({
           type: 'auth',
@@ -105,30 +135,46 @@ function useProvideAuth() {
   };
 
   const signUpWithEmail = async (firstName, lastName, email, password) => {
-    dispatch(notifyLoadingStart({ type: 'auth' }));
     try {
       const auth = getAuth();
       const account = await createUserWithEmailAndPassword(auth, email, password);
 
       const [newAccount, error] = await addNewUser({
-        firstName,
-        lastName,
-        email,
+        id: account.user.uid,
+        username: account.user.displayName,
+        firstName: firstName,
+        lastName: lastName,
+        email: account.user.email,
+        emailVerified: account.user.emailVerified,
+        lastLoginAt: account.user.metadata.lastSignInTime,
+        createdAt: account.user.metadata.creationTime,
+        phoneNumber: null,
+        avatarURL: getRandomAvatar().url,
+        coverImageURL: getRandomCoverImage().url,
+        gender: null,
       });
-      setUser(account);
-      dispatch(notifyLoadingFinish());
-      if (newAccount) return newAccount;
-      else {
+
+      if (newAccount) {
+        const [newConnectionAccount, accountConnectionError] = await addNewUserConnection({
+          id: uuid(),
+          ownerAccountId: account.user.uid,
+          connections: [],
+        });
+
+        if (newConnectionAccount) {
+          return newAccount;
+        }
+      } else {
         console.log('Problem adding account: ', error);
       }
     } catch (error) {
+      console.log(error);
       dispatch(
         notifyError({
           type: 'auth',
           message: 'Account already exist',
         })
       );
-      dispatch(notifyLoadingFinish());
     }
   };
 

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LogBox, StyleSheet, Text, View } from 'react-native';
 import { Provider as PageProvider, Headline } from 'react-native-paper';
 
@@ -11,6 +11,7 @@ import AuthStack from './src/routes';
 import theme from './src/utils/theme';
 import { AuthContext, AuthProvider } from './src/services/auth';
 import { store } from './src/store/store';
+import { StaticDataProvider } from './src/services/staticURLs';
 
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
@@ -36,13 +37,15 @@ export default function App() {
   }
 
   return (
-    <StateProvider store={store}>
-      <PageProvider theme={theme}>
-        <AuthProvider>
-          <AuthStack />
-        </AuthProvider>
-      </PageProvider>
-    </StateProvider>
+    <StaticDataProvider>
+      <StateProvider store={store}>
+        <PageProvider theme={theme}>
+          <AuthProvider>
+            <AuthStack />
+          </AuthProvider>
+        </PageProvider>
+      </StateProvider>
+    </StaticDataProvider>
   );
 }
 

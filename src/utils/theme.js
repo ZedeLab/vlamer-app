@@ -1,4 +1,5 @@
-import { DefaultTheme } from 'react-native-paper';
+import { DefaultTheme, c } from 'react-native-paper';
+import color from 'color';
 
 export default theme = {
   ...DefaultTheme,
@@ -9,7 +10,10 @@ export default theme = {
     primary: '#0E141A',
     primary_light: '#223140',
     accent: '#36B8A0',
+    accent_dark: '#103830',
     background: '#F7F7F9',
+    backdrop: color('#000').alpha(0.5).rgb().string(),
+    backdrop_light: color('#fff').alpha(0.8).rgb().string(),
     paper: '#EAEAEB',
     divider: '#36B8A0',
     success: '#4caf50',

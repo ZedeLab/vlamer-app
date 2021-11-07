@@ -4,20 +4,49 @@ import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import theme from '../../../utils/theme';
 import { Avatar, Caption, Card, Divider, IconButton, Paragraph } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/core';
+import { ProfileScreen, UserProfileScreen } from '../../screens';
+import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors';
+import { useDispatch } from 'react-redux';
+import { getUserById, getUserConnections } from '../../../services/db';
+import { ProfileStackScreen } from '../../../routes/cta/screens';
 
 const VlamPostCard = (props) => {
-  const { firstName, userName, userAvatar, postedAt, vlamType, description, ...restProps } = props;
-  const navigation = useNavigation();
+  const {
+    firstName,
+    userName,
+    userAvatar,
+    postedAt,
+    vlamType,
+    description,
+    navigation,
+    ...restProps
+  } = props;
+  const dispatch = useDispatch();
+
+  const goToProfileHandler = async () => {
+    const [userProfile, error] = await getUserById('Ni2VdynpZVTcpIfpOnOj9Y2gQJ83');
+
+    if (userProfile) {
+      const [userConnections, error] = await getUserConnections(userProfile.id);
+
+      if (userConnections) {
+        dispatch(setFocusedUser(userProfile));
+        dispatch(setFocusedUserConnections(userConnections));
+        navigation.push('Profile', { screen: ProfileScreen, userId: firstName });
+      } else {
+        console.log(error);
+      }
+    } else {
+      console.log(error);
+    }
+  };
+
   return (
     <CardWrapper>
       <View style={styles.headerContainer}>
         <Avatar.Image size={44} source={{ uri: userAvatar }} />
         <View style={styles.innerHeaderContainer}>
-          <TouchableWithoutFeedback
-            style={styles.headerUserSection}
-            onPress={() => console.log(userName, ' profile')}
-          >
+          <TouchableWithoutFeedback style={styles.headerUserSection} onPress={goToProfileHandler}>
             <View>
               <Text style={{ ...styles.text, ...styles.title }}>{firstName}</Text>
               <Caption style={styles.highlight}>

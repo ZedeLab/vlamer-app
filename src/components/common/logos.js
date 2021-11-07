@@ -11,6 +11,14 @@ export const MainLogo = (props) => {
   );
 };
 
+export const MainLogoSlimRt = (props) => {
+  return (
+    <View style={styles.container}>
+      <Image style={styles.tinyLogo} source={LogoImage} />
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     paddingBottom: theme.spacing(0.6),

@@ -10,6 +10,7 @@ import theme from '../../../../utils/theme';
 import { useAuth } from '../../../../services/auth';
 import { addNewUser } from '../../../../services/db';
 import { notifyErrorResolved, selectError } from '../../../../store/errors';
+import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
 
 export const RegisterForm = ({ navigation }) => {
   const { signUpWithEmail } = useAuth();
@@ -25,6 +26,7 @@ export const RegisterForm = ({ navigation }) => {
   }, [errors]);
 
   const onSubmitHandler = async (values, actions) => {
+    dispatch(notifyLoadingStart({ type: 'auth' }));
     const {
       [formikHelpers.fieldNames.firstName]: firstName,
       [formikHelpers.fieldNames.lastName]: lastName,
@@ -35,8 +37,10 @@ export const RegisterForm = ({ navigation }) => {
     const account = await signUpWithEmail(firstName, lastName, email, password);
 
     if (account) {
-      navigation.navigate('App', { screen: 'Home' });
+      // navigation.navigate('App', { screen: 'Home' });
+      console.log('Submitted');
     }
+    dispatch(notifyLoadingFinish());
   };
 
   return (
