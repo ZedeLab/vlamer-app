@@ -7,6 +7,7 @@ import UserProfileHeader from '../sections/ProfileHeader';
 import { selectActors } from '../../store/actors';
 import { useSelector } from 'react-redux';
 import UserVlams from '../sections/currentUser/UserVlams';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Profile = ({ navigation, route }) => {
   const actors = useSelector(selectActors);
@@ -18,17 +19,17 @@ const Profile = ({ navigation, route }) => {
       </PageAux>
     );
   }
-  console.log('Test ', actors.focusedUserConnections);
+
   return (
-    <PageAux>
-      <View style={styles.pagesWrapper}>
+    <PageAux noGutter>
+      <ScrollView style={styles.pagesWrapper}>
         <UserProfileHeader
           account={actors.focusedUser}
           accountConnections={actors.focusedUserConnections}
         />
 
         <UserVlams />
-      </View>
+      </ScrollView>
     </PageAux>
   );
 };

@@ -118,7 +118,6 @@ export default ProfileUserCard = (props) => {
           <UserViewActionButtons focusedAccount={account} />
         )}
       </View>
-      <View style={styles.pillow} />
     </View>
   );
 };
@@ -129,9 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.common,
     paddingHorizontal: 0,
   },
-  pillow: {
-    paddingTop: theme.spacing(3.4),
-  },
+
   coverImageContainer: {
     width: Dimensions.get('window').width,
     height: theme.spacing(11),

@@ -22,7 +22,7 @@ const UserProfile = ({ navigation, route }) => {
 
   return (
     <PageAux noGutter style={styles.pageContainer}>
-      <View style={styles.pagesWrapper}>
+      <ScrollView style={styles.pagesWrapper}>
         <UserProfileHeader
           account={user}
           admin
@@ -30,7 +30,7 @@ const UserProfile = ({ navigation, route }) => {
         />
 
         <UserVlams />
-      </View>
+      </ScrollView>
     </PageAux>
   );
 };

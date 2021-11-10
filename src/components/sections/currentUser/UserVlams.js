@@ -17,22 +17,36 @@ import { v4 as uuid } from 'uuid';
 
 const renderVlamList = () => {
   return (
-    <FlatList
-      data={DATA}
-      keyExtractor={(item) => item.id}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <VlamPosts
-          firstName={item.firstName}
-          userName={item.userName}
-          userAvatar={item.userAvatar}
-          postedAt={item.postedAt}
-          vlamType={item.vlamType}
-          description={item.description}
-        />
-      )}
-      ListHeaderComponent={null}
-    />
+    <View>
+      {DATA.map((item) => {
+        return (
+          <VlamPosts
+            firstName={item.firstName}
+            userName={item.userName}
+            userAvatar={item.userAvatar}
+            postedAt={item.postedAt}
+            vlamType={item.vlamType}
+            description={item.description}
+          />
+        );
+      })}
+    </View>
+    // <FlatList
+    //   data={DATA}
+    //   keyExtractor={(item) => item.id}
+    //   keyExtractor={(item) => item.id}
+    //   renderItem={({ item }) => (
+    //     <VlamPosts
+    //       firstName={item.firstName}
+    //       userName={item.userName}
+    //       userAvatar={item.userAvatar}
+    //       postedAt={item.postedAt}
+    //       vlamType={item.vlamType}
+    //       description={item.description}
+    //     />
+    //   )}
+    //   ListHeaderComponent={null}
+    // />
   );
 };
 
@@ -69,7 +83,7 @@ export default function UserVlams() {
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
-      style={styles.tabBar}
+      style={styles.container}
       sceneContainerStyle={styles.scene}
       renderTabBar={renderTabBar}
     />
@@ -79,8 +93,7 @@ export default function UserVlams() {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    paddingHorizontal: 0,
+    height: Dimensions.get('window').height * 3,
   },
 
   scene: {
@@ -89,6 +102,7 @@ const styles = StyleSheet.create({
 
   tabBar: {
     backgroundColor: theme.colors.common,
+    // height: 400,
     ...theme.shadows[2],
   },
   label: {
