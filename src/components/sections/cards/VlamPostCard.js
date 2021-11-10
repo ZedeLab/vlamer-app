@@ -9,6 +9,7 @@ import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors
 import { useDispatch } from 'react-redux';
 import { getUserById, getUserConnections } from '../../../services/db';
 import { ProfileStackScreen } from '../../../routes/cta/screens';
+import { LottieIcon } from '../../common/animations';
 
 const VlamPostCard = (props) => {
   const {
@@ -49,11 +50,11 @@ const VlamPostCard = (props) => {
           <TouchableWithoutFeedback style={styles.headerUserSection} onPress={goToProfileHandler}>
             <View>
               <Text style={{ ...styles.text, ...styles.title }}>{firstName}</Text>
-              <Caption style={styles.highlight}>
+              <Text style={styles.highlight}>
                 {'@'}
                 {userName}
-              </Caption>
-              <Caption style={styles.time}>{postedAt}</Caption>
+              </Text>
+              <Text style={styles.greyText}>{postedAt}</Text>
             </View>
           </TouchableWithoutFeedback>
           <View style={styles.headerMainSection}>
@@ -69,13 +70,17 @@ const VlamPostCard = (props) => {
         <TouchableWithoutFeedback>
           <View>
             <Text style={{ ...styles.status, ...styles.greenText }}>15k$</Text>
-            <Text style={{ ...styles.text, ...styles.time }}>winning chance 3%</Text>
+            <Text style={{ ...styles.text, ...styles.greyText }}>winning chance 3%</Text>
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback>
           <View>
-            <Text style={{ ...styles.text, ...styles.time, ...styles.redText }}>Ending soon</Text>
-            <Text style={{ ...styles.text, ...styles.time, ...styles.redText }}>2 remaining</Text>
+            <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
+              Ending soon
+            </Text>
+            <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
+              2 remaining
+            </Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -83,14 +88,50 @@ const VlamPostCard = (props) => {
       <View style={styles.mainSection}>
         <TouchableWithoutFeedback>
           <View style={styles.section}>
-            <Ionicons size={20} style={styles.icon} name="heart-outline" />
-            <Ionicons size={20} style={styles.icon} name="chatbox-outline" />
+            <View style={styles.row}>
+              <LottieIcon
+                loop={false}
+                src={require('../../../../assets/lottie/price.json')}
+                style={styles.icon_small}
+              />
+              <Text style={{ ...styles.text, ...styles.greyText }}>
+                {Math.floor(Math.random() * 1000)} {'price'}
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <LottieIcon
+                loop={false}
+                src={require('../../../../assets/lottie/winner.json')}
+                style={styles.icon}
+              />
+              <Text style={{ ...styles.text, ...styles.greyText }}>
+                {Math.floor(Math.random() * 1000)} {'winning'}
+              </Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback>
           <View style={styles.section}>
-            <Ionicons size={20} style={styles.icon} name="flame-outline" />
-            <Ionicons size={20} style={styles.icon} name="fitness-outline" />
+            <View style={styles.row}>
+              <LottieIcon
+                autoPlay={false}
+                src={require('../../../../assets/lottie/heart.json')}
+                style={styles.icon}
+              />
+              <Text style={{ ...styles.text, ...styles.greyText }}>
+                {Math.floor(Math.random() * 1000)} {'likes'}
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <LottieIcon
+                autoPlay={false}
+                src={require('../../../../assets/lottie/comment.json')}
+                style={styles.icon_small}
+              />
+              <Text style={{ ...styles.text, ...styles.greyText }}>
+                {Math.floor(Math.random() * 1000)} {'comments'}
+              </Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -101,14 +142,13 @@ const VlamPostCard = (props) => {
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0.3),
   },
   mainSection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    width: '100%',
-    paddingVertical: theme.spacing(0.5),
+    paddingVertical: theme.spacing(0.2),
   },
   section: {
     width: '50%',
@@ -120,7 +160,6 @@ const styles = StyleSheet.create({
     fontFamily: 'openSans',
     color: theme.colors.textPrimary,
     lineHeight: theme.spacing(1),
-    letterSpacing: 1.2,
   },
   title: {
     fontSize: theme.spacing(1),
@@ -128,8 +167,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textPrimary,
   },
   description: {
-    paddingHorizontal: theme.spacing(1),
-    marginBottom: theme.spacing(1),
+    paddingHorizontal: theme.spacing(0.5),
     fontSize: theme.spacing(0.8),
   },
   highlight: {
@@ -137,22 +175,20 @@ const styles = StyleSheet.create({
     fontSize: theme.spacing(0.7),
     color: theme.colors.accent,
   },
-  time: {
+  greyText: {
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.7),
-    color: theme.colors.disabled,
-
-    // marginTop: theme.spacing(0.5),
+    color: theme.colors.textDisabled,
   },
   innerHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: theme.spacing(0.7),
+    marginLeft: theme.spacing(0.5),
   },
   divider: {
     backgroundColor: theme.colors.divider,
-    marginVertical: theme.spacing(0.5),
-    marginHorizontal: theme.spacing(1),
+    marginVertical: theme.spacing(0.3),
+    // marginHorizontal: theme.spacing(1),
     opacity: 0.7,
   },
   headerUserSection: {
@@ -170,7 +206,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: theme.colors.accent,
     fontSize: theme.spacing(0.6),
-    width: theme.spacing(10),
+    // width: theme.spacing(10),
   },
   greenText: {
     fontSize: theme.spacing(1.2),
@@ -178,6 +214,21 @@ const styles = StyleSheet.create({
   },
   redText: {
     color: theme.colors.error,
+  },
+  icon: {
+    justifyContent: 'center',
+    width: theme.spacing(1.8),
+    height: theme.spacing(1.8),
+  },
+  icon_small: {
+    justifyContent: 'center',
+    width: theme.spacing(1.5),
+    height: theme.spacing(1.5),
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
