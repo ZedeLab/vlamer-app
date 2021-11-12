@@ -12,6 +12,7 @@ import {
 import Header from '../../components/sections/Header';
 import { Text } from 'react-native';
 import ProfileViewHeader from '../../components/sections/ProfileViewHeader';
+import AddVlamScreen from '../../components/screens/UserProfile/AddVlam.screen';
 
 const HomeStack = createStackNavigator();
 export const HomeStackScreen = ({ route }) => {
@@ -82,6 +83,7 @@ export const UserProfileStackScreen = ({ route, navigation }) => {
       }}
     >
       <UserProfileStack.Screen name="User" component={UserProfileScreen} />
+      <UserProfileStack.Screen name="AddVlam" component={AddVlamScreen} />
     </UserProfileStack.Navigator>
   );
 };

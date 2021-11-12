@@ -6,6 +6,8 @@ import { AnimatedNumberText, LottieIcon } from '../common/animations';
 import { AvatarIcon } from '../common/icons';
 import { PrimaryButton, SecondaryButton } from '../common/buttons';
 import { User } from '../../services/db/models/user';
+import { useNavigation } from '@react-navigation/core';
+import AddVlamScreen from '../screens/UserProfile/AddVlam.screen';
 
 export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
   const coverImage = { uri: coverImageURL };
@@ -34,12 +36,20 @@ export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, follow
 };
 
 export const AdminViewActionButtons = (props) => {
+  const { navigation, ...restProps } = props;
+
+  const startNewVlamHandler = () => {
+    navigation.push('AddVlam');
+  };
+
   return (
     <View style={styles.actionsContainer}>
       <PrimaryButton outlined style={styles.editButton}>
         Edit
       </PrimaryButton>
-      <SecondaryButton style={styles.editButton}> Add</SecondaryButton>
+      <SecondaryButton style={styles.editButton} onPress={startNewVlamHandler}>
+        New
+      </SecondaryButton>
     </View>
   );
 };
@@ -62,8 +72,10 @@ export const UserViewActionButtons = (props) => {
 
 export default ProfileUserCard = (props) => {
   const { user } = useAuth();
-  const { account, admin, currentUser, accountConnections, children } = props;
+  const { account, admin, currentUser, accountConnections, children, ...restProps } = props;
+  const navigation = useNavigation();
 
+  // console.log('navigation: ', navigation);
   return (
     <View style={styles.container}>
       <AnimatedCoverImage
@@ -113,9 +125,9 @@ export default ProfileUserCard = (props) => {
           </View>
         </View>
         {user.id === account.id ? (
-          <AdminViewActionButtons />
+          <AdminViewActionButtons navigation={navigation} />
         ) : (
-          <UserViewActionButtons focusedAccount={account} />
+          <UserViewActionButtons focusedAccount={account} navigation={navigation} />
         )}
       </View>
     </View>

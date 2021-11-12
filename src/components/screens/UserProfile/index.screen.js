@@ -2,11 +2,11 @@ import { useRoute } from '@react-navigation/core';
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { useAuth } from '../../services/auth';
-import { selectActors } from '../../store/actors';
-import PageAux from '../hoc/PageAux';
-import UserProfileHeader from '../sections/ProfileHeader';
-import UserVlams from '../sections/currentUser/UserVlams';
+import { useAuth } from '../../../services/auth';
+import { selectActors } from '../../../store/actors';
+import PageAux from '../../hoc/PageAux';
+import UserProfileHeader from '../../sections/ProfileHeader';
+import UserVlams from '../../sections/currentUser/UserVlams';
 
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();

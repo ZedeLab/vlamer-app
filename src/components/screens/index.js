@@ -10,4 +10,4 @@ export { default as NotificationScreen } from './notification.screen';
 export { default as SettingsScreen } from './settings.screen';
 export { default as ChatScreen } from './chat.screen';
 export { default as ProfileScreen } from './profile.screen';
-export { default as UserProfileScreen } from './userProfile.screen';
+export { default as UserProfileScreen } from './UserProfile/index.screen';

@@ -21,6 +21,7 @@ const renderVlamList = () => {
       {DATA.map((item) => {
         return (
           <VlamPosts
+            key={item.id}
             firstName={item.firstName}
             userName={item.userName}
             userAvatar={item.userAvatar}
@@ -31,22 +32,6 @@ const renderVlamList = () => {
         );
       })}
     </View>
-    // <FlatList
-    //   data={DATA}
-    //   keyExtractor={(item) => item.id}
-    //   keyExtractor={(item) => item.id}
-    //   renderItem={({ item }) => (
-    //     <VlamPosts
-    //       firstName={item.firstName}
-    //       userName={item.userName}
-    //       userAvatar={item.userAvatar}
-    //       postedAt={item.postedAt}
-    //       vlamType={item.vlamType}
-    //       description={item.description}
-    //     />
-    //   )}
-    //   ListHeaderComponent={null}
-    // />
   );
 };
 
