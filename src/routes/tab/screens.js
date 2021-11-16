@@ -9,9 +9,9 @@ import {
   UserProfileScreen,
 } from '../../components/screens';
 
-import Header from '../../components/sections/Header';
+import Header from '../../components/sections/header';
 import { Text } from 'react-native';
-import ProfileViewHeader from '../../components/sections/ProfileViewHeader';
+import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import AddVlamScreen from '../../components/screens/UserProfile/AddVlam.screen';
 
 const HomeStack = createStackNavigator();
