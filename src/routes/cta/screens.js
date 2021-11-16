@@ -3,9 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { SettingsScreen, ChatScreen, ProfileScreen } from '../../components/screens';
 
-import Header from '../../components/sections/Header';
+import Header from '../../components/sections/header';
 import { UserProfileScreen } from '../../components/screens';
-import ProfileViewHeader from '../../components/sections/ProfileViewHeader';
+import ProfileViewHeader from '../../components/sections/profileViewHeader';
 
 const SettingsStack = createStackNavigator();
 

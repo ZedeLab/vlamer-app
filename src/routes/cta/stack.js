@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SettingsScreen, ChatScreen, ProfileScreen } from '../../components/screens';
 
 import TabStackScreen from '../tab/stack';
-import ProfileViewHeader from '../../components/sections/ProfileViewHeader';
+import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import { ProfileStackScreen } from './screens';
 
 const CallToActionStack = createStackNavigator();
