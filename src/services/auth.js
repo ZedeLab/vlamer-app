@@ -98,7 +98,7 @@ function useProvideAuth() {
         const { email } = googleAccount.user;
 
         const account = await getUserByEmail(email);
-
+        setUser(account);
         return account;
       } else {
         dispatch(
@@ -123,6 +123,7 @@ function useProvideAuth() {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
 
+      setUser(account.user);
       return account.user;
     } catch (error) {
       dispatch(
@@ -162,6 +163,7 @@ function useProvideAuth() {
         });
 
         if (newConnectionAccount) {
+          setUser(newAccount);
           return newAccount;
         }
       } else {
