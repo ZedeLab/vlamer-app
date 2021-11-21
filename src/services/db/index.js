@@ -4,6 +4,20 @@ import { StaticData } from './models/staticData';
 import { User } from './models/user';
 import { UserConnections } from './models/UserConnections';
 import { UserVolt } from './models/UserVolt';
+import { Vlam } from './models/Vlam';
+
+export const addNewVlamPost = async (newVlamData) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const vlamPost = new Vlam(newVlamData);
+
+    await setDoc(doc(db, 'vlams', vlamPost.getData().id), vlamPost.getData());
+    return [vlamPost, null];
+  } catch (error) {
+    return [null, error];
+  }
+};
 
 export const getUserVolt = async (id) => {
   const db = getFirestore(firebaseApp);
@@ -28,7 +42,7 @@ export const addNewUserVolt = async (newUserData) => {
 
   try {
     const userVolt = new UserVolt({ ...newUserData, volt: UserVolt.GetDefaultVoltValue() });
-    console.log('userVolt: ', userVolt);
+
     await setDoc(doc(db, 'volts', userVolt.getData().id), userVolt.getData());
     return [userVolt, null];
   } catch (error) {

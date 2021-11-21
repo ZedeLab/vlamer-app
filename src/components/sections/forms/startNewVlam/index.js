@@ -1,51 +1,81 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
-import { StyleSheet, View, Text } from 'react-native';
-import { Button, Divider, Subheading, Surface } from 'react-native-paper';
-import { useSelector, useDispatch } from 'react-redux';
-import { FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../../../common/buttons';
-import { InputText } from '../../../common/inputs';
+import { StyleSheet, Text, View } from 'react-native';
+import { Divider, Surface } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import * as formikHelpers from './__formik-helper';
 import theme from '../../../../utils/theme';
-import { notifyErrorResolved, selectError } from '../../../../store/errors';
-import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
+import { selectError } from '../../../../store/errors';
 import { selectActors } from '../../../../store/actors';
+import FormStatus from './FormStatusPreview';
+import { InputText } from '../../../common/inputs';
+import { PrimaryButton } from '../../../common/buttons';
+import { useVoltAccess } from '../../../../services/voltAccess';
+import { selectLoading } from '../../../../store/loading';
+import { LottieAnimation } from '../../../common/animations';
 
 export default StartNewVlamForm = ({ navigation }) => {
-  const errors = useSelector(selectError);
+  const { startNewVlam } = useVoltAccess();
+  const netErrors = useSelector(selectError);
+  const loadingState = useSelector(selectLoading);
   const { userVolt } = useSelector(selectActors);
-  const dispatch = useDispatch();
 
-  const onSubmitHandler = async (values) => {
-    dispatch(notifyLoadingStart({ type: 'auth' }));
-    console.log(values);
-    dispatch(notifyLoadingFinish());
+  const getParticipants = (winningPrice, participatingPrice) => {
+    return Math.round(winningPrice / participatingPrice);
   };
 
-  const getProfitMargin = (profit, winningPrice, participatingPrice) => {
-    return Number.parseInt((winningPrice / participatingPrice) * 2);
+  const onSubmitHandler = async (values) => {
+    const newVlam = await startNewVlam(
+      values[formikHelpers.fieldNames.description],
+      values[formikHelpers.fieldNames.participatingPrice],
+      values[formikHelpers.fieldNames.winningPrice],
+      getParticipants(
+        values[formikHelpers.fieldNames.winningPrice],
+        values[formikHelpers.fieldNames.participatingPrice]
+      )
+    );
+
+    if (newVlam) {
+      navigation.goBack();
+    }
   };
 
   return (
     <Surface style={styles.container}>
-      {errors?.type !== null && <Text style={styles.errorText}> {errors.message} </Text>}
+      {netErrors?.type === 'form/post' && (
+        <Text style={styles.errorText}> {netErrors.message} </Text>
+      )}
       <Formik
-        initialValues={formikHelpers.initialValues}
         onSubmit={onSubmitHandler}
+        initialValues={formikHelpers.initialValues}
         validationSchema={formikHelpers.validationSchema(userVolt.volt.account.totalCoins)}
       >
-        {({ handleChange, values, handleSubmit, errors }) => (
+        {({ values, errors, handleChange, handleSubmit }) => (
           <View>
-            <View style={styles.header}>
-              <Text>Create a new vlam and start earing </Text>
-              <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-                learn more
-              </Text>
+            <View>
+              {loadingState.type === 'form/post' ? (
+                <LottieAnimation
+                  src={require('../../../../../assets/lottie/wave.json')}
+                  style={styles.botAnim}
+                />
+              ) : (
+                <FormStatus
+                  winningPriceReady={errors[formikHelpers.fieldNames.winningPrice] === undefined}
+                  winningPrice={values[formikHelpers.fieldNames.winningPrice]}
+                  participatingPriceReady={
+                    errors[formikHelpers.fieldNames.participatingPrice] === undefined
+                  }
+                  participatingPrice={values[formikHelpers.fieldNames.participatingPrice]}
+                  participantsReady={
+                    errors[formikHelpers.fieldNames.participatingPrice] === undefined
+                  }
+                  participants={getParticipants(
+                    values[formikHelpers.fieldNames.winningPrice],
+                    values[formikHelpers.fieldNames.participatingPrice]
+                  )}
+                />
+              )}
             </View>
-            <PrimaryButton icon="account" style={styles.submitButton} onPress={handleSubmit}>
-              post
-            </PrimaryButton>
-
             <View style={styles.dividersContainer}>
               <Divider style={styles.divider} />
               <Text> New vlam </Text>
@@ -75,7 +105,7 @@ export default StartNewVlamForm = ({ navigation }) => {
             <InputText
               editable={false}
               label={formikHelpers.fieldNames.profitMargin}
-              // onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
+              // onChangeText={handleChange}
               value={values[formikHelpers.fieldNames.profitMargin]}
             />
             {errors[formikHelpers.fieldNames.profitMargin] && (
@@ -84,16 +114,24 @@ export default StartNewVlamForm = ({ navigation }) => {
 
             <InputText
               multiline
-              editable
-              numberOfLines={theme.spacing(1)}
               label={formikHelpers.fieldNames.description}
-              placeholder={formikHelpers.fieldNames.description_placeholder}
               value={values[formikHelpers.fieldNames.description]}
+              onChangeText={handleChange(formikHelpers.fieldNames.description)}
               style={styles.multilineText}
             />
             {errors[formikHelpers.fieldNames.description] && (
               <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.description]}</Text>
             )}
+
+            <View style={styles.header}>
+              <Text>Create a new vlam and start earing </Text>
+              <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
+                learn more
+              </Text>
+            </View>
+            <PrimaryButton icon="account" onPress={handleSubmit} style={styles.submitButton}>
+              post
+            </PrimaryButton>
           </View>
         )}
       </Formik>
@@ -115,6 +153,7 @@ const styles = StyleSheet.create({
 
   multilineText: {
     textAlign: 'justify',
+    paddingVertical: theme.spacing(1),
   },
 
   dividersContainer: {
@@ -138,6 +177,12 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: theme.spacing(0.8),
     color: theme.colors.error,
+    alignSelf: 'center',
+  },
+
+  botAnim: {
+    marginVertical: theme.spacing(1),
+    width: '100%',
     alignSelf: 'center',
   },
 });

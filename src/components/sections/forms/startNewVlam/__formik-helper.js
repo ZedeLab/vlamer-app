@@ -7,11 +7,10 @@ export const fieldNames = {
   category: 'Vlam catagories',
   tags: 'Vlam tags',
   description: 'Vlam message',
-  description_placeholder: 'Lets support the awesome team behind Nextjs. 70% fund! LETS GO💀 ',
 };
 
 export const initialValues = {
-  [fieldNames.winningPrice]: 0,
+  [fieldNames.winningPrice]: 10,
   [fieldNames.participatingPrice]: 0,
   [fieldNames.profitMargin]: 100,
 

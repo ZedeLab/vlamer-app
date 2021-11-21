@@ -12,6 +12,7 @@ import theme from './src/utils/theme';
 import { AuthContext, AuthProvider } from './src/services/auth';
 import { store } from './src/store/store';
 import { StaticDataProvider } from './src/services/staticURLs';
+import ServicesProviderWrapper from './src/components/hoc/ServiceProviderWappers';
 
 LogBox.ignoreAllLogs();
 const fetchFonts = () => {
@@ -41,7 +42,9 @@ export default function App() {
       <StateProvider store={store}>
         <PageProvider theme={theme}>
           <AuthProvider>
-            <AuthStack />
+            <ServicesProviderWrapper>
+              <AuthStack />
+            </ServicesProviderWrapper>
           </AuthProvider>
         </PageProvider>
       </StateProvider>
