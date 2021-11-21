@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { SettingsScreen, ChatScreen, ProfileScreen } from '../../components/screens';
+import { SettingsScreen, ChatList, ProfileScreen } from '../../components/screens';
 
 import Header from '../../components/sections/header';
 import { UserProfileScreen } from '../../components/screens';
 import ProfileViewHeader from '../../components/sections/profileViewHeader';
+import ChatRoom from '../../components/screens/chatRoom';
 
 const SettingsStack = createStackNavigator();
 
@@ -32,7 +33,8 @@ export const ChatStackScreen = () => {
         header: (headerProps) => <Header {...headerProps} />,
       }}
     >
-      <ChatStack.Screen name="Chat" component={ChatScreen} />
+      <ChatStack.Screen name="Chat List" component={ChatList} />
+      <ChatStack.Screen name="Chat Room" component={ChatRoom} />
     </ChatStack.Navigator>
   );
 };
