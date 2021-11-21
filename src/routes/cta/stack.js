@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { SettingsScreen, ChatScreen, ProfileScreen } from '../../components/screens';
+import { SettingsScreen, ChatList, ProfileScreen } from '../../components/screens';
 
 import TabStackScreen from '../tab/stack';
 import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import { ProfileStackScreen } from './screens';
+import ChatRoom from '../../components/screens/chatRoom';
 
 const CallToActionStack = createStackNavigator();
 
@@ -26,7 +27,12 @@ export default CallToActionStackScreen = ({ route, navigation }) => {
         component={TabStackScreen}
       />
 
-      <CallToActionStack.Screen name="Chat" component={ChatScreen} />
+      <CallToActionStack.Screen options={{ headerShown: false }} name="Chat" component={ChatList} />
+      <CallToActionStack.Screen
+        options={{ headerShown: false }}
+        name="Chat Room"
+        component={ChatRoom}
+      />
       <CallToActionStack.Screen name="Settings" component={SettingsScreen} />
     </CallToActionStack.Navigator>
   );
