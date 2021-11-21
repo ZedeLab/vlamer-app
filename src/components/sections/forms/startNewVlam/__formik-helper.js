@@ -7,7 +7,6 @@ export const fieldNames = {
   category: 'Vlam catagories',
   tags: 'Vlam tags',
   description: 'Vlam message',
-  description_placeholder: 'Lets support the awesome team behind Nextjs. 70% fund! LETS GO💀 ',
 };
 
 export const initialValues = {

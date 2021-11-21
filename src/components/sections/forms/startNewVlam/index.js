@@ -1,55 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Formik, useFormik } from 'formik';
+import React from 'react';
+import { Formik } from 'formik';
 import { StyleSheet, Text, View } from 'react-native';
 import { Divider, Surface } from 'react-native-paper';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as formikHelpers from './__formik-helper';
 import theme from '../../../../utils/theme';
 import { selectError } from '../../../../store/errors';
-import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
 import { selectActors } from '../../../../store/actors';
 import FormStatus from './FormStatusPreview';
 import { InputText } from '../../../common/inputs';
 import { PrimaryButton } from '../../../common/buttons';
+import { useVoltAccess } from '../../../../services/voltAccess';
+import { selectLoading } from '../../../../store/loading';
+import { LottieAnimation } from '../../../common/animations';
 
 export default StartNewVlamForm = ({ navigation }) => {
-  const [values, setValues] = useState();
+  const { startNewVlam } = useVoltAccess();
   const netErrors = useSelector(selectError);
+  const loadingState = useSelector(selectLoading);
   const { userVolt } = useSelector(selectActors);
-  const dispatch = useDispatch();
 
   const getParticipants = (winningPrice, participatingPrice) => {
     return Math.round(winningPrice / participatingPrice);
   };
 
-  const onSubmitHandler = (values) => {
-    dispatch(notifyLoadingStart({ type: 'auth' }));
-    dispatch(notifyLoadingFinish());
+  const onSubmitHandler = async (values) => {
+    const newVlam = await startNewVlam(
+      values[formikHelpers.fieldNames.description],
+      values[formikHelpers.fieldNames.participatingPrice],
+      values[formikHelpers.fieldNames.winningPrice],
+      getParticipants(
+        values[formikHelpers.fieldNames.winningPrice],
+        values[formikHelpers.fieldNames.participatingPrice]
+      )
+    );
+
+    if (newVlam) {
+      navigation.goBack();
+    }
   };
 
   return (
     <Surface style={styles.container}>
-      {netErrors?.type !== null && <Text style={styles.errorText}> {netErrors.message} </Text>}
+      {netErrors?.type === 'form/post' && (
+        <Text style={styles.errorText}> {netErrors.message} </Text>
+      )}
       <Formik
         onSubmit={onSubmitHandler}
         initialValues={formikHelpers.initialValues}
         validationSchema={formikHelpers.validationSchema(userVolt.volt.account.totalCoins)}
       >
-        {({ values, errors, handleChange }) => (
+        {({ values, errors, handleChange, handleSubmit }) => (
           <View>
-            <FormStatus
-              winningPriceReady={errors[formikHelpers.fieldNames.winningPrice] === undefined}
-              winningPrice={values[formikHelpers.fieldNames.winningPrice]}
-              participatingPriceReady={
-                errors[formikHelpers.fieldNames.participatingPrice] === undefined
-              }
-              participatingPrice={values[formikHelpers.fieldNames.participatingPrice]}
-              participantsReady={errors[formikHelpers.fieldNames.participatingPrice] === undefined}
-              participants={getParticipants(
-                values[formikHelpers.fieldNames.winningPrice],
-                values[formikHelpers.fieldNames.participatingPrice]
+            <View>
+              {loadingState.type === 'form/post' ? (
+                <LottieAnimation
+                  src={require('../../../../../assets/lottie/wave.json')}
+                  style={styles.botAnim}
+                />
+              ) : (
+                <FormStatus
+                  winningPriceReady={errors[formikHelpers.fieldNames.winningPrice] === undefined}
+                  winningPrice={values[formikHelpers.fieldNames.winningPrice]}
+                  participatingPriceReady={
+                    errors[formikHelpers.fieldNames.participatingPrice] === undefined
+                  }
+                  participatingPrice={values[formikHelpers.fieldNames.participatingPrice]}
+                  participantsReady={
+                    errors[formikHelpers.fieldNames.participatingPrice] === undefined
+                  }
+                  participants={getParticipants(
+                    values[formikHelpers.fieldNames.winningPrice],
+                    values[formikHelpers.fieldNames.participatingPrice]
+                  )}
+                />
               )}
-            />
+            </View>
             <View style={styles.dividersContainer}>
               <Divider style={styles.divider} />
               <Text> New vlam </Text>
@@ -88,11 +114,9 @@ export default StartNewVlamForm = ({ navigation }) => {
 
             <InputText
               multiline
-              editable
-              numberOfLines={theme.spacing(1)}
               label={formikHelpers.fieldNames.description}
-              placeholder={formikHelpers.fieldNames.description_placeholder}
               value={values[formikHelpers.fieldNames.description]}
+              onChangeText={handleChange(formikHelpers.fieldNames.description)}
               style={styles.multilineText}
             />
             {errors[formikHelpers.fieldNames.description] && (
@@ -105,7 +129,7 @@ export default StartNewVlamForm = ({ navigation }) => {
                 learn more
               </Text>
             </View>
-            <PrimaryButton icon="account" style={styles.submitButton}>
+            <PrimaryButton icon="account" onPress={handleSubmit} style={styles.submitButton}>
               post
             </PrimaryButton>
           </View>
@@ -129,6 +153,7 @@ const styles = StyleSheet.create({
 
   multilineText: {
     textAlign: 'justify',
+    paddingVertical: theme.spacing(1),
   },
 
   dividersContainer: {
@@ -152,6 +177,12 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: theme.spacing(0.8),
     color: theme.colors.error,
+    alignSelf: 'center',
+  },
+
+  botAnim: {
+    marginVertical: theme.spacing(1),
+    width: '100%',
     alignSelf: 'center',
   },
 });

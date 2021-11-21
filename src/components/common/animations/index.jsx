@@ -9,7 +9,7 @@ export const LottieAnimation = ({ src, loadFallBack, style, ...restProps }) => {
   const loading = useSelector(selectLoading);
   return (
     <View>
-      {loading?.type === loadFallBack.type ? (
+      {loading?.type === loadFallBack?.type ? (
         <LottieView
           source={loadFallBack.src}
           style={defaultStyles.loader}
