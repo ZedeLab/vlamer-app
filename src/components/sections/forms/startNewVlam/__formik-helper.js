@@ -1,9 +1,9 @@
-import { object, string, array, number, ref as yupRef } from 'yup';
+import { object, string, array, number, ref as yupRef, reach } from 'yup';
 
 export const fieldNames = {
   winningPrice: 'Winning price in coins',
   participatingPrice: 'Participating price in coins',
-  profitMargin: 'Profit margin',
+  profitMargin: 'Profit margin is 🔐 on 100%',
   category: 'Vlam catagories',
   tags: 'Vlam tags',
   description: 'Vlam message',
@@ -11,8 +11,8 @@ export const fieldNames = {
 };
 
 export const initialValues = {
-  [fieldNames.winningPrice]: 10,
-  [fieldNames.participatingPrice]: 2,
+  [fieldNames.winningPrice]: 0,
+  [fieldNames.participatingPrice]: 0,
   [fieldNames.profitMargin]: 100,
 
   [fieldNames.category]: '',
@@ -20,12 +20,17 @@ export const initialValues = {
   [fieldNames.description]: '',
 };
 
-export const validationSchema = object({
-  [fieldNames.winningPrice]: number().required().min(10),
-  [fieldNames.participatingPrice]: number().required().min(10),
-  [fieldNames.profitMargin]: number().required().min(100),
+export const validationSchema = (voltCapacity) =>
+  object({
+    [fieldNames.winningPrice]: number()
+      .required()
+      .max(voltCapacity, `You only have ${voltCapacity} coins in your account`),
+    [fieldNames.participatingPrice]: number()
+      .required()
+      .max(voltCapacity, `You only have ${voltCapacity} coins in your account`),
+    [fieldNames.profitMargin]: number().required().min(100),
 
-  [fieldNames.category]: string().min(6),
-  // [fieldNames.tags]: array().of(string().oneOf(['chill', 'relax', 'lotto', 'fund'])),
-  [fieldNames.description]: string().required().min(6),
-});
+    [fieldNames.category]: string().min(6),
+    // [fieldNames.tags]: array().of(string().oneOf(['chill', 'relax', 'lotto', 'fund'])),
+    [fieldNames.description]: string().required().min(5),
+  });

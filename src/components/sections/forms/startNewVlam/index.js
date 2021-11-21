@@ -9,9 +9,11 @@ import * as formikHelpers from './__formik-helper';
 import theme from '../../../../utils/theme';
 import { notifyErrorResolved, selectError } from '../../../../store/errors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
+import { selectActors } from '../../../../store/actors';
 
 export default StartNewVlamForm = ({ navigation }) => {
   const errors = useSelector(selectError);
+  const { userVolt } = useSelector(selectActors);
   const dispatch = useDispatch();
 
   const onSubmitHandler = async (values) => {
@@ -30,7 +32,7 @@ export default StartNewVlamForm = ({ navigation }) => {
       <Formik
         initialValues={formikHelpers.initialValues}
         onSubmit={onSubmitHandler}
-        validationSchema={formikHelpers.validationSchema}
+        validationSchema={formikHelpers.validationSchema(userVolt.volt.account.totalCoins)}
       >
         {({ handleChange, values, handleSubmit, errors }) => (
           <View>
@@ -49,38 +51,37 @@ export default StartNewVlamForm = ({ navigation }) => {
               <Text> New vlam </Text>
               <Divider style={styles.divider} />
             </View>
+
+            <InputText
+              label={formikHelpers.fieldNames.winningPrice}
+              onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
+              value={values[formikHelpers.fieldNames.winningPrice]}
+            />
             {errors[formikHelpers.fieldNames.winningPrice] && (
               <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.winningPrice]}</Text>
             )}
-            <InputText
-              label={formikHelpers.fieldNames.winningPrice}
-              // onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
-              value={values[formikHelpers.fieldNames.winningPrice]}
-            />
 
+            <InputText
+              label={formikHelpers.fieldNames.participatingPrice}
+              onChangeText={handleChange(formikHelpers.fieldNames.participatingPrice)}
+              value={values[formikHelpers.fieldNames.participatingPrice]}
+            />
             {errors[formikHelpers.fieldNames.participatingPrice] && (
               <Text style={styles.errorText}>
                 {errors[formikHelpers.fieldNames.participatingPrice]}
               </Text>
             )}
-            <InputText
-              label={formikHelpers.fieldNames.participatingPrice}
-              // onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
-              value={values[formikHelpers.fieldNames.participatingPrice]}
-            />
 
-            {errors[formikHelpers.fieldNames.profitMargin] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.profitMargin]}</Text>
-            )}
             <InputText
+              editable={false}
               label={formikHelpers.fieldNames.profitMargin}
               // onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
               value={values[formikHelpers.fieldNames.profitMargin]}
             />
-
-            {errors[formikHelpers.fieldNames.description] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.description]}</Text>
+            {errors[formikHelpers.fieldNames.profitMargin] && (
+              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.profitMargin]}</Text>
             )}
+
             <InputText
               multiline
               editable
@@ -90,6 +91,9 @@ export default StartNewVlamForm = ({ navigation }) => {
               value={values[formikHelpers.fieldNames.description]}
               style={styles.multilineText}
             />
+            {errors[formikHelpers.fieldNames.description] && (
+              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.description]}</Text>
+            )}
           </View>
         )}
       </Formik>
