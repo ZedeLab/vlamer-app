@@ -1,51 +1,55 @@
-import React, { useEffect } from 'react';
-import { Formik } from 'formik';
-import { StyleSheet, View, Text } from 'react-native';
-import { Button, Divider, Subheading, Surface } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { Form, Formik, useFormik } from 'formik';
+import { StyleSheet, Text, View } from 'react-native';
+import { Divider, Surface } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
-import { FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../../../common/buttons';
-import { InputText } from '../../../common/inputs';
 import * as formikHelpers from './__formik-helper';
 import theme from '../../../../utils/theme';
-import { notifyErrorResolved, selectError } from '../../../../store/errors';
+import { selectError } from '../../../../store/errors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
 import { selectActors } from '../../../../store/actors';
+import FormStatus from './FormStatusPreview';
+import { InputText } from '../../../common/inputs';
+import { PrimaryButton } from '../../../common/buttons';
 
 export default StartNewVlamForm = ({ navigation }) => {
-  const errors = useSelector(selectError);
+  const [values, setValues] = useState();
+  const netErrors = useSelector(selectError);
   const { userVolt } = useSelector(selectActors);
   const dispatch = useDispatch();
 
-  const onSubmitHandler = async (values) => {
-    dispatch(notifyLoadingStart({ type: 'auth' }));
-    console.log(values);
-    dispatch(notifyLoadingFinish());
+  const getParticipants = (winningPrice, participatingPrice) => {
+    return Math.round(winningPrice / participatingPrice);
   };
 
-  const getProfitMargin = (profit, winningPrice, participatingPrice) => {
-    return Number.parseInt((winningPrice / participatingPrice) * 2);
+  const onSubmitHandler = (values) => {
+    dispatch(notifyLoadingStart({ type: 'auth' }));
+    dispatch(notifyLoadingFinish());
   };
 
   return (
     <Surface style={styles.container}>
-      {errors?.type !== null && <Text style={styles.errorText}> {errors.message} </Text>}
+      {netErrors?.type !== null && <Text style={styles.errorText}> {netErrors.message} </Text>}
       <Formik
-        initialValues={formikHelpers.initialValues}
         onSubmit={onSubmitHandler}
+        initialValues={formikHelpers.initialValues}
         validationSchema={formikHelpers.validationSchema(userVolt.volt.account.totalCoins)}
       >
-        {({ handleChange, values, handleSubmit, errors }) => (
+        {({ values, errors, handleChange }) => (
           <View>
-            <View style={styles.header}>
-              <Text>Create a new vlam and start earing </Text>
-              <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-                learn more
-              </Text>
-            </View>
-            <PrimaryButton icon="account" style={styles.submitButton} onPress={handleSubmit}>
-              post
-            </PrimaryButton>
-
+            <FormStatus
+              winningPriceReady={errors[formikHelpers.fieldNames.winningPrice] === undefined}
+              winningPrice={values[formikHelpers.fieldNames.winningPrice]}
+              participatingPriceReady={
+                errors[formikHelpers.fieldNames.participatingPrice] === undefined
+              }
+              participatingPrice={values[formikHelpers.fieldNames.participatingPrice]}
+              participantsReady={errors[formikHelpers.fieldNames.participatingPrice] === undefined}
+              participants={getParticipants(
+                values[formikHelpers.fieldNames.winningPrice],
+                values[formikHelpers.fieldNames.participatingPrice]
+              )}
+            />
             <View style={styles.dividersContainer}>
               <Divider style={styles.divider} />
               <Text> New vlam </Text>
@@ -75,7 +79,7 @@ export default StartNewVlamForm = ({ navigation }) => {
             <InputText
               editable={false}
               label={formikHelpers.fieldNames.profitMargin}
-              // onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
+              // onChangeText={handleChange}
               value={values[formikHelpers.fieldNames.profitMargin]}
             />
             {errors[formikHelpers.fieldNames.profitMargin] && (
@@ -94,6 +98,16 @@ export default StartNewVlamForm = ({ navigation }) => {
             {errors[formikHelpers.fieldNames.description] && (
               <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.description]}</Text>
             )}
+
+            <View style={styles.header}>
+              <Text>Create a new vlam and start earing </Text>
+              <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
+                learn more
+              </Text>
+            </View>
+            <PrimaryButton icon="account" style={styles.submitButton}>
+              post
+            </PrimaryButton>
           </View>
         )}
       </Formik>

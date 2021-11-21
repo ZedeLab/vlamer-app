@@ -11,7 +11,7 @@ export const fieldNames = {
 };
 
 export const initialValues = {
-  [fieldNames.winningPrice]: 0,
+  [fieldNames.winningPrice]: 10,
   [fieldNames.participatingPrice]: 0,
   [fieldNames.profitMargin]: 100,
 
