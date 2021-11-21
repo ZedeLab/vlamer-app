@@ -2,9 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getUserConnections } from '../../services/db';
 import { User } from '../../services/db/models/user';
 import { UserConnections } from '../../services/db/models/UserConnections';
+import { UserVolt } from '../../services/db/models/UserVolt';
 
 const initialState = {
   user: null,
+  userVolt: null,
   focusedUser: null,
   currentUserConnections: null,
   focusedUserConnections: null,
@@ -20,6 +22,14 @@ export const actorsSlice = createSlice({
 
     resetCurrentUser: (state, action) => {
       state.user = null;
+    },
+
+    setCurrentUserVolt: (state, action) => {
+      state.userVolt = new UserVolt(action.payload).getData();
+    },
+
+    resetCurrentUserVolt: (state, action) => {
+      state.userVolt = null;
     },
 
     setFocusedUser: (state, action) => {
@@ -53,6 +63,8 @@ export const actorsSlice = createSlice({
 
 // Actions
 export const {
+  setCurrentUserVolt,
+  resetCurrentUserVolt,
   setCurrentUser,
   resetCurrentUser,
   setFocusedUser,

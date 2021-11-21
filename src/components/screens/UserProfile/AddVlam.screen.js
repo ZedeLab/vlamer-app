@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native';
+
+import StartNewVlamForm from '../../sections/forms/startNewVlam';
 
 export default AddVlamScreen = (props) => {
-  return <Text> Add vlam screen</Text>;
+  const { navigation, ...restProps } = props;
+  return <StartNewVlamForm navigation={navigation} />;
 };
