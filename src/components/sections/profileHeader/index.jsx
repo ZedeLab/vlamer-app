@@ -9,6 +9,8 @@ import { PrimaryButton, SecondaryButton } from '../../common/buttons';
 import { User } from '../../../services/db/models/user';
 import { useNavigation } from '@react-navigation/core';
 import AddVlamScreen from '../../screens/UserProfile/AddVlam.screen';
+import { useSelector } from 'react-redux';
+import { selectActors } from '../../../store/actors';
 
 export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
   const coverImage = { uri: coverImageURL };
@@ -75,8 +77,8 @@ export default ProfileUserCard = (props) => {
   const { user } = useAuth();
   const { account, admin, currentUser, accountConnections, children, ...restProps } = props;
   const navigation = useNavigation();
+  const { userVolt } = useSelector(selectActors);
 
-  // console.log('navigation: ', navigation);
   return (
     <View style={styles.container}>
       <AnimatedCoverImage
@@ -103,7 +105,7 @@ export default ProfileUserCard = (props) => {
               />
               <View style={styles.accountStatusContainerTitle}>
                 <AnimatedNumberText
-                  value={403}
+                  value={userVolt.volt.account.totalCoins}
                   textStyle={{ ...styles.accountStatus, ...styles.accountStatus_highlighted }}
                 />
                 <Text style={{ ...styles.greyText, ...styles.thinText }}>in volt</Text>
@@ -117,7 +119,7 @@ export default ProfileUserCard = (props) => {
               />
               <View style={styles.accountStatusContainerTitle}>
                 <AnimatedNumberText
-                  value={262}
+                  value={userVolt.volt.inAction.totalCoinsOnAction}
                   textStyle={{ ...styles.accountStatus, ...styles.accountStatus_highlighted }}
                 />
                 <Text style={{ ...styles.greyText, ...styles.thinText }}>in action</Text>

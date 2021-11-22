@@ -12,13 +12,21 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
-import { addNewUser, addNewUserConnection, getUserByEmail, getUserConnections } from './db';
+import {
+  addNewUser,
+  addNewUserConnection,
+  addNewUserVolt,
+  getUserByEmail,
+  getUserConnections,
+  getUserVolt,
+} from './db';
 import { selectError, notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
   setCurrentUserConnections,
-  setCurrentUser,
+  setCurrentUserVolt,
   resetCurrentUser,
+  resetCurrentUserVolt,
 } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart, selectLoading } from '../store/loading';
 
@@ -53,18 +61,20 @@ function useProvideAuth() {
         const [account, error] = await getUserByEmail(user.email);
 
         if (account) {
+          // dispatch(setCurrentUser(account));
+          setUser(account);
           const [connections, connectionsError] = await getUserConnections(account.id);
+          const [volt, voltError] = await getUserVolt(account.id);
 
-          if (connections) {
+          if (connections && volt) {
+            dispatch(setCurrentUserVolt(volt));
             dispatch(setCurrentUserConnections(connections));
-            dispatch(setCurrentUser(account));
-            setUser(account);
           } else {
-            console.log(connectionsError);
+            console.log('connectionsError: ', connectionsError, '\nvoltError: ', voltError);
             dispatch(
               notifyError({
                 type: 'auth',
-                message: 'Problem fetching account connections',
+                message: 'Problem fetching account information',
               })
             );
           }
@@ -80,6 +90,7 @@ function useProvideAuth() {
         setUser(null);
         dispatch(resetCurrentUser());
         dispatch(resetCurrentUserConnections());
+        dispatch(resetCurrentUserVolt());
       }
       dispatch(notifyLoadingFinish());
     });
@@ -161,10 +172,21 @@ function useProvideAuth() {
           ownerAccountId: account.user.uid,
           connections: [],
         });
+        // Show errors from create user volt function
+        // accountConnectionError && console.log(accountConnectionError);
 
         if (newConnectionAccount) {
-          setUser(newAccount);
-          return newAccount;
+          const [newVoltAccount, accountVoltError] = await addNewUserVolt({
+            id: uuid(),
+            ownerAccountId: account.user.uid,
+          });
+          // Show errors from create user volt function
+          // accountVoltError && console.log(accountVoltError);
+
+          if (newVoltAccount) {
+            setUser(newAccount);
+            return newAccount;
+          }
         }
       } else {
         console.log('Problem adding account: ', error);

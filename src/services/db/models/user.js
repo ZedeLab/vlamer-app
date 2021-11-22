@@ -1,8 +1,10 @@
 import { boolean, date, object, string, ref as yupRef } from 'yup';
 import { v4 as uuid } from 'uuid';
 export class User {
-  constructor(newUserData) {
+  constructor(newUserData, userVolt, userConnection) {
     this.data = newUserData;
+    this.volt = userVolt;
+    this.userConnection = userConnection;
     this.__validate();
   }
 
@@ -29,6 +31,7 @@ export class User {
     }
   };
   getData() {
-    return this.data;
+    const { volt, userConnection, ...restData } = this.data;
+    return restData;
   }
 }
