@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
-import {
-  View,
-  useWindowDimensions,
-  SectionList,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  Dimensions,
-  Text,
-} from 'react-native';
+import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import theme from '../../../utils/theme';
-import VlamPosts from '../../sections/cards/VlamPostCard';
-import DATA from '../../../utils/__mock__/feeds.json';
-import { v4 as uuid } from 'uuid';
+import VlamPosts from '../cards/VlamPostCard';
+import { selectActors } from '../../../store/actors';
+import { useSelector } from 'react-redux';
+import { useAuth } from '../../../services/auth';
+import { useNavigation } from '@react-navigation/core';
 
 const renderVlamList = () => {
+  const { user } = useAuth();
+  const navigation = useNavigation();
+  const actors = useSelector(selectActors);
+
+  if (!user || !actors?.currentUserVlamList) {
+    return <Text> Loading...</Text>;
+  }
+
   return (
     <View>
-      {DATA.map((item) => {
+      {actors.currentUserVlamList.map((item) => {
         return (
           <VlamPosts
-            key={item.id}
-            firstName={item.firstName}
-            userName={item.userName}
-            userAvatar={item.userAvatar}
-            postedAt={item.postedAt}
-            vlamType={item.vlamType}
-            description={item.description}
+            authorAccount={user}
+            vlamType={''}
+            message={item.message}
+            numberOfParticipants={item.numberOfParticipants}
+            participatingPrice={item.participatingPrice}
+            winingPrice={item.winingPrice}
+            createdAt={item.createdAt}
+            navigation={navigation}
           />
         );
       })}
@@ -78,7 +80,7 @@ export default function UserVlams() {
 const styles = StyleSheet.create({
   container: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height * 3,
+    minHeight: '100%',
   },
 
   scene: {

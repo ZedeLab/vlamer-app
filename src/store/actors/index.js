@@ -11,6 +11,8 @@ const initialState = {
   currentUserConnections: null,
   focusedUserConnections: null,
   currentUserFeedList: null,
+  currentUserVlamList: null,
+  profileVlamList: null,
 };
 
 export const actorsSlice = createSlice({
@@ -63,6 +65,14 @@ export const actorsSlice = createSlice({
     setCurrentUserFeedList: (state, action) => {
       state.currentUserFeedList = action.payload;
     },
+
+    setCurrentUserVlamList: (state, action) => {
+      state.currentUserVlamList = action.payload;
+    },
+
+    setProfileVlamList: (state, action) => {
+      state.profileVlamList = action.payload;
+    },
   },
 });
 
@@ -79,6 +89,8 @@ export const {
   setFocusedUserConnections,
   resetFocusedUserConnections,
   setCurrentUserFeedList,
+  setCurrentUserVlamList,
+  setProfileVlamList,
 } = actorsSlice.actions;
 
 // Selectors

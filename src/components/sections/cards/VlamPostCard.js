@@ -1,15 +1,12 @@
 import React from 'react';
 import { styles } from './styles';
 import CardWrapper from '../../hoc/CardWrapper';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import theme from '../../../utils/theme';
-import { Avatar, Caption, Card, Divider, IconButton, Paragraph } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
-import { ProfileScreen, UserProfileScreen } from '../../screens';
+import { Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Avatar, Divider, Paragraph } from 'react-native-paper';
+import { ProfileScreen } from '../../screens';
 import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
-import { getUserById, getUserConnections } from '../../../services/db';
-import { ProfileStackScreen } from '../../../routes/cta/screens';
+import { getUserConnections } from '../../../services/db';
 import { LottieIcon } from '../../common/animations';
 
 const VlamPostCard = (props) => {

@@ -16,6 +16,29 @@ import { UserConnections } from './models/UserConnections';
 import { UserVolt } from './models/UserVolt';
 import { Vlam } from './models/Vlam';
 
+export const getUserVlamList = async (userId) => {
+  const db = getFirestore(firebaseApp);
+  const vlamRef = collection(db, 'vlams');
+  const docRef = query(vlamRef, where('author', '==', userId));
+
+  try {
+    const vlamList = [];
+    const querySnapshot = await getDocs(docRef);
+    querySnapshot.forEach((doc) => {
+      const { createdAt, ...document } = doc.data();
+
+      const formattedCreatedAt = formatTime(
+        new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
+      );
+      vlamList.push({ ...document, createdAt: formattedCreatedAt });
+    });
+
+    return [vlamList, null];
+  } catch (error) {
+    return [null, error];
+  }
+};
+
 export const findUsersFromUserIdList = async (userIdList) => {
   const db = getFirestore(firebaseApp);
   const userRef = collection(db, 'users');
