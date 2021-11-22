@@ -1,17 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { LogBox, StyleSheet, Text, View } from 'react-native';
-import { Provider as PageProvider, Headline } from 'react-native-paper';
-
-import { Provider as StateProvider } from 'react-redux';
+import React, { useState } from 'react';
+import { LogBox, StyleSheet } from 'react-native';
 
 import * as Front from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import AuthStack from './src/routes';
-import theme from './src/utils/theme';
-import { AuthContext, AuthProvider } from './src/services/auth';
-import { store } from './src/store/store';
-import { StaticDataProvider } from './src/services/staticURLs';
 import ServicesProviderWrapper from './src/components/hoc/ServiceProviderWappers';
 
 LogBox.ignoreAllLogs();
@@ -38,17 +30,9 @@ export default function App() {
   }
 
   return (
-    <StaticDataProvider>
-      <StateProvider store={store}>
-        <PageProvider theme={theme}>
-          <AuthProvider>
-            <ServicesProviderWrapper>
-              <AuthStack />
-            </ServicesProviderWrapper>
-          </AuthProvider>
-        </PageProvider>
-      </StateProvider>
-    </StaticDataProvider>
+    <ServicesProviderWrapper>
+      <AuthStack />
+    </ServicesProviderWrapper>
   );
 }
 
