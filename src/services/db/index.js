@@ -1,18 +1,88 @@
-import { doc, getDocs, setDoc, collection, getFirestore, query, where } from 'firebase/firestore';
+import {
+  doc,
+  getDocs,
+  setDoc,
+  collection,
+  getFirestore,
+  query,
+  where,
+  Timestamp,
+} from 'firebase/firestore';
 import firebaseApp from '../../utils/firebase';
+import { formatTime } from '../../utils/timeManager';
 import { StaticData } from './models/staticData';
 import { User } from './models/user';
 import { UserConnections } from './models/UserConnections';
 import { UserVolt } from './models/UserVolt';
 import { Vlam } from './models/Vlam';
 
+export const findUsersFromUserIdList = async (userIdList) => {
+  const db = getFirestore(firebaseApp);
+  const userRef = collection(db, 'users');
+  const docRef = query(userRef, where('id', 'in', userIdList));
+
+  try {
+    const userList = [];
+    const querySnapshot = await getDocs(docRef);
+    querySnapshot.forEach((doc) => {
+      const document = doc.data();
+      userList.push({ id: doc.id, ...document });
+    });
+
+    return [userList, null];
+  } catch (error) {
+    return [null, error];
+  }
+};
+
+export const getUserFeedList = async () => {
+  const db = getFirestore(firebaseApp);
+  const vlamRef = collection(db, 'vlams');
+  const docRef = query(vlamRef, where('state', '==', 'onPlay'));
+  const accountIdList = [];
+
+  try {
+    const feedList = [];
+    const querySnapshot = await getDocs(docRef);
+    querySnapshot.forEach((doc) => {
+      const { createdAt, ...document } = doc.data();
+
+      const formattedCreatedAt = formatTime(
+        new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
+      );
+      console.log('formattedCreatedAt: ', formattedCreatedAt);
+      feedList.push({ ...document, createdAt: formattedCreatedAt });
+      accountIdList.push(document.author);
+    });
+
+    if (feedList.length === 0) return [feedList, null];
+
+    const [accounts, error] = await findUsersFromUserIdList(accountIdList);
+
+    if (accounts) {
+      const fullFeedList = feedList.map((feedPost, index) => ({
+        ...feedPost,
+        authorAccount: accounts.find((account) => account.id === feedPost.author),
+      }));
+      return [fullFeedList, null];
+    } else {
+      console.log(error);
+    }
+  } catch (error) {
+    return [null, error];
+  }
+};
+
 export const addNewVlamPost = async (newVlamData) => {
   const db = getFirestore(firebaseApp);
 
   try {
-    const vlamPost = new Vlam(newVlamData);
-
-    await setDoc(doc(db, 'vlams', vlamPost.getData().id), vlamPost.getData());
+    const vlamPost = await new Vlam({
+      ...Vlam.GetDefaultVlamValue(),
+      createdAt: Timestamp.now(),
+      ...newVlamData,
+    }).__validate();
+    await setDoc(doc(db, 'vlams', vlamPost.id), vlamPost);
     return [vlamPost, null];
   } catch (error) {
     return [null, error];

@@ -10,19 +10,28 @@ import PageAux from '../../hoc/PageAux';
 import DATA from '../../../utils/__mock__/feeds.json';
 import { useNavigation } from '@react-navigation/core';
 import { useStaticData } from '../../../services/staticURLs';
+import { useSelector } from 'react-redux';
+import { selectActors } from '../../../store/actors';
 
 export default Home = () => {
   const navigation = useNavigation();
+  const { currentUserFeedList: feedList } = useSelector(selectActors);
+
+  if (!feedList) {
+    return <Text>Loading...</Text>;
+  }
 
   const renderVlams = ({ item }) => {
     return (
       <VlamPosts
-        firstName={item.firstName}
-        userName={item.userName}
-        userAvatar={item.userAvatar}
+        authorAccount={item.authorAccount}
         postedAt={item.postedAt}
-        vlamType={item.vlamType}
-        description={item.description}
+        vlamType={''}
+        message={item.message}
+        numberOfParticipants={item.numberOfParticipants}
+        participatingPrice={item.participatingPrice}
+        winingPrice={item.winingPrice}
+        createdAt={item.createdAt}
         navigation={navigation}
       />
     );
@@ -32,7 +41,7 @@ export default Home = () => {
     <PageAux>
       <CompleteRegistrationBanner />
       <FlatList
-        data={DATA}
+        data={feedList}
         renderItem={renderVlams}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}

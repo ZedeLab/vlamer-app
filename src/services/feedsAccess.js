@@ -1,5 +1,8 @@
 import React, { useState, useContext, createContext, useEffect } from 'react';
-import { FeedsList } from './db/models/FeedsList';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectActors, setCurrentUserFeedList } from '../store/actors';
+import { useAuth } from './auth';
+import { getUserFeedList } from './db';
 
 const FeedsListContext = createContext();
 
@@ -13,16 +16,11 @@ export const useFeedsList = () => {
 };
 
 function useProvideFeedsList() {
-  const [feedsList, setFeedsList] = useState(null);
-
-  // useEffect(() => {
-  //   initializeFeedsList();
-  // }, []);
-
-  // const initializeFeedsList = async () => {};
+  const dispatch = useDispatch();
+  const { currentUserFeedList } = useSelector(selectActors);
 
   return {
-    // FeedsList: FeedsList && new FeedsList(FeedsList),
+    currentUserFeedList,
     // setFeedsList,
   };
 }

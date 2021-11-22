@@ -35,7 +35,7 @@ function useProvideVoltAccess() {
         console.log('Problem fetching user volt');
       }
     }
-  }, []);
+  }, [user]);
 
   const startNewVlam = async (message, participatingPrice, winingPrice, numberOfParticipants) => {
     dispatch(notifyLoadingStart({ type: 'form/post' }));
@@ -45,14 +45,15 @@ function useProvideVoltAccess() {
       author: user.id,
       message: message,
       participatingPrice: participatingPrice,
-      winingPrice: winingPrice,
-      numberOfParticipants: numberOfParticipants,
+      winingPrice: parseInt(winingPrice),
+      numberOfParticipants: parseInt(numberOfParticipants),
     });
 
     if (vlam) {
       dispatch(notifyLoadingFinish());
       return vlam;
     } else {
+      console.log(error);
       dispatch(notifyLoadingFinish());
       dispatch(
         notifyError({

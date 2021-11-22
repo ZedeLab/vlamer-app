@@ -10,6 +10,7 @@ const initialState = {
   focusedUser: null,
   currentUserConnections: null,
   focusedUserConnections: null,
+  currentUserFeedList: null,
 };
 
 export const actorsSlice = createSlice({
@@ -58,6 +59,10 @@ export const actorsSlice = createSlice({
     resetFocusedUserConnections: (state) => {
       state.currentUserConnections = null;
     },
+
+    setCurrentUserFeedList: (state, action) => {
+      state.currentUserFeedList = action.payload;
+    },
   },
 });
 
@@ -73,6 +78,7 @@ export const {
   resetCurrentUserConnections,
   setFocusedUserConnections,
   resetFocusedUserConnections,
+  setCurrentUserFeedList,
 } = actorsSlice.actions;
 
 // Selectors

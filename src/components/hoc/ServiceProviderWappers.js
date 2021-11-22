@@ -6,6 +6,7 @@ import { Provider as PageProvider } from 'react-native-paper';
 import { Provider as StateProvider } from 'react-redux';
 import theme from '../../utils/theme';
 import { store } from '../../store/store';
+import { FeedsVlamListProvider } from '../../services/feedsAccess';
 
 export const ServicesProviderWrapper = (props) => {
   const { children } = props;
@@ -15,7 +16,9 @@ export const ServicesProviderWrapper = (props) => {
       <StateProvider store={store}>
         <PageProvider theme={theme}>
           <AuthProvider>
-            <VoltAccessProvider>{children}</VoltAccessProvider>
+            <VoltAccessProvider>
+              <FeedsVlamListProvider>{children}</FeedsVlamListProvider>
+            </VoltAccessProvider>
           </AuthProvider>
         </PageProvider>
       </StateProvider>

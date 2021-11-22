@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     padding: theme.spacing(0.3),
   },
   mainSection: {
+    width: '95%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -36,11 +37,18 @@ export const styles = StyleSheet.create({
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.7),
     color: theme.colors.accent,
+    textTransform: 'lowercase',
   },
   greyText: {
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.7),
     color: theme.colors.textDisabled,
+    paddingLeft: theme.spacing(0.1),
+  },
+  smallPrimaryText: {
+    fontFamily: 'openSans',
+    fontSize: theme.spacing(0.7),
+    color: theme.colors.textPrimary,
     paddingLeft: theme.spacing(0.1),
   },
   innerHeaderContainer: {
@@ -76,7 +84,7 @@ export const styles = StyleSheet.create({
     color: theme.colors.success,
   },
   redText: {
-    color: theme.colors.error,
+    color: theme.colors.success,
   },
   icon: {
     justifyContent: 'center',
@@ -103,5 +111,14 @@ export const styles = StyleSheet.create({
 
   iconHeartText: {
     marginLeft: -theme.spacing(0.3),
+  },
+
+  message: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: theme.spacing(0.3),
+    marginVertical: theme.spacing(0.3),
+  },
+  messageContainer: {
+    width: '95%',
   },
 });
