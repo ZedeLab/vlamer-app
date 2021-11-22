@@ -1,31 +1,48 @@
-import { boolean, date, object, string, ref as yupRef } from 'yup';
+import { number, date, object, string, ref as yupRef } from 'yup';
 import { v4 as uuid } from 'uuid';
 export class Vlam {
   constructor(newData) {
     this.data = newData;
-    this.__validate();
   }
 
   __validate = async (data) => {
     try {
-      return await object({
+      this.data = await object({
         id: string().uuid().default(uuid()),
         author: string().required(),
         participatingPrice: string().required(),
-        winingPrice: string().required(),
-        numberOfParticipants: string().required().email(),
-        message: boolean().default(false),
-        vlamType: string().oneOf(['express', 'fund', 'sales']).default('express'),
-        createdAt: date().required().default(new Date()),
+        winingPrice: number().required(),
+        numberOfParticipants: number().required(),
+        message: string().required().min(5),
+        type: string().oneOf(['express', 'fund', 'sales']).default('express'),
+        state: string().oneOf(['onPlay', 'onSelection', 'ended']).default('onPlay'),
+        createdAt: {
+          seconds: number().required(),
+          nanoseconds: number().required(),
+        },
       })
         .camelCase(false)
-        .validate(data, { stripUnknown: true, strict: true, abortEarly: false });
+        .validate(this.data, { stripUnknown: true, strict: true, abortEarly: false });
+
+      return this.data;
     } catch (err) {
+      console.log('Creating vlam: ', err.errors);
       return err;
     }
   };
   getData() {
     const { volt, userConnection, ...restData } = this.data;
-    return restData;
+    return rest;
+  }
+
+  static GetDefaultVlamValue() {
+    return {
+      id: uuid(),
+
+      message: 'Come join me. 💜',
+      type: 'express',
+      state: 'onPlay',
+      createdAt: new Date(),
+    };
   }
 }

@@ -1,43 +1,36 @@
 import React from 'react';
 import { styles } from './styles';
 import CardWrapper from '../../hoc/CardWrapper';
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import theme from '../../../utils/theme';
-import { Avatar, Caption, Card, Divider, IconButton, Paragraph } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
-import { ProfileScreen, UserProfileScreen } from '../../screens';
+import { Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Avatar, Divider, Paragraph } from 'react-native-paper';
+import { ProfileScreen } from '../../screens';
 import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
-import { getUserById, getUserConnections } from '../../../services/db';
-import { ProfileStackScreen } from '../../../routes/cta/screens';
+import { getUserConnections } from '../../../services/db';
 import { LottieIcon } from '../../common/animations';
 
 const VlamPostCard = (props) => {
   const {
-    firstName,
-    userName,
-    userAvatar,
-    postedAt,
+    authorAccount,
+    createdAt,
     vlamType,
-    description,
+    message,
     navigation,
+    numberOfParticipants,
+    participatingPrice,
+    winingPrice,
     ...restProps
   } = props;
+
   const dispatch = useDispatch();
 
   const goToProfileHandler = async () => {
-    const [userProfile, error] = await getUserById('Ni2VdynpZVTcpIfpOnOj9Y2gQJ83');
+    const [userConnections, error] = await getUserConnections(authorAccount?.id);
 
-    if (userProfile) {
-      const [userConnections, error] = await getUserConnections(userProfile.id);
-
-      if (userConnections) {
-        dispatch(setFocusedUser(userProfile));
-        dispatch(setFocusedUserConnections(userConnections));
-        navigation.push('Profile', { screen: ProfileScreen, userId: firstName });
-      } else {
-        console.log(error);
-      }
+    if (userConnections) {
+      dispatch(setFocusedUser(authorAccount));
+      dispatch(setFocusedUserConnections(userConnections));
+      navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
     } else {
       console.log(error);
     }
@@ -46,16 +39,16 @@ const VlamPostCard = (props) => {
   return (
     <CardWrapper>
       <View style={styles.headerContainer}>
-        <Avatar.Image size={44} source={{ uri: userAvatar }} />
+        <Avatar.Image size={44} source={{ uri: authorAccount?.avatarURL }} />
         <View style={styles.innerHeaderContainer}>
           <TouchableWithoutFeedback style={styles.headerUserSection} onPress={goToProfileHandler}>
             <View>
-              <Text style={{ ...styles.text, ...styles.title }}>{firstName}</Text>
+              <Text style={{ ...styles.text, ...styles.title }}>{authorAccount?.firstName}</Text>
               <Text style={styles.highlight}>
                 {'@'}
-                {userName}
+                {authorAccount?.username}
               </Text>
-              <Text style={styles.greyText}>{postedAt}</Text>
+              <Text style={styles.greyText}>{createdAt}</Text>
             </View>
           </TouchableWithoutFeedback>
           <View style={styles.headerMainSection}>
@@ -66,21 +59,30 @@ const VlamPostCard = (props) => {
         </View>
       </View>
       <Divider style={styles.divider} />
-      <Paragraph style={{ ...styles.text, ...styles.description }}>{description}</Paragraph>
+      <View style={styles.messageContainer}>
+        <Paragraph style={{ ...styles.text, ...styles.message }}>{message}</Paragraph>
+      </View>
       <View style={styles.mainSection}>
         <TouchableWithoutFeedback>
           <View>
-            <Text style={{ ...styles.status, ...styles.greenText }}>15k$</Text>
-            <Text style={{ ...styles.text, ...styles.greyText }}>winning chance 3%</Text>
+            <View style={styles.row}>
+              <LottieIcon
+                autoPlay={true}
+                loop={false}
+                src={require('../../../../assets/lottie/gift.json')}
+                style={styles.iconBig}
+              />
+              <Text style={{ ...styles.status, ...styles.greenText }}>{winingPrice} coins</Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback>
           <View>
             <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
-              Ending soon
+              New starting
             </Text>
             <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
-              2 remaining
+              {numberOfParticipants} remaining
             </Text>
           </View>
         </TouchableWithoutFeedback>
@@ -95,18 +97,21 @@ const VlamPostCard = (props) => {
                 src={require('../../../../assets/lottie/price.json')}
                 style={styles.icon_small}
               />
-              <Text style={{ ...styles.text, ...styles.greyText }}>
-                {Math.floor(Math.random() * 1000)} {'price'}
+              <Text style={{ ...styles.text, ...styles.smallPrimaryText }}>
+                Join for
+                <Text style={{ ...styles.text, ...styles.redText }}>
+                  {' ' + participatingPrice} coins
+                </Text>
               </Text>
             </View>
             <View style={styles.row}>
               <LottieIcon
                 loop={false}
-                src={require('../../../../assets/lottie/winner.json')}
+                src={require('../../../../assets/lottie/group.json')}
                 style={styles.icon}
               />
               <Text style={{ ...styles.text, ...styles.greyText }}>
-                {Math.floor(Math.random() * 1000)} {'winning'}
+                0 of {numberOfParticipants}
               </Text>
             </View>
           </View>
@@ -119,8 +124,8 @@ const VlamPostCard = (props) => {
                 src={require('../../../../assets/lottie/heart.json')}
                 style={styles.icon}
               />
-              <Text style={{ ...styles.text, ...styles.greyText }}>
-                {Math.floor(Math.random() * 1000)} {'likes'}
+              <Text style={{ ...styles.text, ...styles.greyText, ...styles.iconHeartText }}>
+                0 likes
               </Text>
             </View>
             <View style={styles.row}>
@@ -129,9 +134,7 @@ const VlamPostCard = (props) => {
                 src={require('../../../../assets/lottie/comment.json')}
                 style={styles.icon_small}
               />
-              <Text style={{ ...styles.text, ...styles.greyText }}>
-                {Math.floor(Math.random() * 1000)} {'comments'}
-              </Text>
+              <Text style={{ ...styles.text, ...styles.greyText }}>0 comments</Text>
             </View>
           </View>
         </TouchableWithoutFeedback>

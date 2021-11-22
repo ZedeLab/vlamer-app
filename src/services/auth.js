@@ -18,6 +18,7 @@ import {
   addNewUserVolt,
   getUserByEmail,
   getUserConnections,
+  getUserFeedList,
   getUserVolt,
 } from './db';
 import { selectError, notifyError } from '../store/errors';
@@ -25,6 +26,7 @@ import {
   resetCurrentUserConnections,
   setCurrentUserConnections,
   setCurrentUserVolt,
+  setCurrentUserFeedList,
   resetCurrentUser,
   resetCurrentUserVolt,
 } from '../store/actors';
@@ -64,13 +66,22 @@ function useProvideAuth() {
           // dispatch(setCurrentUser(account));
           setUser(account);
           const [connections, connectionsError] = await getUserConnections(account.id);
+          const [feedList, feedListError] = await getUserFeedList();
           const [volt, voltError] = await getUserVolt(account.id);
 
-          if (connections && volt) {
+          if (connections && volt && feedList) {
             dispatch(setCurrentUserVolt(volt));
             dispatch(setCurrentUserConnections(connections));
+            dispatch(setCurrentUserFeedList(feedList));
           } else {
-            console.log('connectionsError: ', connectionsError, '\nvoltError: ', voltError);
+            console.log(
+              'connectionsError: ',
+              connectionsError,
+              '\nvoltError: ',
+              voltError,
+              '\nfeedListError: ',
+              feedListError
+            );
             dispatch(
               notifyError({
                 type: 'auth',
@@ -153,7 +164,7 @@ function useProvideAuth() {
 
       const [newAccount, error] = await addNewUser({
         id: account.user.uid,
-        username: account.user.displayName,
+        username: firstName + uuid().substr(0, 4),
         firstName: firstName,
         lastName: lastName,
         email: account.user.email,

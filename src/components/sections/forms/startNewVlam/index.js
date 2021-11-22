@@ -21,7 +21,7 @@ export default StartNewVlamForm = ({ navigation }) => {
   const { userVolt } = useSelector(selectActors);
 
   const getParticipants = (winningPrice, participatingPrice) => {
-    return Math.round(winningPrice / participatingPrice);
+    return Math.round(winningPrice / participatingPrice) * 2;
   };
 
   const onSubmitHandler = async (values) => {
