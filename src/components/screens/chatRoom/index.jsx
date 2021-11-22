@@ -1,12 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { styles } from './styles';
-import {
-  View,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  FlatList,
-} from 'react-native';
+import { View, KeyboardAvoidingView, Keyboard, FlatList } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Header from './header';
 import Footer from './footer';

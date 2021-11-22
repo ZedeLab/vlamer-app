@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { styles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
-const ChatListHeader = () => {
+const ChatListHeader = ({ showSearch, toggleSearch }) => {
   const { goBack } = useNavigation();
   return (
     <View style={styles.container}>
@@ -12,8 +12,8 @@ const ChatListHeader = () => {
         <Feather name="chevron-left" size={26} color="black" />
       </TouchableOpacity>
       <Text style={styles.title}>Chats</Text>
-      <TouchableOpacity onPress={() => {}}>
-        <Feather name="search" size={22} color="black" />
+      <TouchableOpacity onPress={() => toggleSearch(!showSearch)}>
+        <Feather name={showSearch ? 'x' : 'search'} size={24} color="black" />
       </TouchableOpacity>
     </View>
   );

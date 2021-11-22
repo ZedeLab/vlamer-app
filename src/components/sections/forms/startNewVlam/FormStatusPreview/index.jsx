@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { LottieIcon } from '../../../../common/animations';
 import { styles } from './style';
 
-export const FormStatus = (props) => {
+const FormStatus = (props) => {
   const {
     winningPrice,
     winningPriceReady,
