@@ -70,8 +70,15 @@ const VlamPostCard = (props) => {
       <View style={styles.mainSection}>
         <TouchableWithoutFeedback>
           <View>
-            <Text style={{ ...styles.status, ...styles.greenText }}>15k$</Text>
-            <Text style={{ ...styles.text, ...styles.greyText }}>winning chance 3%</Text>
+            <View style={styles.row}>
+              <LottieIcon
+                autoPlay={true}
+                loop={false}
+                src={require('../../../../assets/lottie/gift.json')}
+                style={styles.iconBig}
+              />
+              <Text style={{ ...styles.status, ...styles.greenText }}>15k coins</Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback>
@@ -96,17 +103,17 @@ const VlamPostCard = (props) => {
                 style={styles.icon_small}
               />
               <Text style={{ ...styles.text, ...styles.greyText }}>
-                {Math.floor(Math.random() * 1000)} {'price'}
+                Buy-in {Math.floor(Math.random() * 1000)} coins
               </Text>
             </View>
             <View style={styles.row}>
               <LottieIcon
                 loop={false}
-                src={require('../../../../assets/lottie/winner.json')}
+                src={require('../../../../assets/lottie/group.json')}
                 style={styles.icon}
               />
               <Text style={{ ...styles.text, ...styles.greyText }}>
-                {Math.floor(Math.random() * 1000)} {'winning'}
+                {Math.floor(Math.random() * 10)} of {Math.floor(Math.random() * 1) + 20}
               </Text>
             </View>
           </View>
@@ -119,7 +126,7 @@ const VlamPostCard = (props) => {
                 src={require('../../../../assets/lottie/heart.json')}
                 style={styles.icon}
               />
-              <Text style={{ ...styles.text, ...styles.greyText }}>
+              <Text style={{ ...styles.text, ...styles.greyText, ...styles.iconHeartText }}>
                 {Math.floor(Math.random() * 1000)} {'likes'}
               </Text>
             </View>

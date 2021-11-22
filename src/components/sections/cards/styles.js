@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
   headerContainer: {
@@ -40,6 +41,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.7),
     color: theme.colors.textDisabled,
+    paddingLeft: theme.spacing(0.1),
   },
   innerHeaderContainer: {
     flexDirection: 'row',
@@ -80,6 +82,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: theme.spacing(1.8),
     height: theme.spacing(1.8),
+    marginHorizontal: theme.spacing(0.1),
   },
   icon_small: {
     justifyContent: 'center',
@@ -90,5 +93,15 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconBig: {
+    justifyContent: 'center',
+    // // backgroundColor: 'red',
+    width: theme.spacing(2.8),
+    height: theme.spacing(2.8),
+  },
+
+  iconHeartText: {
+    marginLeft: -theme.spacing(0.3),
   },
 });
