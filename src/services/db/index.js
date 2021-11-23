@@ -115,6 +115,7 @@ export const getUserFeedList = async () => {
         ...feedPost,
         authorAccount: accounts.find((account) => account.id === feedPost.author),
       }));
+
       return [fullFeedList, null];
     } else {
       console.log(error);

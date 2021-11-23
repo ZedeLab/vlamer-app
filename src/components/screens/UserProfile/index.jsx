@@ -3,7 +3,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../../services/auth';
-import { selectActors, setCurrentUserVlamList } from '../../../store/actors';
+import { selectCurrentUserActors, setCurrentUserVlamList } from '../../../store/actors/currentUser';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
@@ -12,7 +12,7 @@ import { getUserVlamList } from '../../../services/db';
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const actors = useSelector(selectActors);
+  const { userVolt, currentUserConnections } = useSelector(selectCurrentUserActors);
 
   useEffect(() => {
     if (user) {
@@ -26,7 +26,7 @@ const UserProfile = ({ navigation, route }) => {
     }
   }, [user]);
 
-  if (!user || !actors.currentUserConnections) {
+  if (!user || !currentUserConnections || !userVolt) {
     return (
       <PageAux>
         <Text>Loading...</Text>
@@ -39,9 +39,9 @@ const UserProfile = ({ navigation, route }) => {
       <ScrollView style={styles.pagesWrapper}>
         <UserProfileHeader
           account={user}
-          userVolt={actors.userVolt}
+          userVolt={userVolt}
           admin
-          accountConnections={actors.currentUserConnections}
+          accountConnections={currentUserConnections}
         />
         <UserVlams />
       </ScrollView>

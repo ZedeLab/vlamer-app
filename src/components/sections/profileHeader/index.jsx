@@ -1,16 +1,12 @@
 import React from 'react';
 import { styles } from './styles';
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, Text, View } from 'react-native';
 import { useAuth } from '../../../services/auth';
 import theme from '../../../utils/theme';
 import { AnimatedNumberText, LottieIcon } from '../../common/animations';
 import { AvatarIcon } from '../../common/icons';
 import { PrimaryButton, SecondaryButton } from '../../common/buttons';
-import { User } from '../../../services/db/models/user';
 import { useNavigation } from '@react-navigation/core';
-import AddVlamScreen from '../../screens/UserProfile/AddVlam.screen';
-import { useSelector } from 'react-redux';
-import { selectActors } from '../../../store/actors';
 
 export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
   const coverImage = { uri: coverImageURL };

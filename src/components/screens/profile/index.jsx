@@ -5,7 +5,11 @@ import { useAuth } from '../../../services/auth';
 import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
-import { selectActors, setFocusedUserVolt, setProfileVlamList } from '../../../store/actors';
+import {
+  selectFocusedUserActors,
+  setFocusedUserVolt,
+  setProfileVlamList,
+} from '../../../store/actors/focusedUser';
 import { useSelector } from 'react-redux';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,7 +19,8 @@ import { useDispatch } from 'react-redux';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { focusedUser, focusedUserConnections, focusedUserVolt } = useSelector(selectActors);
+  const { focusedUser, focusedUserConnections, focusedUserVolt } =
+    useSelector(selectFocusedUserActors);
 
   useEffect(() => {
     if (focusedUser) {

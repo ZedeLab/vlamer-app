@@ -3,7 +3,7 @@ import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-n
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import theme from '../../../utils/theme';
 import VlamPosts from '../cards/VlamPostCard';
-import { selectActors } from '../../../store/actors';
+import { selectCurrentUserActors } from '../../../store/actors/currentUser';
 import { useSelector } from 'react-redux';
 import { useAuth } from '../../../services/auth';
 import { useNavigation } from '@react-navigation/core';
@@ -11,15 +11,15 @@ import { useNavigation } from '@react-navigation/core';
 const renderVlamList = () => {
   const { user } = useAuth();
   const navigation = useNavigation();
-  const actors = useSelector(selectActors);
+  const { currentUserVlamList } = useSelector(selectCurrentUserActors);
 
-  if (!user || !actors?.currentUserVlamList) {
+  if (!user || !currentUserVlamList) {
     return <Text> Loading...</Text>;
   }
 
   return (
     <View>
-      {actors.currentUserVlamList.map((item) => {
+      {currentUserVlamList.map((item) => {
         return (
           <VlamPosts
             authorAccount={user}

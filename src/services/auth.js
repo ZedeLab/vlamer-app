@@ -29,7 +29,8 @@ import {
   setCurrentUserFeedList,
   resetCurrentUser,
   resetCurrentUserVolt,
-} from '../store/actors';
+} from '../store/actors/currentUser';
+
 import { notifyLoadingFinish, notifyLoadingStart, selectLoading } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
@@ -68,11 +69,15 @@ function useProvideAuth() {
           const [connections, connectionsError] = await getUserConnections(account.id);
           const [feedList, feedListError] = await getUserFeedList();
           const [volt, voltError] = await getUserVolt(account.id);
-
+          console.log('volt: ', volt, '\nfeedList: ', feedList, '\nconnections: ', connections);
           if (connections && volt && feedList) {
-            dispatch(setCurrentUserVolt(volt));
-            dispatch(setCurrentUserConnections(connections));
-            dispatch(setCurrentUserFeedList(feedList));
+            try {
+              dispatch(setCurrentUserVolt(volt));
+              dispatch(setCurrentUserConnections(connections));
+              dispatch(setCurrentUserFeedList(feedList));
+            } catch (error) {
+              console.log('error: ', error);
+            }
           } else {
             console.log(
               'connectionsError: ',

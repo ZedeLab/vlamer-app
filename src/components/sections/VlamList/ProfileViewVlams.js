@@ -3,14 +3,14 @@ import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-n
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import theme from '../../../utils/theme';
 import VlamPosts from '../cards/VlamPostCard';
-import { selectActors } from '../../../store/actors';
+import { selectFocusedUserActors } from '../../../store/actors/focusedUser';
 import { useSelector } from 'react-redux';
 import { useAuth } from '../../../services/auth';
 import { useNavigation } from '@react-navigation/core';
 
 const renderVlamList = () => {
   const navigation = useNavigation();
-  const { profileVlamList, focusedUser } = useSelector(selectActors);
+  const { profileVlamList, focusedUser } = useSelector(selectFocusedUserActors);
 
   if (!profileVlamList || !focusedUser) {
     return <Text> Loading...</Text>;

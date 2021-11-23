@@ -4,7 +4,7 @@ import CardWrapper from '../../hoc/CardWrapper';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, Divider, Paragraph } from 'react-native-paper';
 import { ProfileScreen } from '../../screens';
-import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors';
+import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors/focusedUser';
 import { useDispatch } from 'react-redux';
 import { getUserConnections } from '../../../services/db';
 import { LottieIcon } from '../../common/animations';

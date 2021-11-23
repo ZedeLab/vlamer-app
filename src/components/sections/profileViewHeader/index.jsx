@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MainLogoSlimRt } from '../../common/logos';
 
 import { useAuth } from '../../../services/auth';
-import { resetFocusedUser } from '../../../store/actors';
+import { resetFocusedUser } from '../../../store/actors/focusedUser';
 import { useDispatch } from 'react-redux';
 
 const ProfileViewHeader = ({ current, navigation, route, ...restProps }) => {

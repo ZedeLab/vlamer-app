@@ -11,12 +11,12 @@ import DATA from '../../../utils/__mock__/feeds.json';
 import { useNavigation } from '@react-navigation/core';
 import { useStaticData } from '../../../services/staticURLs';
 import { useSelector } from 'react-redux';
-import { selectActors } from '../../../store/actors';
+import { selectCurrentUserActors } from '../../../store/actors/currentUser';
 
 export default Home = () => {
   const navigation = useNavigation();
-  const { currentUserFeedList: feedList } = useSelector(selectActors);
-
+  const { currentUserFeedList: feedList } = useSelector(selectCurrentUserActors);
+  console.log('feedList: ', feedList);
   if (!feedList) {
     return <Text>Loading...</Text>;
   }

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import * as formikHelpers from './__formik-helper';
 import theme from '../../../../utils/theme';
 import { selectError } from '../../../../store/errors';
-import { selectActors } from '../../../../store/actors';
+import { selectCurrentUserActors } from '../../../../store/actors/currentUser';
 import FormStatus from './FormStatusPreview';
 import { InputText } from '../../../common/inputs';
 import { PrimaryButton } from '../../../common/buttons';
@@ -18,7 +18,7 @@ export default StartNewVlamForm = ({ navigation }) => {
   const { startNewVlam } = useVoltAccess();
   const netErrors = useSelector(selectError);
   const loadingState = useSelector(selectLoading);
-  const { userVolt } = useSelector(selectActors);
+  const { userVolt } = useSelector(selectCurrentUserActors);
 
   const getParticipants = (winningPrice, participatingPrice) => {
     return Math.round(winningPrice / participatingPrice) * 2;

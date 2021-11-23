@@ -1,6 +1,6 @@
 import React, { useState, useContext, createContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActors, setCurrentUserFeedList } from '../store/actors';
+import { selectCurrentUserActors } from '../store/actors/currentUser';
 import { useAuth } from './auth';
 import { getUserFeedList } from './db';
 
@@ -17,7 +17,7 @@ export const useFeedsList = () => {
 
 function useProvideFeedsList() {
   const dispatch = useDispatch();
-  const { currentUserFeedList } = useSelector(selectActors);
+  const { currentUserFeedList } = useSelector(selectCurrentUserActors);
 
   return {
     currentUserFeedList,

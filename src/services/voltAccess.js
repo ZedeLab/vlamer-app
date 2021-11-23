@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addNewVlamPost, depositFromVolt, getUserVolt, transferCoinToInAction } from './db';
-import { selectActors, setCurrentUserVolt } from '../store/actors';
+import { setCurrentUserVolt } from '../store/actors/currentUser';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useAuth } from './auth';
