@@ -6,6 +6,7 @@ import {
   getFirestore,
   query,
   where,
+  updateDoc,
   Timestamp,
 } from 'firebase/firestore';
 import firebaseApp from '../../utils/firebase';
@@ -15,6 +16,34 @@ import { User } from './models/user';
 import { UserConnections } from './models/UserConnections';
 import { UserVolt } from './models/UserVolt';
 import { Vlam } from './models/Vlam';
+
+export const transferCoinToInAction = async (userId, quantity) => {
+  let [accountVolt, error] = await getUserVolt(userId);
+  console.log('updatedDoc: ', accountVolt);
+
+  if (accountVolt) {
+    accountVolt.volt.account.totalCoins = accountVolt.volt.account.totalCoins - quantity;
+    accountVolt.volt.inAction.totalCoinsOnAction =
+      accountVolt.volt.inAction.totalCoinsOnAction + quantity;
+
+    const db = getFirestore(firebaseApp);
+    const vlamRef = doc(db, 'volts', accountVolt.id);
+
+    try {
+      await updateDoc(vlamRef, {
+        ...accountVolt,
+      });
+      console.log('newVolt: ', accountVolt);
+      return [accountVolt, null];
+    } catch (error) {
+      console.log('ERROR: ', error);
+    }
+  } else {
+    return [null, error];
+  }
+
+  // const [newVolt, voltError] = await addNewUserVolt(accountVolt);
+};
 
 export const getUserVlamList = async (userId) => {
   const db = getFirestore(firebaseApp);
@@ -73,7 +102,6 @@ export const getUserFeedList = async () => {
       const formattedCreatedAt = formatTime(
         new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
       );
-      console.log('formattedCreatedAt: ', formattedCreatedAt);
       feedList.push({ ...document, createdAt: formattedCreatedAt });
       accountIdList.push(document.author);
     });

@@ -5,36 +5,39 @@ import { useAuth } from '../../../services/auth';
 import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
-import { selectActors, setProfileVlamList } from '../../../store/actors';
+import { selectActors, setFocusedUserVolt, setProfileVlamList } from '../../../store/actors';
 import { useSelector } from 'react-redux';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getUserVlamList } from '../../../services/db';
+import { getUserVlamList, getUserVolt } from '../../../services/db';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { focusedUser, focusedUserConnections } = useSelector(selectActors);
+  const { focusedUser, focusedUserConnections, focusedUserVolt } = useSelector(selectActors);
 
   useEffect(() => {
     if (focusedUser) {
       const fetchProfileVlamList = async () => {
         const [vlamList, error] = await getUserVlamList(focusedUser.id);
+        const [focusedVolt, voltError] = await getUserVolt(focusedUser.id);
 
-        if (vlamList) {
+        if (vlamList && focusedVolt) {
           dispatch(setProfileVlamList(vlamList));
+          dispatch(setFocusedUserVolt(focusedVolt));
         } else {
+          console.log('vlamListError: ', error, '\nvoltError: ', voltError);
         }
       };
       fetchProfileVlamList();
     }
   }, [focusedUser]);
 
-  if (!focusedUser || !focusedUserConnections) {
+  if (!focusedUser || !focusedUserConnections || !focusedUserVolt) {
     return (
       <PageAux>
-        <Text> Account could not be found</Text>
+        <Text> Loading... </Text>
       </PageAux>
     );
   }
@@ -42,7 +45,11 @@ const Profile = ({ navigation, route }) => {
   return (
     <PageAux noGutter>
       <ScrollView style={styles.pagesWrapper}>
-        <UserProfileHeader account={focusedUser} accountConnections={focusedUserConnections} />
+        <UserProfileHeader
+          account={focusedUser}
+          userVolt={focusedUserVolt}
+          accountConnections={focusedUserConnections}
+        />
         <ProfileViewVlams />
       </ScrollView>
     </PageAux>

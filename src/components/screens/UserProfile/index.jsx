@@ -39,6 +39,7 @@ const UserProfile = ({ navigation, route }) => {
       <ScrollView style={styles.pagesWrapper}>
         <UserProfileHeader
           account={user}
+          userVolt={actors.userVolt}
           admin
           accountConnections={actors.currentUserConnections}
         />

@@ -13,6 +13,7 @@ const initialState = {
   currentUserFeedList: null,
   currentUserVlamList: null,
   profileVlamList: null,
+  focusedUserVolt: null,
 };
 
 export const actorsSlice = createSlice({
@@ -73,6 +74,10 @@ export const actorsSlice = createSlice({
     setProfileVlamList: (state, action) => {
       state.profileVlamList = action.payload;
     },
+
+    setFocusedUserVolt: (state, action) => {
+      state.focusedUserVolt = action.payload;
+    },
   },
 });
 
@@ -91,6 +96,7 @@ export const {
   setCurrentUserFeedList,
   setCurrentUserVlamList,
   setProfileVlamList,
+  setFocusedUserVolt,
 } = actorsSlice.actions;
 
 // Selectors
