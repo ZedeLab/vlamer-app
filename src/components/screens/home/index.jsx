@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useSelector } from 'react-redux';
 import { selectActors, setCurrentUserFeedList } from '../../../store/actors';
 import { LottieIcon } from '../../common/animations';
-import { getUserFeedList } from '../../../services/db';
+import { getUserFeedList } from '../../../services/db/queries/site';
 import { useAuth } from '../../../services/auth';
 import { useDispatch } from 'react-redux';
 

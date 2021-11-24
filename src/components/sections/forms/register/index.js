@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { Formik } from 'formik';
-import { Button, Divider, Subheading, Surface } from 'react-native-paper';
+import { Surface } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
-import { FacebookLoginButton, GoogleLoginButton, PrimaryButton } from '../../../common/buttons';
+import { PrimaryButton } from '../../../common/buttons';
 import { InputText } from '../../../common/inputs';
 import * as formikHelpers from './__formik-helper';
 import { StyleSheet, View, Text } from 'react-native';
 import theme from '../../../../utils/theme';
 import { useAuth } from '../../../../services/auth';
-import { addNewUser } from '../../../../services/db';
 import { notifyErrorResolved, selectError } from '../../../../store/errors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
 

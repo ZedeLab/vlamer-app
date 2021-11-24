@@ -4,13 +4,8 @@ import CardWrapper from '../../hoc/CardWrapper';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, Divider, Paragraph } from 'react-native-paper';
 import { ProfileScreen } from '../../screens';
-import {
-  setFocusedUser,
-  setFocusedUserConnections,
-  setFocusedUserVolt,
-} from '../../../store/actors';
+import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
-import { getUserConnections, getUserVolt } from '../../../services/db';
 import { LottieIcon } from '../../common/animations';
 
 const VlamPostCard = (props) => {

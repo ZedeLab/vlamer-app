@@ -14,9 +14,11 @@ import {
 import { useSelector } from 'react-redux';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getUserConnections, getUserVlamList, getUserVolt } from '../../../services/db';
+import { getUserConnections } from '../../../services/db/queries/connections';
+import { getUserVolt } from '../../../services/db/queries/volt.js';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
+import { getUserVlamList } from '../../../services/db/queries/vlam';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();

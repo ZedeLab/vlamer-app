@@ -44,7 +44,8 @@ const renderScene = SceneMap({
 
 export default function ProfileViewVlams() {
   const layout = useWindowDimensions();
-
+  const actors = useSelector(selectActors);
+  const styles = useStyle(actors.profileVlamList.length);
   const [index, setIndex] = useState(0);
 
   const [routes] = useState([
@@ -76,32 +77,33 @@ export default function ProfileViewVlams() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: Dimensions.get('window').width,
-    minHeight: '100%',
-  },
+const useStyle = (LIST_SIZE) =>
+  StyleSheet.create({
+    container: {
+      width: Dimensions.get('window').width,
+      minHeight: theme.spacing(LIST_SIZE) * 13.8,
+    },
 
-  scene: {
-    paddingHorizontal: theme.spacing(0.5),
-  },
+    scene: {
+      paddingHorizontal: theme.spacing(0.5),
+    },
 
-  tabBar: {
-    backgroundColor: theme.colors.common,
-    // height: 400,
-    ...theme.shadows[2],
-  },
-  label: {
-    fontFamily: 'openSans-bold',
-    color: theme.colors.textPrimary,
-    fontSize: theme.spacing(0.8),
-    textTransform: 'capitalize',
-    alignSelf: 'center',
-    marginRight: theme.spacing(0.5),
-  },
-  vlamList: {
-    height: 300,
-    width: 300,
-    backgroundColor: 'red',
-  },
-});
+    tabBar: {
+      backgroundColor: theme.colors.common,
+      // height: 400,
+      ...theme.shadows[2],
+    },
+    label: {
+      fontFamily: 'openSans-bold',
+      color: theme.colors.textPrimary,
+      fontSize: theme.spacing(0.8),
+      textTransform: 'capitalize',
+      alignSelf: 'center',
+      marginRight: theme.spacing(0.5),
+    },
+    vlamList: {
+      height: 300,
+      width: 300,
+      backgroundColor: 'red',
+    },
+  });

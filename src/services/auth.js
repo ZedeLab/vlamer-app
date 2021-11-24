@@ -12,27 +12,21 @@ import { useDispatch } from 'react-redux';
 
 import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
-import {
-  addNewUser,
-  addNewUserConnection,
-  addNewUserVolt,
-  getUserByEmail,
-  getUserConnections,
-  getUserVolt,
-  subscribeToFeedsVlamList,
-} from './db';
+import { addNewUser } from './db/queries/user';
+
+import { addNewUserConnection } from './db/queries/connections';
 import { notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
-  setCurrentUserConnections,
   setCurrentUserVolt,
   resetCurrentUser,
   resetCurrentUserVolt,
-  setCurrentUserFeedList,
 } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
+import { getUserByEmail } from './db/queries/user';
+import { addNewUserVolt, getUserVolt } from './db/queries/volt';
 
 const authContext = createContext();
 

@@ -1,8 +1,7 @@
-import React, { useState, useContext, createContext, useEffect } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActors, setCurrentUserFeedList } from '../store/actors';
+import { selectActors } from '../store/actors';
 import { useAuth } from './auth';
-import { subscribeToFeedsVlamList } from './db';
 
 const FeedsListContext = createContext();
 

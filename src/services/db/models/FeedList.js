@@ -1,5 +1,4 @@
-import { boolean, date, object, string, ref as yupRef, array } from 'yup';
-import { v4 as uuid } from 'uuid';
+import { array } from 'yup';
 import { Vlam } from './Vlam';
 
 export class User {

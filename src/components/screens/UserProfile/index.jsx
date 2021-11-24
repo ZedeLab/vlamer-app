@@ -11,7 +11,8 @@ import {
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
-import { getUserConnections, getUserVlamList, getUserVolt } from '../../../services/db';
+import { getUserConnections } from '../../../services/db/queries/connections';
+import { getUserVlamList } from '../../../services/db/queries/vlam';
 
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();
