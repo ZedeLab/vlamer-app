@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -81,6 +82,7 @@ export const styles = StyleSheet.create({
   userName: {
     textAlign: 'left',
     color: theme.colors.textDisabled,
+    textTransform: 'lowercase',
   },
 
   bio: {

@@ -1,9 +1,8 @@
 import * as React from 'react';
 
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { Banner, Headline, Subheading } from 'react-native-paper';
+import { Image, Text, View } from 'react-native';
+import { Banner, Subheading } from 'react-native-paper';
 import { styles } from './styles';
-import theme from '../../../utils/theme';
 
 export const CompleteRegistrationBanner = (props) => {
   const [visible, setVisible] = React.useState(false);

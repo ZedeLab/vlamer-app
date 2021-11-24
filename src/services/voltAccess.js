@@ -3,12 +3,14 @@ import { v4 as uuid } from 'uuid';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addNewVlamPost, depositFromVolt, getUserVolt, transferFromVoltToInAction } from './db';
+import { addNewVlamPost } from './db/queries/vlam';
+import { transferFromVoltToInAction } from './db/queries/volt';
 import { selectActors, setCurrentUserVolt } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useAuth } from './auth';
 import { notifyError } from '../store/errors';
+import { getUserVolt } from './db/queries/volt';
 
 const VoltAccessContext = createContext();
 

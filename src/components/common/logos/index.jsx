@@ -8,7 +8,7 @@ export const MainLogo = (props) => {
   return (
     <View style={styles.container}>
       <Image style={styles.tinyLogo} source={LogoImage} />
-      <Text style={styles.logoText}>Valmer Express </Text>
+      <Text style={styles.logoText}>Vlamer Express </Text>
     </View>
   );
 };

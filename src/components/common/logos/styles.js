@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,7 +16,7 @@ export const styles = StyleSheet.create({
   },
   logoText: {
     fontFamily: 'openSans',
-    fontSize: theme.spacing(1.1),
+    fontSize: theme.spacing(1),
     textTransform: 'capitalize',
     paddingHorizontal: theme.spacing(1),
   },

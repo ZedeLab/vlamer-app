@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getUserConnections } from '../../services/db';
 import { User } from '../../services/db/models/user';
 import { UserConnections } from '../../services/db/models/UserConnections';
 import { UserVolt } from '../../services/db/models/UserVolt';

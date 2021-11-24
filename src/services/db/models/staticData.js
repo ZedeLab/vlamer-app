@@ -1,4 +1,4 @@
-import { boolean, date, object, array, string, ref as yupRef } from 'yup';
+import { object, array, string } from 'yup';
 import { v4 as uuid } from 'uuid';
 export class StaticData {
   constructor(newStaticData) {
