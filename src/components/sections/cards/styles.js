@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
   headerContainer: {
@@ -6,6 +7,7 @@ export const styles = StyleSheet.create({
     padding: theme.spacing(0.3),
   },
   mainSection: {
+    width: '95%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -35,11 +37,19 @@ export const styles = StyleSheet.create({
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.7),
     color: theme.colors.accent,
+    textTransform: 'lowercase',
   },
   greyText: {
     fontFamily: 'openSans',
     fontSize: theme.spacing(0.7),
     color: theme.colors.textDisabled,
+    paddingLeft: theme.spacing(0.1),
+  },
+  smallPrimaryText: {
+    fontFamily: 'openSans',
+    fontSize: theme.spacing(0.7),
+    color: theme.colors.textPrimary,
+    paddingLeft: theme.spacing(0.1),
   },
   innerHeaderContainer: {
     flexDirection: 'row',
@@ -74,12 +84,13 @@ export const styles = StyleSheet.create({
     color: theme.colors.success,
   },
   redText: {
-    color: theme.colors.error,
+    color: theme.colors.success,
   },
   icon: {
     justifyContent: 'center',
     width: theme.spacing(1.8),
     height: theme.spacing(1.8),
+    marginHorizontal: theme.spacing(0.1),
   },
   icon_small: {
     justifyContent: 'center',
@@ -90,5 +101,24 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconBig: {
+    justifyContent: 'center',
+    // // backgroundColor: 'red',
+    width: theme.spacing(2.8),
+    height: theme.spacing(2.8),
+  },
+
+  iconHeartText: {
+    marginLeft: -theme.spacing(0.3),
+  },
+
+  message: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: theme.spacing(0.3),
+    marginVertical: theme.spacing(0.3),
+  },
+  messageContainer: {
+    width: '95%',
   },
 });

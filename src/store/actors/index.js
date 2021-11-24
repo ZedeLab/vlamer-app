@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getUserConnections } from '../../services/db';
 import { User } from '../../services/db/models/user';
 import { UserConnections } from '../../services/db/models/UserConnections';
 import { UserVolt } from '../../services/db/models/UserVolt';
@@ -10,6 +9,10 @@ const initialState = {
   focusedUser: null,
   currentUserConnections: null,
   focusedUserConnections: null,
+  currentUserFeedList: null,
+  currentUserVlamList: null,
+  profileVlamList: null,
+  focusedUserVolt: null,
 };
 
 export const actorsSlice = createSlice({
@@ -41,9 +44,7 @@ export const actorsSlice = createSlice({
     },
 
     setCurrentUserConnections: (state, action) => {
-      const accountConnections = new UserConnections(action.payload).getData();
-
-      state.currentUserConnections = accountConnections;
+      state.currentUserConnections = action.payload;
     },
 
     resetCurrentUserConnections: (state) => {
@@ -58,11 +59,33 @@ export const actorsSlice = createSlice({
     resetFocusedUserConnections: (state) => {
       state.currentUserConnections = null;
     },
+
+    setCurrentUserFeedList: (state, action) => {
+      state.currentUserFeedList = action.payload;
+    },
+
+    setCurrentUserVlamList: (state, action) => {
+      state.currentUserVlamList = action.payload;
+    },
+
+    setProfileVlamList: (state, action) => {
+      state.profileVlamList = action.payload;
+    },
+
+    setFocusedUserVolt: (state, action) => {
+      state.focusedUserVolt = action.payload;
+    },
+
+    resetFocusedUserVolt: (state, action) => {
+      state.focusedUserVolt = action.payload;
+    },
   },
 });
 
 // Actions
 export const {
+  setFocusedUserVolt,
+  resetFocusedUserVolt,
   setCurrentUserVolt,
   resetCurrentUserVolt,
   setCurrentUser,
@@ -73,6 +96,9 @@ export const {
   resetCurrentUserConnections,
   setFocusedUserConnections,
   resetFocusedUserConnections,
+  setCurrentUserFeedList,
+  setCurrentUserVlamList,
+  setProfileVlamList,
 } = actorsSlice.actions;
 
 // Selectors

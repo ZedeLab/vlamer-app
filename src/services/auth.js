@@ -8,29 +8,25 @@ import {
   onAuthStateChanged,
   signOut as signOutFirebase,
 } from 'firebase/auth';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
-import {
-  addNewUser,
-  addNewUserConnection,
-  addNewUserVolt,
-  getUserByEmail,
-  getUserConnections,
-  getUserVolt,
-} from './db';
-import { selectError, notifyError } from '../store/errors';
+import { addNewUser } from './db/queries/user';
+
+import { addNewUserConnection } from './db/queries/connections';
+import { notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
-  setCurrentUserConnections,
   setCurrentUserVolt,
   resetCurrentUser,
   resetCurrentUserVolt,
 } from '../store/actors';
-import { notifyLoadingFinish, notifyLoadingStart, selectLoading } from '../store/loading';
+import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
+import { getUserByEmail } from './db/queries/user';
+import { addNewUserVolt, getUserVolt } from './db/queries/volt';
 
 const authContext = createContext();
 
@@ -47,7 +43,6 @@ function useProvideAuth() {
   const { getRandomAvatar, getRandomCoverImage } = useStaticData();
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
-
   const signInWithFacebook = () => {
     console.log('Sing in with Facebook');
   };
@@ -61,14 +56,12 @@ function useProvideAuth() {
         const [account, error] = await getUserByEmail(user.email);
 
         if (account) {
-          // dispatch(setCurrentUser(account));
           setUser(account);
-          const [connections, connectionsError] = await getUserConnections(account.id);
+
           const [volt, voltError] = await getUserVolt(account.id);
 
-          if (connections && volt) {
+          if (volt) {
             dispatch(setCurrentUserVolt(volt));
-            dispatch(setCurrentUserConnections(connections));
           } else {
             console.log('connectionsError: ', connectionsError, '\nvoltError: ', voltError);
             dispatch(
@@ -153,7 +146,7 @@ function useProvideAuth() {
 
       const [newAccount, error] = await addNewUser({
         id: account.user.uid,
-        username: account.user.displayName,
+        username: firstName + uuid().substr(0, 4),
         firstName: firstName,
         lastName: lastName,
         email: account.user.email,

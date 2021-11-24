@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { useAuth } from '../services/auth';
 
 import { StyleSheet } from 'react-native';
-import theme from '../utils/theme';
 import CallToActionStackScreen from './cta/stack';
 import AuthStackScreen from './auth/stack';
-import { useStaticData } from '../services/staticURLs';
-import { StaticData } from '../services/db/models/staticData';
-import { getStaticData } from '../services/db';
 
 const RootStack = createStackNavigator();
 

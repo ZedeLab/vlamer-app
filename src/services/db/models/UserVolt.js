@@ -1,6 +1,6 @@
-import { boolean, date, object, array, string, ref as yupRef } from 'yup';
+import { number, object, string } from 'yup';
 import { v4 as uuid } from 'uuid';
-import { number } from 'yup/lib/locale';
+
 export class UserVolt {
   constructor(newUserVolt) {
     this.data = newUserVolt;
@@ -11,11 +11,11 @@ export class UserVolt {
     try {
       const newData = await object({
         id: string().uuid().default(uuid()),
-        ownerAccountId: string().uuid().default(uuid()),
+        ownerAccountId: string().uuid(),
         volt: object({
           account: object({
             id: string().uuid(),
-            totalCoins: number(),
+            totalCoins: number().required(),
             status: string().required().oneOf(['active', 'suspended', 'onHold']),
           }),
           inAction: object({

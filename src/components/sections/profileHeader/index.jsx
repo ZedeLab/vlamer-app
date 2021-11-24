@@ -75,9 +75,9 @@ export const UserViewActionButtons = (props) => {
 
 export default ProfileUserCard = (props) => {
   const { user } = useAuth();
-  const { account, admin, currentUser, accountConnections, children, ...restProps } = props;
+  const { account, admin, currentUser, userVolt, accountConnections, children, ...restProps } =
+    props;
   const navigation = useNavigation();
-  const { userVolt } = useSelector(selectActors);
 
   return (
     <View style={styles.container}>
