@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import moment from 'moment';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { AvatarIcon } from '../../common/icons';
@@ -25,7 +24,8 @@ const MessageCard = ({ data }) => {
             {sender.firstName} {sender.lastName}
           </Text>
           <Text style={styles.time}>
-            {moment(new Date(lastMessageDate.seconds)).format('HH:MM')}
+            11:00
+            {/* {moment(new Date(lastMessageDate.seconds)).format('HH:MM')} */}
           </Text>
         </View>
         <Text style={styles.lastMessage}>
