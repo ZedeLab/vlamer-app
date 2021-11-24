@@ -43,7 +43,7 @@ function useProvideVoltAccess() {
     dispatch(notifyLoadingStart({ type: 'form/post' }));
 
     const [success, failedError] = await transferFromVoltToInAction(user.id, winingPrice);
-    console.log('success: ', success);
+
     if (success) {
       const [vlam, error] = await addNewVlamPost({
         id: uuid(),
@@ -53,7 +53,6 @@ function useProvideVoltAccess() {
         winingPrice: parseInt(winingPrice),
         numberOfParticipants: parseInt(numberOfParticipants),
       });
-      console.log('vlam: ', vlam);
       if (vlam) {
         dispatch(notifyLoadingFinish());
         return vlam;

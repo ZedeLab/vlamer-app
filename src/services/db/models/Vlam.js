@@ -26,7 +26,6 @@ export class Vlam {
 
       return this.data;
     } catch (err) {
-      console.log('Creating vlam: ', err.errors);
       return err;
     }
   };

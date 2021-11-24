@@ -2,8 +2,9 @@ import { getDocs, collection, getFirestore, query, where, Timestamp } from 'fire
 import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
 import { findUsersFromUserIdList } from './user';
+import { getVlamLikesByUserId, getVlamLikesCount } from './vlam';
 
-export const getUserVlamList = async (userId) => {
+export const getUserVlamList = async (userId, currentUserId) => {
   const db = getFirestore(firebaseApp);
   const vlamRef = collection(db, 'vlams');
   const docRef = query(vlamRef, where('author', '==', userId));
@@ -20,13 +21,26 @@ export const getUserVlamList = async (userId) => {
       vlamList.push({ ...document, createdAt: formattedCreatedAt });
     });
 
-    return [vlamList, null];
+    if (vlamList.length === 0) return [vlamList, null];
+
+    const [userVlamLikes, vlamLikeError] = await getVlamLikesByUserId(currentUserId);
+
+    if (userVlamLikes) {
+      const fullFeedList = vlamList.map((vlamPost, index) => ({
+        ...vlamPost,
+        likes: userVlamLikes.find((likes) => likes.vlamPostId === vlamPost.id),
+      }));
+      return [fullFeedList, null];
+    } else {
+      console.log(error);
+      return [null, error];
+    }
   } catch (error) {
     return [null, error];
   }
 };
 
-export const getUserFeedList = async (startIndex = 0, limit = 10) => {
+export const getUserFeedList = async (currentUserId, startIndex = 0, limit = 10) => {
   const db = getFirestore(firebaseApp);
   const vlamRef = collection(db, 'vlams');
   const docRef = query(vlamRef, where('state', '==', 'onPlay'));
@@ -46,17 +60,19 @@ export const getUserFeedList = async (startIndex = 0, limit = 10) => {
     });
 
     if (feedList.length === 0) return [feedList, null];
-
+    const [userVlamLikes, vlamLikeError] = await getVlamLikesByUserId(currentUserId);
     const [accounts, error] = await findUsersFromUserIdList(accountIdList.slice(startIndex, limit));
 
     if (accounts) {
       const fullFeedList = feedList.map((feedPost, index) => ({
         ...feedPost,
         authorAccount: accounts.find((account) => account.id === feedPost.author),
+        likes: userVlamLikes.find((likes) => likes.vlamPostId === feedPost.id),
       }));
       return [fullFeedList, null];
     } else {
       console.log(error);
+      return [null, error];
     }
   } catch (error) {
     console.log('Error: ', error);

@@ -25,6 +25,7 @@ const renderVlamList = () => {
             id={item.id}
             authorAccount={focusedUser}
             vlamType={''}
+            likes={item.likes}
             message={item.message}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}

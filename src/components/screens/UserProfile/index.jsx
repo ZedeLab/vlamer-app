@@ -12,7 +12,7 @@ import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
 import { getUserConnections } from '../../../services/db/queries/connections';
-import { getUserVlamList } from '../../../services/db/queries/vlam';
+import { getUserVlamList } from '../../../services/db/queries/site';
 
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();
@@ -22,7 +22,7 @@ const UserProfile = ({ navigation, route }) => {
   useEffect(async () => {
     if (user) {
       const fetchUserVlamList = async () => {
-        const [vlamList, error] = await getUserVlamList(user.id);
+        const [vlamList, error] = await getUserVlamList(user.id, user.id);
         const [connections, connectionsError] = await getUserConnections(user.id);
 
         if (vlamList && connections) {

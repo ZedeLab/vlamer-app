@@ -23,7 +23,7 @@ export default Home = () => {
   useEffect(() => {
     if (user) {
       const fetchFeedsVlamList = async () => {
-        const [vlamList, error] = await getUserFeedList();
+        const [vlamList, error] = await getUserFeedList(user.id);
 
         if (vlamList) {
           dispatch(setCurrentUserFeedList(vlamList));
@@ -44,6 +44,7 @@ export default Home = () => {
       <VlamPosts
         key={uuid()}
         id={item.id}
+        likes={item.likes}
         authorAccount={item.authorAccount}
         postedAt={item.postedAt}
         vlamType={''}

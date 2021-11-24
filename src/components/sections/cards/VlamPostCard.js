@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styles } from './styles';
 import CardWrapper from '../../hoc/CardWrapper';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
@@ -8,11 +8,12 @@ import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
-import { likeVlamPost } from '../../../services/db/queries/vlam';
+import { toggleVlamPostLike } from '../../../services/db/queries/vlam';
 
 const VlamPostCard = (props) => {
   const {
     id,
+    likes,
     authorAccount,
     createdAt,
     vlamType,
@@ -23,8 +24,10 @@ const VlamPostCard = (props) => {
     winingPrice,
     ...restProps
   } = props;
+
   const { user } = useAuth();
   const dispatch = useDispatch();
+  const [isLiked, setIsLiked] = useState(likes !== undefined);
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
@@ -33,13 +36,13 @@ const VlamPostCard = (props) => {
   };
 
   const likeVlamPostHandler = async () => {
-    const [reqSuccessful, reqError] = await likeVlamPost(user.id, id);
-    console.log('liked');
-    // if (reqSuccessful) {
-    //   console.log('liked');
-    // } else {
-    //   console.log('Not liked Error: ', reqError);
-    // }
+    const [reqSuccessful, reqError] = await toggleVlamPostLike(user.id, id);
+
+    if (reqSuccessful) {
+      setIsLiked(!isLiked);
+    } else {
+      console.log('reqError: ', reqError);
+    }
   };
 
   return (
@@ -126,9 +129,14 @@ const VlamPostCard = (props) => {
           <TouchableWithoutFeedback onPress={likeVlamPostHandler}>
             <View style={styles.row}>
               <LottieIcon
-                autoPlay={false}
+                withActive
+                isActive={isLiked}
+                onNotActiveFrame={{ x: 7, y: 7 }}
+                onActiveFrame={{ x: 41, y: 41 }}
+                autoPlay={true}
+                loop={false}
                 src={require('../../../../assets/lottie/heart.json')}
-                style={styles.icon}
+                style={styles.iconHeart}
               />
               <Text style={{ ...styles.text, ...styles.greyText, ...styles.iconHeartText }}>
                 0 likes
@@ -138,7 +146,8 @@ const VlamPostCard = (props) => {
           <TouchableWithoutFeedback>
             <View style={styles.row}>
               <LottieIcon
-                autoPlay={false}
+                autoPlay={true}
+                loop={true}
                 src={require('../../../../assets/lottie/comment.json')}
                 style={styles.icon_small}
               />

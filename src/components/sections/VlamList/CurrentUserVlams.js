@@ -30,6 +30,7 @@ const renderVlamList = () => {
             authorAccount={user}
             vlamType={''}
             id={item.id}
+            likes={item.likes}
             message={item.message}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}
