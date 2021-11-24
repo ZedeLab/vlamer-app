@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import theme from '../../../utils/theme';
+import globalTheme from '../../../utils/theme';
 import VlamPosts from '../cards/VlamPostCard';
 import { selectActors } from '../../../store/actors';
 import { useSelector } from 'react-redux';
 import { useAuth } from '../../../services/auth';
 import { useNavigation } from '@react-navigation/core';
+import theme from '../../../utils/theme';
+
+let LIST_SIZE = 0;
 
 const renderVlamList = () => {
   const { user } = useAuth();
@@ -22,6 +26,7 @@ const renderVlamList = () => {
       {actors.currentUserVlamList.map((item) => {
         return (
           <VlamPosts
+            key={uuid()}
             authorAccount={user}
             vlamType={''}
             message={item.message}
@@ -45,7 +50,8 @@ const renderScene = SceneMap({
 
 export default function UserVlams() {
   const layout = useWindowDimensions();
-
+  const actors = useSelector(selectActors);
+  const styles = useStyle(actors.currentUserVlamList.length);
   const [index, setIndex] = useState(0);
 
   const [routes] = useState([
@@ -77,32 +83,33 @@ export default function UserVlams() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    width: Dimensions.get('window').width,
-    minHeight: '100%',
-  },
+const useStyle = (LIST_SIZE) =>
+  StyleSheet.create({
+    container: {
+      width: Dimensions.get('window').width,
+      minHeight: theme.spacing(LIST_SIZE * 13.8),
+    },
 
-  scene: {
-    paddingHorizontal: theme.spacing(0.5),
-  },
+    scene: {
+      paddingHorizontal: theme.spacing(0.5),
+    },
 
-  tabBar: {
-    backgroundColor: theme.colors.common,
-    // height: 400,
-    ...theme.shadows[2],
-  },
-  label: {
-    fontFamily: 'openSans-bold',
-    color: theme.colors.textPrimary,
-    fontSize: theme.spacing(0.8),
-    textTransform: 'capitalize',
-    alignSelf: 'center',
-    marginRight: theme.spacing(0.5),
-  },
-  vlamList: {
-    height: 300,
-    width: 300,
-    backgroundColor: 'red',
-  },
-});
+    tabBar: {
+      backgroundColor: theme.colors.common,
+      // height: 400,
+      ...theme.shadows[2],
+    },
+    label: {
+      fontFamily: 'openSans-bold',
+      color: theme.colors.textPrimary,
+      fontSize: theme.spacing(0.8),
+      textTransform: 'capitalize',
+      alignSelf: 'center',
+      marginRight: theme.spacing(0.5),
+    },
+    vlamList: {
+      height: 300,
+      width: 300,
+      backgroundColor: 'red',
+    },
+  });

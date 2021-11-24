@@ -1,23 +1,40 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styles } from './styles';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { Subheading } from 'react-native-paper';
-import theme from '../../../utils/theme';
+import { FlatList, Text } from 'react-native';
 import { CompleteRegistrationBanner } from '../../common/banners';
-import { PrimaryButton } from '../../common/buttons';
 import VlamPosts from '../../sections/cards/VlamPostCard';
 import PageAux from '../../hoc/PageAux';
-import DATA from '../../../utils/__mock__/feeds.json';
 import { useNavigation } from '@react-navigation/core';
-import { useStaticData } from '../../../services/staticURLs';
 import { useSelector } from 'react-redux';
-import { selectActors } from '../../../store/actors';
+import { selectActors, setCurrentUserFeedList } from '../../../store/actors';
+import { LottieIcon } from '../../common/animations';
+import { getUserFeedList } from '../../../services/db';
+import { useAuth } from '../../../services/auth';
+import { useDispatch } from 'react-redux';
 
 export default Home = () => {
+  const { user } = useAuth();
+  const dispatch = useDispatch();
+  const [loadMoreVlams, setLoadMoreVlams] = useState(false);
   const navigation = useNavigation();
-  const { currentUserFeedList: feedList } = useSelector(selectActors);
+  const actors = useSelector(selectActors);
 
-  if (!feedList) {
+  useEffect(() => {
+    if (user) {
+      const fetchFeedsVlamList = async () => {
+        const [vlamList, error] = await getUserFeedList();
+
+        if (vlamList) {
+          dispatch(setCurrentUserFeedList(vlamList));
+        } else {
+          console.log('Error: ', error);
+        }
+      };
+      fetchFeedsVlamList();
+    }
+  }, [user]);
+
+  if (!user || !actors.currentUserFeedList) {
     return <Text>Loading...</Text>;
   }
 
@@ -41,11 +58,21 @@ export default Home = () => {
     <PageAux>
       <CompleteRegistrationBanner />
       <FlatList
-        data={feedList}
+        data={actors.currentUserFeedList}
         renderItem={renderVlams}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        // onEndReachedThreshold={0.2}
+        // onEndReached={(event) => setLoadMoreVlams(true)}
       />
+      {loadMoreVlams && (
+        <LottieIcon
+          autoPlay={true}
+          loop={true}
+          src={require('../../../../assets/lottie/scroll-down.json')}
+          style={styles.iconBig}
+        />
+      )}
     </PageAux>
   );
 };

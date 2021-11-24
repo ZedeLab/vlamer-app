@@ -2,7 +2,7 @@ import React, { useState, useContext, createContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserFeedList } from '../store/actors';
 import { useAuth } from './auth';
-import { getUserFeedList } from './db';
+import { subscribeToFeedsVlamList } from './db';
 
 const FeedsListContext = createContext();
 
@@ -16,7 +16,11 @@ export const useFeedsList = () => {
 };
 
 function useProvideFeedsList() {
+  const { user } = useAuth();
+  const REQUEST_LIMIT = 10;
   const dispatch = useDispatch();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadMoreVlams, setLoadMoreVlams] = useState(false);
   const { currentUserFeedList } = useSelector(selectActors);
 
   return {
