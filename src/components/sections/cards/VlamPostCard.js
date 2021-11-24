@@ -7,9 +7,12 @@ import { ProfileScreen } from '../../screens';
 import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
+import { useAuth } from '../../../services/auth';
+import { likeVlamPost } from '../../../services/db/queries/vlam';
 
 const VlamPostCard = (props) => {
   const {
+    id,
     authorAccount,
     createdAt,
     vlamType,
@@ -20,13 +23,23 @@ const VlamPostCard = (props) => {
     winingPrice,
     ...restProps
   } = props;
-
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
 
     navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+  };
+
+  const likeVlamPostHandler = async () => {
+    const [reqSuccessful, reqError] = await likeVlamPost(user.id, id);
+    console.log('liked');
+    // if (reqSuccessful) {
+    //   console.log('liked');
+    // } else {
+    //   console.log('Not liked Error: ', reqError);
+    // }
   };
 
   return (
@@ -109,8 +122,8 @@ const VlamPostCard = (props) => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
-          <View style={styles.section}>
+        <View style={styles.section}>
+          <TouchableWithoutFeedback onPress={likeVlamPostHandler}>
             <View style={styles.row}>
               <LottieIcon
                 autoPlay={false}
@@ -121,6 +134,8 @@ const VlamPostCard = (props) => {
                 0 likes
               </Text>
             </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback>
             <View style={styles.row}>
               <LottieIcon
                 autoPlay={false}
@@ -129,8 +144,8 @@ const VlamPostCard = (props) => {
               />
               <Text style={{ ...styles.text, ...styles.greyText }}>0 comments</Text>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
     </CardWrapper>
   );

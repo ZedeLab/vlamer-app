@@ -5,7 +5,7 @@ import theme from '../../../utils/theme';
 import VlamPosts from '../cards/VlamPostCard';
 import { selectActors } from '../../../store/actors';
 import { useSelector } from 'react-redux';
-import { useAuth } from '../../../services/auth';
+import { v4 as uuid } from 'uuid';
 import { useNavigation } from '@react-navigation/core';
 
 const renderVlamList = () => {
@@ -21,6 +21,8 @@ const renderVlamList = () => {
       {profileVlamList.map((item) => {
         return (
           <VlamPosts
+            key={uuid()}
+            id={item.id}
             authorAccount={focusedUser}
             vlamType={''}
             message={item.message}

@@ -29,6 +29,7 @@ const renderVlamList = () => {
             key={uuid()}
             authorAccount={user}
             vlamType={''}
+            id={item.id}
             message={item.message}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}

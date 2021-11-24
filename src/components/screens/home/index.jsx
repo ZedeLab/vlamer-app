@@ -11,6 +11,7 @@ import { LottieIcon } from '../../common/animations';
 import { getUserFeedList } from '../../../services/db/queries/site';
 import { useAuth } from '../../../services/auth';
 import { useDispatch } from 'react-redux';
+import { v4 as uuid } from 'uuid';
 
 export default Home = () => {
   const { user } = useAuth();
@@ -41,6 +42,8 @@ export default Home = () => {
   const renderVlams = ({ item }) => {
     return (
       <VlamPosts
+        key={uuid()}
+        id={item.id}
         authorAccount={item.authorAccount}
         postedAt={item.postedAt}
         vlamType={''}

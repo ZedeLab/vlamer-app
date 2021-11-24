@@ -12,6 +12,51 @@ import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
 import { Vlam } from '../models/Vlam';
 import { findUsersFromUserIdList } from './user';
+import { v4 as uuid } from 'uuid';
+
+export const getVlamLikesByUserId = async (userId) => {
+  const db = getFirestore(firebaseApp);
+  const userRef = collection(db, 'likes');
+  const docRef = query(userRef, where('userId', '==', userId));
+
+  try {
+    let likes = [];
+    const querySnapshot = await getDocs(docRef);
+    querySnapshot.forEach((doc) => {
+      likes.push({ id: doc.id, ...doc.data() });
+    });
+
+    return [likes, null];
+  } catch (error) {
+    return [null, error];
+  }
+};
+
+export const likeVlamPost = async (userId, vlamPostId) => {
+  const db = getFirestore(firebaseApp);
+  const [userLikes, likesError] = await getVlamLikesByUserId(userId);
+  const hasNotBeenLikedBefore =
+    userLikes.filter((item) => item.vlamPostId === vlamPostId).length === 0;
+  console.log(hasNotBeenLikedBefore);
+  if (userLikes && hasNotBeenLikedBefore) {
+    try {
+      console.log('hello');
+      const id = uuid();
+      await setDoc(doc(db, 'likes', `${id}`), {
+        id: id,
+        createdAt: new Date(),
+        vlamPostId: vlamPostId,
+        userId: userId,
+      });
+      return [true, null];
+    } catch (error) {
+      console.log(error);
+      return [false, error];
+    }
+  } else {
+    console.log('Already liked');
+  }
+};
 
 export const getUserVlamList = async (userId) => {
   const db = getFirestore(firebaseApp);
