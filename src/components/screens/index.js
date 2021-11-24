@@ -9,5 +9,6 @@ export { default as ExploreScreen } from './explore';
 export { default as NotificationScreen } from './notification';
 export { default as SettingsScreen } from './settings';
 export { default as ChatList } from './chatList';
+export { default as ChatScreen } from './chat';
 export { default as ProfileScreen } from './profile';
 export { default as UserProfileScreen } from './UserProfile';
