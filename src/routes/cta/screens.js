@@ -34,7 +34,7 @@ export const ChatStackScreen = () => {
       }}
     >
       <ChatStack.Screen name="Chat List" component={ChatList} />
-      <ChatStack.Screen name="Chat Room" component={ChatRoom} />
+      {/* <ChatStack.Screen name="Chat Room" component={ChatRoom} /> */}
     </ChatStack.Navigator>
   );
 };
