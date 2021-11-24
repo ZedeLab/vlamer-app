@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogBox, StyleSheet } from 'react-native';
+import { LogBox, StyleSheet, YellowBox } from 'react-native';
 
 import * as Front from 'expo-font';
 import AppLoading from 'expo-app-loading';
@@ -7,6 +7,8 @@ import AuthStack from './src/routes';
 import ServicesProviderWrapper from './src/components/hoc/ServiceProviderWappers';
 
 LogBox.ignoreAllLogs();
+YellowBox.ignoreWarnings(['Setting a timer']);
+
 const fetchFonts = () => {
   return Front.loadAsync({
     openSans: require('./assets/fonts/OpenSans/OpenSans-Regular.ttf'),

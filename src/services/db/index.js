@@ -16,6 +16,23 @@ import { UserConnections } from './models/UserConnections';
 import { UserVolt } from './models/UserVolt';
 import { Vlam } from './models/Vlam';
 
+export const transferFromVoltToInAction = async (userId, amount) => {
+  const db = getFirestore(firebaseApp);
+  const [userVolt, voltError] = await getUserVolt(userId);
+
+  if (userVolt) {
+    console.log('before: ', userVolt);
+    userVolt.volt.account.totalCoins = parseInt(userVolt.volt.account.totalCoins) - amount;
+    userVolt.volt.inAction.totalCoinsOnAction =
+      parseInt(userVolt.volt.inAction.totalCoinsOnAction) + parseInt(amount);
+    console.log('after: ', userVolt);
+    await setDoc(doc(db, 'volts', userVolt.id), userVolt);
+    return [true, null];
+  } else {
+    return [false, voltError];
+  }
+};
+
 export const getUserVlamList = async (userId) => {
   const db = getFirestore(firebaseApp);
   const vlamRef = collection(db, 'vlams');
@@ -58,7 +75,7 @@ export const findUsersFromUserIdList = async (userIdList) => {
   }
 };
 
-export const getUserFeedList = async () => {
+export const getUserFeedList = async (startIndex = 0, limit = 10) => {
   const db = getFirestore(firebaseApp);
   const vlamRef = collection(db, 'vlams');
   const docRef = query(vlamRef, where('state', '==', 'onPlay'));
@@ -73,14 +90,13 @@ export const getUserFeedList = async () => {
       const formattedCreatedAt = formatTime(
         new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
       );
-      console.log('formattedCreatedAt: ', formattedCreatedAt);
       feedList.push({ ...document, createdAt: formattedCreatedAt });
       accountIdList.push(document.author);
     });
 
     if (feedList.length === 0) return [feedList, null];
 
-    const [accounts, error] = await findUsersFromUserIdList(accountIdList);
+    const [accounts, error] = await findUsersFromUserIdList(accountIdList.slice(startIndex, limit));
 
     if (accounts) {
       const fullFeedList = feedList.map((feedPost, index) => ({
@@ -92,6 +108,7 @@ export const getUserFeedList = async () => {
       console.log(error);
     }
   } catch (error) {
+    console.log('Error: ', error);
     return [null, error];
   }
 };

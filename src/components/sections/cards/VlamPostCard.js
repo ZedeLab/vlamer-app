@@ -4,9 +4,13 @@ import CardWrapper from '../../hoc/CardWrapper';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, Divider, Paragraph } from 'react-native-paper';
 import { ProfileScreen } from '../../screens';
-import { setFocusedUser, setFocusedUserConnections } from '../../../store/actors';
+import {
+  setFocusedUser,
+  setFocusedUserConnections,
+  setFocusedUserVolt,
+} from '../../../store/actors';
 import { useDispatch } from 'react-redux';
-import { getUserConnections } from '../../../services/db';
+import { getUserConnections, getUserVolt } from '../../../services/db';
 import { LottieIcon } from '../../common/animations';
 
 const VlamPostCard = (props) => {
@@ -25,15 +29,9 @@ const VlamPostCard = (props) => {
   const dispatch = useDispatch();
 
   const goToProfileHandler = async () => {
-    const [userConnections, error] = await getUserConnections(authorAccount?.id);
+    dispatch(setFocusedUser(authorAccount));
 
-    if (userConnections) {
-      dispatch(setFocusedUser(authorAccount));
-      dispatch(setFocusedUserConnections(userConnections));
-      navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
-    } else {
-      console.log(error);
-    }
+    navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
   };
 
   return (

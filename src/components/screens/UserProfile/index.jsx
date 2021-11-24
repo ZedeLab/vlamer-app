@@ -3,30 +3,39 @@ import React, { Component, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../../services/auth';
-import { selectActors, setCurrentUserVlamList } from '../../../store/actors';
+import {
+  selectActors,
+  setCurrentUserConnections,
+  setCurrentUserVlamList,
+} from '../../../store/actors';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
-import { getUserVlamList } from '../../../services/db';
+import { getUserConnections, getUserVlamList, getUserVolt } from '../../../services/db';
 
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();
   const dispatch = useDispatch();
   const actors = useSelector(selectActors);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (user) {
       const fetchUserVlamList = async () => {
         const [vlamList, error] = await getUserVlamList(user.id);
-        if (vlamList) {
+        const [connections, connectionsError] = await getUserConnections(user.id);
+
+        if (vlamList && connections) {
           dispatch(setCurrentUserVlamList(vlamList));
+          dispatch(setCurrentUserConnections(connections));
+        } else {
+          console.log('connectionsError: ', connectionsError, '\nvlamListError: ', error);
         }
       };
       fetchUserVlamList();
     }
   }, [user]);
 
-  if (!user || !actors.currentUserConnections) {
+  if (!user || !actors.currentUserConnections || !actors.userVolt || !actors.currentUserVlamList) {
     return (
       <PageAux>
         <Text>Loading...</Text>
@@ -41,6 +50,7 @@ const UserProfile = ({ navigation, route }) => {
           account={user}
           admin
           accountConnections={actors.currentUserConnections}
+          userVolt={actors.userVolt}
         />
         <UserVlams />
       </ScrollView>

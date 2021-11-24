@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import theme from '../../../utils/theme';
@@ -22,6 +23,7 @@ const renderVlamList = () => {
       {actors.currentUserVlamList.map((item) => {
         return (
           <VlamPosts
+            key={uuid()}
             authorAccount={user}
             vlamType={''}
             message={item.message}

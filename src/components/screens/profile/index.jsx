@@ -5,25 +5,36 @@ import { useAuth } from '../../../services/auth';
 import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
-import { selectActors, setProfileVlamList } from '../../../store/actors';
+import {
+  selectActors,
+  setFocusedUserConnections,
+  setFocusedUserVolt,
+  setProfileVlamList,
+} from '../../../store/actors';
 import { useSelector } from 'react-redux';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getUserVlamList } from '../../../services/db';
+import { getUserConnections, getUserVlamList, getUserVolt } from '../../../services/db';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { focusedUser, focusedUserConnections } = useSelector(selectActors);
+  const { focusedUser, focusedUserConnections, focusedUserVolt, profileVlamList } =
+    useSelector(selectActors);
 
   useEffect(() => {
     if (focusedUser) {
       const fetchProfileVlamList = async () => {
-        const [vlamList, error] = await getUserVlamList(focusedUser.id);
+        const [vlamList, vlamListError] = await getUserVlamList(focusedUser.id);
+        const [connections, connectionError] = await getUserConnections(focusedUser.id);
+
+        const [volt, voltError] = await getUserVolt(focusedUser.id);
 
         if (vlamList) {
           dispatch(setProfileVlamList(vlamList));
+          dispatch(setFocusedUserConnections(connections));
+          dispatch(setFocusedUserVolt(volt));
         } else {
         }
       };
@@ -31,10 +42,10 @@ const Profile = ({ navigation, route }) => {
     }
   }, [focusedUser]);
 
-  if (!focusedUser || !focusedUserConnections) {
+  if (!focusedUser || !focusedUserConnections || !focusedUserVolt || !profileVlamList) {
     return (
       <PageAux>
-        <Text> Account could not be found</Text>
+        <Text> Loading </Text>
       </PageAux>
     );
   }
@@ -42,7 +53,11 @@ const Profile = ({ navigation, route }) => {
   return (
     <PageAux noGutter>
       <ScrollView style={styles.pagesWrapper}>
-        <UserProfileHeader account={focusedUser} accountConnections={focusedUserConnections} />
+        <UserProfileHeader
+          account={focusedUser}
+          accountConnections={focusedUserConnections}
+          userVolt={focusedUserVolt}
+        />
         <ProfileViewVlams />
       </ScrollView>
     </PageAux>

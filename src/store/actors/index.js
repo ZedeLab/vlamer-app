@@ -13,6 +13,7 @@ const initialState = {
   currentUserFeedList: null,
   currentUserVlamList: null,
   profileVlamList: null,
+  focusedUserVolt: null,
 };
 
 export const actorsSlice = createSlice({
@@ -44,9 +45,7 @@ export const actorsSlice = createSlice({
     },
 
     setCurrentUserConnections: (state, action) => {
-      const accountConnections = new UserConnections(action.payload).getData();
-
-      state.currentUserConnections = accountConnections;
+      state.currentUserConnections = action.payload;
     },
 
     resetCurrentUserConnections: (state) => {
@@ -73,11 +72,21 @@ export const actorsSlice = createSlice({
     setProfileVlamList: (state, action) => {
       state.profileVlamList = action.payload;
     },
+
+    setFocusedUserVolt: (state, action) => {
+      state.focusedUserVolt = action.payload;
+    },
+
+    resetFocusedUserVolt: (state, action) => {
+      state.focusedUserVolt = action.payload;
+    },
   },
 });
 
 // Actions
 export const {
+  setFocusedUserVolt,
+  resetFocusedUserVolt,
   setCurrentUserVolt,
   resetCurrentUserVolt,
   setCurrentUser,

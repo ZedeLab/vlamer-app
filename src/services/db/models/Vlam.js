@@ -10,7 +10,7 @@ export class Vlam {
       this.data = await object({
         id: string().uuid().default(uuid()),
         author: string().required(),
-        participatingPrice: string().required(),
+        participatingPrice: number().required(),
         winingPrice: number().required(),
         numberOfParticipants: number().required(),
         message: string().required().min(5),

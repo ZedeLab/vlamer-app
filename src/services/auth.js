@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
   signOut as signOutFirebase,
 } from 'firebase/auth';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
@@ -18,19 +18,19 @@ import {
   addNewUserVolt,
   getUserByEmail,
   getUserConnections,
-  getUserFeedList,
   getUserVolt,
+  subscribeToFeedsVlamList,
 } from './db';
-import { selectError, notifyError } from '../store/errors';
+import { notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
   setCurrentUserConnections,
   setCurrentUserVolt,
-  setCurrentUserFeedList,
   resetCurrentUser,
   resetCurrentUserVolt,
+  setCurrentUserFeedList,
 } from '../store/actors';
-import { notifyLoadingFinish, notifyLoadingStart, selectLoading } from '../store/loading';
+import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
 
@@ -49,7 +49,6 @@ function useProvideAuth() {
   const { getRandomAvatar, getRandomCoverImage } = useStaticData();
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
-
   const signInWithFacebook = () => {
     console.log('Sing in with Facebook');
   };
@@ -63,25 +62,14 @@ function useProvideAuth() {
         const [account, error] = await getUserByEmail(user.email);
 
         if (account) {
-          // dispatch(setCurrentUser(account));
           setUser(account);
-          const [connections, connectionsError] = await getUserConnections(account.id);
-          const [feedList, feedListError] = await getUserFeedList();
+
           const [volt, voltError] = await getUserVolt(account.id);
 
-          if (connections && volt && feedList) {
+          if (volt) {
             dispatch(setCurrentUserVolt(volt));
-            dispatch(setCurrentUserConnections(connections));
-            dispatch(setCurrentUserFeedList(feedList));
           } else {
-            console.log(
-              'connectionsError: ',
-              connectionsError,
-              '\nvoltError: ',
-              voltError,
-              '\nfeedListError: ',
-              feedListError
-            );
+            console.log('connectionsError: ', connectionsError, '\nvoltError: ', voltError);
             dispatch(
               notifyError({
                 type: 'auth',
