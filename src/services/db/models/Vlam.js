@@ -12,6 +12,7 @@ export class Vlam {
         author: string().required(),
         participatingPrice: number().required(),
         winingPrice: number().required(),
+        totalLikes: number().required().min(0),
         numberOfParticipants: number().required(),
         message: string().required().min(5),
         type: string().oneOf(['express', 'fund', 'sales']).default('express'),
@@ -37,7 +38,7 @@ export class Vlam {
   static GetDefaultVlamValue() {
     return {
       id: uuid(),
-
+      totalLikes: 0,
       message: 'Come join me. 💜',
       type: 'express',
       state: 'onPlay',

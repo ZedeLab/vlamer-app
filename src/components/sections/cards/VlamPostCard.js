@@ -17,6 +17,7 @@ const VlamPostCard = (props) => {
     authorAccount,
     createdAt,
     vlamType,
+    totalLikes,
     message,
     navigation,
     numberOfParticipants,
@@ -28,6 +29,7 @@ const VlamPostCard = (props) => {
   const { user } = useAuth();
   const dispatch = useDispatch();
   const [isLiked, setIsLiked] = useState(likes !== undefined);
+  const [totalPostLikes, setTotalPostLikes] = useState(totalLikes);
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
@@ -36,10 +38,16 @@ const VlamPostCard = (props) => {
   };
 
   const likeVlamPostHandler = async () => {
-    const [reqSuccessful, reqError] = await toggleVlamPostLike(user.id, id);
+    const [reqSuccessful, reqError] = await toggleVlamPostLike(user.id, id, totalPostLikes);
 
     if (reqSuccessful) {
-      setIsLiked(!isLiked);
+      if (reqSuccessful.type === 'like') {
+        setIsLiked(true);
+        setTotalPostLikes(totalPostLikes + 1);
+      } else if (reqSuccessful.type === 'unlike') {
+        setIsLiked(false);
+        setTotalPostLikes(totalPostLikes - 1);
+      }
     } else {
       console.log('reqError: ', reqError);
     }
@@ -139,7 +147,7 @@ const VlamPostCard = (props) => {
                 style={styles.iconHeart}
               />
               <Text style={{ ...styles.text, ...styles.greyText, ...styles.iconHeartText }}>
-                0 likes
+                {totalPostLikes} likes
               </Text>
             </View>
           </TouchableWithoutFeedback>

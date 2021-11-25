@@ -8,6 +8,7 @@ import {
   where,
   Timestamp,
   deleteDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
@@ -73,14 +74,14 @@ export const getVlamLikesByUserId = async (userId) => {
   }
 };
 
-export const toggleVlamPostLike = async (userId, vlamPostId) => {
+export const toggleVlamPostLike = async (userId, vlamPostId, totalLikes) => {
   const db = getFirestore(firebaseApp);
   const [userLikes, likesError] = await getVlamLikesByUserId(userId);
 
   const hasNotBeenLikedBefore =
     userLikes.filter((item) => item.vlamPostId === vlamPostId).length === 0;
 
-  if (userLikes && hasNotBeenLikedBefore) {
+  if (hasNotBeenLikedBefore) {
     try {
       const id = uuid();
       await setDoc(doc(db, 'likes', id), {
@@ -89,15 +90,27 @@ export const toggleVlamPostLike = async (userId, vlamPostId) => {
         vlamPostId: vlamPostId,
         userId: userId,
       });
-      return [true, null];
+
+      const vlamRef = doc(db, 'vlams', vlamPostId);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(vlamRef, {
+        totalLikes: totalLikes + 1,
+      });
+      return [{ type: 'like' }, null];
     } catch (error) {
       return [false, error];
     }
   } else if (!hasNotBeenLikedBefore) {
     try {
       const [reqSuccessful, reqError] = await deleteVlamLikesByVlamId(vlamPostId);
+      const vlamRef = doc(db, 'vlams', vlamPostId);
 
-      if (reqSuccessful) return [true, null];
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(vlamRef, {
+        totalLikes: totalLikes - 1,
+      });
+      if (reqSuccessful) return [{ type: 'unlike' }, null];
       else return [false, reqError];
     } catch (error) {
       console.log(error);

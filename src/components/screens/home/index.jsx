@@ -45,6 +45,7 @@ export default Home = () => {
         key={uuid()}
         id={item.id}
         likes={item.likes}
+        totalLikes={item.totalLikes}
         authorAccount={item.authorAccount}
         postedAt={item.postedAt}
         vlamType={''}

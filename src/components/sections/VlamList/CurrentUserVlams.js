@@ -32,6 +32,7 @@ const renderVlamList = () => {
             id={item.id}
             likes={item.likes}
             message={item.message}
+            totalLikes={item.totalLikes}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}
             winingPrice={item.winingPrice}
@@ -89,7 +90,7 @@ const useStyle = (LIST_SIZE) =>
   StyleSheet.create({
     container: {
       width: Dimensions.get('window').width,
-      minHeight: theme.spacing(LIST_SIZE) * 14.8,
+      minHeight: theme.spacing(LIST_SIZE) * 16.8,
     },
 
     scene: {
