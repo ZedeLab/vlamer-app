@@ -110,7 +110,7 @@ export const styles = StyleSheet.create({
   },
 
   iconHeartText: {
-    marginLeft: -theme.spacing(0.3),
+    marginLeft: -theme.spacing(0.5),
   },
 
   message: {
@@ -120,5 +120,12 @@ export const styles = StyleSheet.create({
   },
   messageContainer: {
     width: '95%',
+  },
+
+  iconHeart: {
+    width: theme.spacing(3),
+    height: theme.spacing(2.4),
+    position: 'relative',
+    top: theme.spacing(-0.05),
   },
 });

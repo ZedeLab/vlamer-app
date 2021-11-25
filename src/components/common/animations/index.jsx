@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -51,20 +51,40 @@ const defaultStyles = StyleSheet.create({
   },
 });
 
-export const LottieIcon = ({ src, isActive, style, ...restProps }) => {
+export const LottieIcon = ({
+  src,
+  withActive,
+  isActive,
+
+  onNotActiveFrame,
+  onActiveFrame,
+
+  style,
+  ...restProps
+}) => {
+  const [firstRun, setFirstRun] = useState(true);
+  const animation = useRef(null);
+
+  useEffect(() => {
+    if (withActive) {
+      if (firstRun) {
+        if (isActive) {
+          animation.current.play(onActiveFrame.x, onActiveFrame.y);
+        } else {
+          animation.current.play(onNotActiveFrame.x, onNotActiveFrame.y);
+        }
+        setFirstRun(false);
+      } else if (isActive) {
+        animation.current.play(onActiveFrame.x, onActiveFrame.y);
+      } else {
+        animation.current.play(onNotActiveFrame.x, onNotActiveFrame.y);
+      }
+    }
+  }, [isActive]);
+
   return (
     <View>
-      {isActive ? (
-        <LottieView
-          source={loadFallBack.src}
-          style={defaultStyles.loader}
-          autoPlay
-          loop
-          {...restProps}
-        />
-      ) : (
-        <LottieView source={src} autoPlay loop style={style} {...restProps} />
-      )}
+      <LottieView ref={animation} source={src} autoPlay loop style={style} {...restProps} />
     </View>
   );
 };

@@ -7,11 +7,10 @@ export const transferFromVoltToInAction = async (userId, amount) => {
   const [userVolt, voltError] = await getUserVolt(userId);
 
   if (userVolt) {
-    console.log('before: ', userVolt);
     userVolt.volt.account.totalCoins = parseInt(userVolt.volt.account.totalCoins) - amount;
     userVolt.volt.inAction.totalCoinsOnAction =
       parseInt(userVolt.volt.inAction.totalCoinsOnAction) + parseInt(amount);
-    console.log('after: ', userVolt);
+
     await setDoc(doc(db, 'volts', userVolt.id), userVolt);
     return [true, null];
   } else {

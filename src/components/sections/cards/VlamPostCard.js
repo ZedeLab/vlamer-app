@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styles } from './styles';
 import CardWrapper from '../../hoc/CardWrapper';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
@@ -7,12 +7,17 @@ import { ProfileScreen } from '../../screens';
 import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
+import { useAuth } from '../../../services/auth';
+import { toggleVlamPostLike } from '../../../services/db/queries/vlam';
 
 const VlamPostCard = (props) => {
   const {
+    id,
+    likes,
     authorAccount,
     createdAt,
     vlamType,
+    totalLikes,
     message,
     navigation,
     numberOfParticipants,
@@ -21,12 +26,31 @@ const VlamPostCard = (props) => {
     ...restProps
   } = props;
 
+  const { user } = useAuth();
   const dispatch = useDispatch();
+  const [isLiked, setIsLiked] = useState(likes !== undefined);
+  const [totalPostLikes, setTotalPostLikes] = useState(totalLikes);
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
 
     navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+  };
+
+  const likeVlamPostHandler = async () => {
+    const [reqSuccessful, reqError] = await toggleVlamPostLike(user.id, id, totalPostLikes);
+
+    if (reqSuccessful) {
+      if (reqSuccessful.type === 'like') {
+        setIsLiked(true);
+        setTotalPostLikes(totalPostLikes + 1);
+      } else if (reqSuccessful.type === 'unlike') {
+        setIsLiked(false);
+        setTotalPostLikes(totalPostLikes - 1);
+      }
+    } else {
+      console.log('reqError: ', reqError);
+    }
   };
 
   return (
@@ -109,28 +133,36 @@ const VlamPostCard = (props) => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
-          <View style={styles.section}>
+        <View style={styles.section}>
+          <TouchableWithoutFeedback onPress={likeVlamPostHandler}>
             <View style={styles.row}>
               <LottieIcon
-                autoPlay={false}
+                withActive
+                isActive={isLiked}
+                onNotActiveFrame={{ x: 7, y: 7 }}
+                onActiveFrame={{ x: 41, y: 41 }}
+                autoPlay={true}
+                loop={false}
                 src={require('../../../../assets/lottie/heart.json')}
-                style={styles.icon}
+                style={styles.iconHeart}
               />
               <Text style={{ ...styles.text, ...styles.greyText, ...styles.iconHeartText }}>
-                0 likes
+                {totalPostLikes} likes
               </Text>
             </View>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback>
             <View style={styles.row}>
               <LottieIcon
-                autoPlay={false}
+                autoPlay={true}
+                loop={true}
                 src={require('../../../../assets/lottie/comment.json')}
                 style={styles.icon_small}
               />
               <Text style={{ ...styles.text, ...styles.greyText }}>0 comments</Text>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
     </CardWrapper>
   );

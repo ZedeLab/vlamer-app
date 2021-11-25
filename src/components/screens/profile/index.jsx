@@ -18,17 +18,18 @@ import { getUserConnections } from '../../../services/db/queries/connections';
 import { getUserVolt } from '../../../services/db/queries/volt.js';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
-import { getUserVlamList } from '../../../services/db/queries/vlam';
+import { getUserVlamList } from '../../../services/db/queries/site';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const { focusedUser, focusedUserConnections, focusedUserVolt, profileVlamList } =
     useSelector(selectActors);
 
   useEffect(() => {
     if (focusedUser) {
       const fetchProfileVlamList = async () => {
-        const [vlamList, vlamListError] = await getUserVlamList(focusedUser.id);
+        const [vlamList, vlamListError] = await getUserVlamList(focusedUser.id, user.id);
         const [connections, connectionError] = await getUserConnections(focusedUser.id);
 
         const [volt, voltError] = await getUserVolt(focusedUser.id);
