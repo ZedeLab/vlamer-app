@@ -17,22 +17,18 @@ const renderVlamList = () => {
   const navigation = useNavigation();
   const actors = useSelector(selectActors);
 
-  if (!user || !actors?.currentUserVlamList) {
-    return <Text> Loading...</Text>;
-  }
-
   return (
     <View>
       {actors.currentUserVlamList.map((item) => {
         return (
           <VlamPosts
             key={uuid()}
-            authorAccount={user}
+            authorAccount={item.__ownerAccountSnapShot}
             vlamType={''}
             id={item.id}
             likes={item.likes}
             message={item.message}
-            totalLikes={item.totalLikes}
+            totalLikes={item.likes}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}
             winingPrice={item.winingPrice}

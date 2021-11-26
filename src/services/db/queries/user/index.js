@@ -1,5 +1,6 @@
-import { getDocs, collection, getFirestore, query, where } from 'firebase/firestore';
-import firebaseApp from '../../../utils/firebase';
+import { getDocs, collection, getFirestore, query, where, setDoc, doc } from 'firebase/firestore';
+import firebaseApp from '../../../../utils/firebase';
+import { User } from '../../models/user';
 
 export const findUsersFromUserIdList = async (userIdList) => {
   const db = getFirestore(firebaseApp);

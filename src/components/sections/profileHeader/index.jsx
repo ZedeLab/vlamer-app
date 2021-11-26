@@ -84,8 +84,8 @@ export default ProfileUserCard = (props) => {
       <AnimatedCoverImage
         avatarURL={account.avatarURL}
         coverImageURL={account.coverImageURL}
-        followers={accountConnections.connections.length}
-        following={accountConnections.connections.length}
+        followers={accountConnections.length}
+        following={accountConnections.length}
       />
       <View style={styles.sectionsWrapper}>
         <View style={styles.userInfoSection}>
@@ -105,7 +105,7 @@ export default ProfileUserCard = (props) => {
               />
               <View style={styles.accountStatusContainerTitle}>
                 <AnimatedNumberText
-                  value={userVolt.volt.account.totalCoins}
+                  value={userVolt.account.inVoltCoins}
                   textStyle={{ ...styles.accountStatus, ...styles.accountStatus_highlighted }}
                 />
                 <Text style={{ ...styles.greyText, ...styles.thinText }}>in volt</Text>
@@ -119,7 +119,7 @@ export default ProfileUserCard = (props) => {
               />
               <View style={styles.accountStatusContainerTitle}>
                 <AnimatedNumberText
-                  value={userVolt.volt.inAction.totalCoinsOnAction}
+                  value={userVolt.inAction.coinsOnAction}
                   textStyle={{ ...styles.accountStatus, ...styles.accountStatus_highlighted }}
                 />
                 <Text style={{ ...styles.greyText, ...styles.thinText }}>in action</Text>

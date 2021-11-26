@@ -48,7 +48,7 @@ export default StartNewVlamForm = ({ navigation }) => {
       <Formik
         onSubmit={onSubmitHandler}
         initialValues={formikHelpers.initialValues}
-        validationSchema={formikHelpers.validationSchema(userVolt.volt.account.totalCoins)}
+        validationSchema={formikHelpers.validationSchema(userVolt.account.inVoltCoins)}
       >
         {({ values, errors, handleChange, handleSubmit }) => (
           <View>

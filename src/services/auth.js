@@ -14,19 +14,20 @@ import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
 import { addNewUser } from './db/queries/user';
 
-import { addNewUserConnection } from './db/queries/connections';
+import { addNewUserConnection, getUserConnections } from './db/queries/user/connections';
 import { notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
   setCurrentUserVolt,
   resetCurrentUser,
   resetCurrentUserVolt,
+  setCurrentUserConnections,
 } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
 import { getUserByEmail } from './db/queries/user';
-import { addNewUserVolt, getUserVolt } from './db/queries/volt';
+import { addNewUserVolt, getUserVolt } from './db/queries/user/volt';
 
 const authContext = createContext();
 
@@ -54,23 +55,13 @@ function useProvideAuth() {
 
       if (user) {
         const [account, error] = await getUserByEmail(user.email);
+        const [volt, voltError] = await getUserVolt(account.id);
+        const [connections, connectionsError] = await getUserConnections(account.id);
 
-        if (account) {
+        if (account && volt && connections) {
           setUser(account);
-
-          const [volt, voltError] = await getUserVolt(account.id);
-
-          if (volt) {
-            dispatch(setCurrentUserVolt(volt));
-          } else {
-            console.log('connectionsError: ', connectionsError, '\nvoltError: ', voltError);
-            dispatch(
-              notifyError({
-                type: 'auth',
-                message: 'Problem fetching account information',
-              })
-            );
-          }
+          dispatch(setCurrentUserVolt(volt));
+          dispatch(setCurrentUserConnections(connections));
         } else {
           dispatch(
             notifyError({
@@ -160,38 +151,33 @@ function useProvideAuth() {
       });
 
       if (newAccount) {
-        const [newConnectionAccount, accountConnectionError] = await addNewUserConnection({
-          id: uuid(),
-          ownerAccountId: account.user.uid,
-          connections: [],
-        });
-        // Show errors from create user volt function
-        // accountConnectionError && console.log(accountConnectionError);
+        const [newConnectionAccount, accountConnectionError] = await addNewUserConnection(
+          newAccount.id
+        );
+        const [newVoltAccount, accountVoltError] = await addNewUserVolt(account.user.uid);
 
-        if (newConnectionAccount) {
-          const [newVoltAccount, accountVoltError] = await addNewUserVolt({
-            id: uuid(),
-            ownerAccountId: account.user.uid,
-          });
-          // Show errors from create user volt function
-          // accountVoltError && console.log(accountVoltError);
-
-          if (newVoltAccount) {
-            setUser(newAccount);
-            return newAccount;
-          }
+        if (newConnectionAccount && newVoltAccount) {
+          setUser(newAccount);
+          return newAccount;
+        } else {
+          console.log(
+            'accountConnectionError: ',
+            accountConnectionError,
+            '\naccountVoltError: ',
+            accountVoltError
+          );
         }
       } else {
-        console.log('Problem adding account: ', error);
+        console.log('newAccountError: ', error);
+        dispatch(
+          notifyError({
+            type: 'auth',
+            message: 'Account already exist',
+          })
+        );
       }
     } catch (error) {
       console.log(error);
-      dispatch(
-        notifyError({
-          type: 'auth',
-          message: 'Account already exist',
-        })
-      );
     }
   };
 

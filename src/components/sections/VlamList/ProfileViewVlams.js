@@ -23,7 +23,7 @@ const renderVlamList = () => {
           <VlamPosts
             key={uuid()}
             id={item.id}
-            authorAccount={focusedUser}
+            authorAccount={item.__ownerAccountSnapShot}
             vlamType={''}
             likes={item.likes}
             totalLikes={item.totalLikes}

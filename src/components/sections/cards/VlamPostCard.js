@@ -8,7 +8,11 @@ import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
-import { toggleVlamPostLike } from '../../../services/db/queries/vlam';
+import {
+  likeVlamPost,
+  toggleVlamPostLike,
+  unlikeVlamPost,
+} from '../../../services/db/queries/vlam';
 
 const VlamPostCard = (props) => {
   const {
@@ -38,18 +42,24 @@ const VlamPostCard = (props) => {
   };
 
   const likeVlamPostHandler = async () => {
-    const [reqSuccessful, reqError] = await toggleVlamPostLike(user.id, id, totalPostLikes);
+    if (isLiked) {
+      const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id);
 
-    if (reqSuccessful) {
-      if (reqSuccessful.type === 'like') {
-        setIsLiked(true);
-        setTotalPostLikes(totalPostLikes + 1);
-      } else if (reqSuccessful.type === 'unlike') {
+      if (reqSuccessful) {
         setIsLiked(false);
         setTotalPostLikes(totalPostLikes - 1);
+      } else {
+        console.log('reqError: ', reqError);
       }
     } else {
-      console.log('reqError: ', reqError);
+      const [reqSuccessful, reqError] = await likeVlamPost(user.id, id);
+
+      if (reqSuccessful) {
+        setIsLiked(true);
+        setTotalPostLikes(totalPostLikes + 1);
+      } else {
+        console.log('reqError: ', reqError);
+      }
     }
   };
 
