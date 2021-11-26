@@ -1,7 +1,4 @@
-import { number, boolean, object, string, ref as yupRef, array } from 'yup';
-import { v4 as uuid } from 'uuid';
-import { Timestamp } from '@firebase/firestore';
-import { Vlam } from './Vlam';
+import { number, boolean, object, string } from 'yup';
 
 export class VlamLike {
   constructor(newData) {
@@ -39,12 +36,13 @@ export class VlamLike {
       totalNumberOfLikes,
       totalNumberOfComments,
       totalNumberOfParticipants,
+      __ownerAccountSnapShot,
       ...restParentVlamData
     } = parentVlamData;
 
     return {
       id: userId,
-      createdAt: Timestamp.fromDate(new Date()),
+      createdAt: new Date(),
       userId: userId,
       unliked: false,
       __parentSnapShot: restParentVlamData,

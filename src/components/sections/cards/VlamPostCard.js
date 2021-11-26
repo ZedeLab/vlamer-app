@@ -8,11 +8,8 @@ import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
-import {
-  likeVlamPost,
-  toggleVlamPostLike,
-  unlikeVlamPost,
-} from '../../../services/db/queries/vlam';
+import { likeVlamPost, unlikeVlamPost } from '../../../services/db/queries/vlam/likes';
+import { useLikesAccess } from '../../../services/likesAccess';
 
 const VlamPostCard = (props) => {
   const {
@@ -32,7 +29,9 @@ const VlamPostCard = (props) => {
 
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const [isLiked, setIsLiked] = useState(likes !== undefined);
+
+  const { vlamHasBeenLiked } = useLikesAccess();
+  const [isLiked, setIsLiked] = useState(vlamHasBeenLiked(id));
   const [totalPostLikes, setTotalPostLikes] = useState(totalLikes);
 
   const goToProfileHandler = async () => {

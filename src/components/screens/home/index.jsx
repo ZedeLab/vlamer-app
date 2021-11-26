@@ -45,7 +45,7 @@ export default Home = () => {
         key={uuid()}
         id={item.id}
         likes={item.likes}
-        totalLikes={item.totalLikes}
+        totalLikes={item.totalNumberOfLikes}
         authorAccount={item.__ownerAccountSnapShot}
         postedAt={item.postedAt}
         vlamType={''}
@@ -60,13 +60,14 @@ export default Home = () => {
   };
 
   return (
-    <PageAux>
+    <PageAux noGutter>
       <CompleteRegistrationBanner />
       <FlatList
         data={actors.currentUserFeedList}
         renderItem={renderVlams}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        style={styles.wrapper}
         // onEndReachedThreshold={0.2}
         // onEndReached={(event) => setLoadMoreVlams(true)}
       />

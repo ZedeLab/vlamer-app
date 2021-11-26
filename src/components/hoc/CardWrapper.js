@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
   container: {
     ...theme.shadows[1],
     borderRadius: theme.shapes.borderRadios,
-    marginVertical: theme.spacing(0.8),
+    marginBottom: theme.spacing(0.8),
     backgroundColor: theme.colors.common,
+    width: '96.5%',
   },
 });

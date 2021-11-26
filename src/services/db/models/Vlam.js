@@ -1,6 +1,5 @@
-import { number, date, object, string, ref as yupRef, array } from 'yup';
+import { number, object, string } from 'yup';
 import { v4 as uuid } from 'uuid';
-import { Timestamp } from '@firebase/firestore';
 
 export class Vlam {
   constructor(newData) {
@@ -41,15 +40,8 @@ export class Vlam {
   }
 
   static GetDefaultVlamValue(ownerAccount) {
-    const {
-      coverImageURL,
-      createdAt,
-      email,
-      emailVerified,
-      lastLoginAt,
-      phoneNumber,
-      ...restOwnerAccount
-    } = ownerAccount;
+    const { createdAt, email, emailVerified, lastLoginAt, phoneNumber, ...restOwnerAccount } =
+      ownerAccount;
     return {
       id: uuid(),
       totalLikes: 0,

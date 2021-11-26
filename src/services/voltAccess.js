@@ -28,18 +28,6 @@ function useProvideVoltAccess() {
   const { user } = useAuth();
   const actors = useSelector(selectActors);
 
-  useEffect(async () => {
-    if (user) {
-      const [volt, voltError] = await getUserVolt(user.id);
-
-      if (volt) {
-        dispatch(setCurrentUserVolt(volt));
-      } else {
-        console.log('Problem fetching user volt: ', voltError);
-      }
-    }
-  }, [user]);
-
   const startNewVlam = async (message, participatingPrice, winingPrice, numberOfParticipants) => {
     dispatch(notifyLoadingStart({ type: 'form/post' }));
 

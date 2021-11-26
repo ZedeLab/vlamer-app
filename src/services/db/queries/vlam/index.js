@@ -7,39 +7,11 @@ import {
   query,
   where,
   Timestamp,
-  deleteDoc,
-  updateDoc,
-  increment,
-  arrayUnion,
 } from 'firebase/firestore';
 import firebaseApp from '../../../../utils/firebase';
 import { formatTime } from '../../../../utils/timeManager';
 import { Vlam } from '../../models/Vlam';
-import { v4 as uuid } from 'uuid';
-import { VlamLike } from '../../models/VlamLike';
 import { getUserById } from '../user';
-
-export const getVlamLikesFromVlamId = async (vlamId) => {
-  const db = getFirestore(firebaseApp);
-  const vlamRef = collection(db, 'vlams', vlamId, 'likes');
-
-  try {
-    let vlamLike;
-    const querySnapshot = await getDocs(doc(vlamRef));
-    querySnapshot.forEach((doc) => {
-      const { createdAt, ...document } = doc.data();
-
-      const formattedCreatedAt = formatTime(
-        new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
-      );
-      vlamLike = { id: doc.id, ...document, createdAt: formattedCreatedAt };
-    });
-
-    return [vlamLike, null];
-  } catch (error) {
-    return [null, error];
-  }
-};
 
 export const getVlamsByUserId = async (userId) => {
   const db = getFirestore(firebaseApp);
@@ -60,48 +32,6 @@ export const getVlamsByUserId = async (userId) => {
     return [vlams[0], null];
   } catch (error) {
     return [null, error];
-  }
-};
-
-export const likeVlamPost = async (currentUserId, vlamPostId) => {
-  const db = getFirestore(firebaseApp);
-  const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUserId);
-
-  try {
-    let [parentVlam, parentVlamError] = await getVlamsByUserId(currentUserId);
-
-    const vlamLike = await new VlamLike(
-      VlamLike.GetDefaultVlamLikeValue(currentUserId, parentVlam)
-    ).__validate();
-    await setDoc(vlamLikeRef, vlamLike);
-
-    const vlamRef = doc(db, 'vlams', vlamPostId);
-
-    await updateDoc(vlamRef, {
-      totalNumberOfLikes: increment(1),
-    });
-    return [vlamLike, null];
-  } catch (error) {
-    console.log(error);
-    return [false, error];
-  }
-};
-
-export const unlikeVlamPost = async (currentUserId, vlamPostId) => {
-  const db = getFirestore(firebaseApp);
-  const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUserId);
-
-  try {
-    await deleteDoc(vlamLikeRef);
-    const vlamRef = doc(db, 'vlams', vlamPostId);
-
-    await updateDoc(vlamRef, {
-      totalNumberOfLikes: increment(-1),
-    });
-    return [true, null];
-  } catch (error) {
-    console.log(error);
-    return [false, error];
   }
 };
 

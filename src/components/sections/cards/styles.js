@@ -4,10 +4,11 @@ import theme from '../../../utils/theme';
 export const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
+    width: '90%',
     padding: theme.spacing(0.3),
   },
   mainSection: {
-    width: '95%',
+    width: '96%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',

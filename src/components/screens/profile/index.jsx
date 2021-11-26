@@ -29,7 +29,6 @@ const Profile = ({ navigation, route }) => {
       const fetchProfileVlamList = async () => {
         const [vlamList, vlamListError] = await getUserVlamList(focusedUser.id, user.id);
         const [connections, connectionError] = await getUserConnections(focusedUser.id);
-
         const [volt, voltError] = await getUserVolt(focusedUser.id);
 
         if (vlamList) {
