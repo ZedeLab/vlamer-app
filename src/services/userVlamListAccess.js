@@ -1,5 +1,5 @@
 import { Timestamp } from '@firebase/firestore';
-import React, { useContext, createContext, useEffect } from 'react';
+import React, { useContext, createContext, useEffect, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserVlamList } from '../store/actors';
@@ -28,8 +28,8 @@ function useProvideCurrentUserVlamList() {
   const dispatch = useDispatch();
   const { currentUserVlamList } = useSelector(selectActors);
 
-  useEffect(async () => {
-    if (currentUserVlamList) {
+  useMemo(async () => {
+    if (user) {
       const [{ eventHandler, docRef }, _] = await onNewVlamInUserProfile(user.id);
 
       const unsubscribe = eventHandler(docRef, (querySnapshot) => {
@@ -46,9 +46,15 @@ function useProvideCurrentUserVlamList() {
         dispatch(setCurrentUserVlamList(vlamList));
       });
 
-      return unsubscribe;
+      return () => {
+        if (user) {
+          return unsubscribe;
+        } else {
+          return unsubscribe();
+        }
+      };
     }
-  }, []);
+  }, [user]);
 
   return {};
 }
