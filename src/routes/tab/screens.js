@@ -13,6 +13,7 @@ import Header from '../../components/sections/header';
 import { Text } from 'react-native';
 import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import AddVlamScreen from '../../components/screens/UserProfile/AddVlam.screen';
+import { CurrentUserVlamListProvider } from '../../services/userVlamListAccess';
 
 const HomeStack = createStackNavigator();
 export const HomeStackScreen = ({ route }) => {

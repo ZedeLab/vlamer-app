@@ -1,4 +1,5 @@
 import { Timestamp } from '@firebase/firestore';
+import { id } from 'date-fns/locale';
 import React, { useState, useContext, createContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserFeedList } from '../store/actors';
@@ -27,23 +28,17 @@ function useProvideFeedsList() {
       const [{ eventHandler, docRef }, _] = await onNewVlamInUserVlamFeedList();
 
       const unsubscribe = eventHandler(docRef, (querySnapshot) => {
-        let feedList = [...currentUserFeedList];
-        let index = 0;
+        let feedList = currentUserFeedList ? [...currentUserFeedList] : [];
 
-        querySnapshot.docChanges().forEach((change) => {
-          if (change.type === 'added' || change.type === 'modified') {
-            const document = change.doc.data();
+        querySnapshot.forEach((doc) => {
+          const document = doc.data();
+          const formattedCreatedAt = formatTime(
+            new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
+          );
 
-            const formattedCreatedAt = formatTime(
-              new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
-            );
-            feedList[index++] = { ...document, createdAt: formattedCreatedAt };
-          }
-
-          if (change.type === 'removed') {
-            console.log('Removed city: ', change.doc.data());
-          }
+          feedList.push({ ...document, createdAt: formattedCreatedAt });
         });
+
         dispatch(setCurrentUserFeedList(feedList));
       });
 
@@ -51,8 +46,5 @@ function useProvideFeedsList() {
     }
   }, []);
 
-  return {
-    currentUserFeedList,
-    // setFeedsList,
-  };
+  return {};
 }

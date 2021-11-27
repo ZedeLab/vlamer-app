@@ -85,7 +85,7 @@ export default StartNewVlamForm = ({ navigation }) => {
             <InputText
               label={formikHelpers.fieldNames.winningPrice}
               onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
-              value={values[formikHelpers.fieldNames.winningPrice]}
+              value={values[formikHelpers.fieldNames.winningPrice] + ''}
             />
             {errors[formikHelpers.fieldNames.winningPrice] && (
               <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.winningPrice]}</Text>
@@ -94,7 +94,7 @@ export default StartNewVlamForm = ({ navigation }) => {
             <InputText
               label={formikHelpers.fieldNames.participatingPrice}
               onChangeText={handleChange(formikHelpers.fieldNames.participatingPrice)}
-              value={values[formikHelpers.fieldNames.participatingPrice]}
+              value={values[formikHelpers.fieldNames.participatingPrice] + ''}
             />
             {errors[formikHelpers.fieldNames.participatingPrice] && (
               <Text style={styles.errorText}>
@@ -106,7 +106,7 @@ export default StartNewVlamForm = ({ navigation }) => {
               editable={false}
               label={formikHelpers.fieldNames.profitMargin}
               // onChangeText={handleChange}
-              value={values[formikHelpers.fieldNames.profitMargin]}
+              value={values[formikHelpers.fieldNames.profitMargin] + ''}
             />
             {errors[formikHelpers.fieldNames.profitMargin] && (
               <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.profitMargin]}</Text>
