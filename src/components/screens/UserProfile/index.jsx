@@ -17,7 +17,7 @@ const UserProfile = ({ navigation, route }) => {
     if (user) {
       const fetchUserVlamList = async () => {
         const [vlamList, error] = await getUserVlamList(user.id);
-        console.log('vlamList: ', vlamList);
+
         if (vlamList) {
           dispatch(setCurrentUserVlamList(vlamList));
         } else {

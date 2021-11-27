@@ -1,5 +1,6 @@
 import {
   doc,
+  getDoc,
   getDocs,
   setDoc,
   collection,
@@ -13,23 +14,25 @@ import { formatTime } from '../../../../utils/timeManager';
 import { Vlam } from '../../models/Vlam';
 import { getUserById } from '../user';
 
-export const getVlamsByUserId = async (userId) => {
+export const getVlamById = async (vlamId) => {
   const db = getFirestore(firebaseApp);
-  const vlamsRef = collection(db, 'vlams');
-  const docRef = query(vlamsRef, where('author', '==', userId));
+  const vlamsRef = doc(db, 'vlams', vlamId);
 
   try {
-    let vlams = [];
-    const querySnapshot = await getDocs(docRef);
-    querySnapshot.forEach((doc) => {
-      const { createdAt, ...document } = doc.data();
+    let vlam;
+    const vlamSnapshot = await getDoc(vlamsRef);
+
+    if (vlamSnapshot.exists()) {
+      const { createdAt, ...document } = vlamSnapshot.data();
       const formattedCreatedAt = formatTime(
         new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
       );
-      vlams.push({ id: doc.id, ...document, createdAt: formattedCreatedAt });
-    });
-    console.log();
-    return [vlams[0], null];
+      vlam = { id: doc.id, ...document, createdAt: formattedCreatedAt };
+
+      return [vlam, null];
+    } else {
+      return [null, null];
+    }
   } catch (error) {
     return [null, error];
   }

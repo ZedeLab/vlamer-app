@@ -30,19 +30,23 @@ const VlamPostCard = (props) => {
   const { user } = useAuth();
   const dispatch = useDispatch();
 
-  const { vlamHasBeenLiked } = useLikesAccess();
-  const [isLiked, setIsLiked] = useState(vlamHasBeenLiked(id));
+  const { isVlamLiked } = useLikesAccess();
+  const [isLiked, setIsLiked] = useState(isVlamLiked(id));
   const [totalPostLikes, setTotalPostLikes] = useState(totalLikes);
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
 
-    navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+    if (user.id === authorAccount.id) {
+      navigation.navigate('User');
+    } else {
+      navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+    }
   };
 
   const likeVlamPostHandler = async () => {
     if (isLiked) {
-      const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id);
+      const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
 
       if (reqSuccessful) {
         setIsLiked(false);
@@ -51,7 +55,8 @@ const VlamPostCard = (props) => {
         console.log('reqError: ', reqError);
       }
     } else {
-      const [reqSuccessful, reqError] = await likeVlamPost(user.id, id);
+      console.log(authorAccount.id);
+      const [reqSuccessful, reqError] = await likeVlamPost(user.id, id, authorAccount.id);
 
       if (reqSuccessful) {
         setIsLiked(true);

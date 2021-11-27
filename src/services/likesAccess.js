@@ -19,15 +19,18 @@ export const useLikesAccess = () => {
 
 function useProvideLikesAccess() {
   const { currentUserLikes } = useSelector(selectActors);
+  const { user } = useAuth();
 
-  const vlamHasBeenLiked = (vlamId) => {
+  const isVlamLiked = (vlamId) => {
     return (
       currentUserLikes &&
-      currentUserLikes.find((userLike) => userLike.__parentSnapShot.id === vlamId)
+      currentUserLikes.find((userLike) => {
+        return userLike.__parentSnapShot.id === vlamId;
+      })
     );
   };
 
   return {
-    vlamHasBeenLiked,
+    isVlamLiked,
   };
 }

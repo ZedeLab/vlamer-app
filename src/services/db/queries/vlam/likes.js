@@ -11,7 +11,7 @@ import {
   where,
   Timestamp,
 } from 'firebase/firestore';
-import { getVlamsByUserId } from '.';
+import { getVlamById } from '.';
 import firebaseApp from '../../../../utils/firebase';
 import { formatTime } from '../../../../utils/timeManager';
 import { VlamLike } from '../../models/VlamLike';
@@ -31,7 +31,7 @@ export const getVlamLikesByUserId = async (userId) => {
       );
       vlamLike.push({ id: doc.id, ...document, createdAt: formattedCreatedAt });
     });
-    console.log('vlamLike: ', vlamLike);
+
     return [vlamLike, null];
   } catch (error) {
     console.log(error);
@@ -44,26 +44,30 @@ export const likeVlamPost = async (currentUserId, vlamPostId) => {
   const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUserId);
 
   try {
-    let [parentVlam, parentVlamError] = await getVlamsByUserId(currentUserId);
+    let [parentVlam, parentVlamError] = await getVlamById(vlamPostId);
 
-    const vlamLike = await new VlamLike(
-      VlamLike.GetDefaultVlamLikeValue(currentUserId, parentVlam)
-    ).__validate();
-    await setDoc(vlamLikeRef, vlamLike);
+    if (parentVlam) {
+      const vlamLike = await new VlamLike(
+        VlamLike.GetDefaultVlamLikeValue(currentUserId, parentVlam)
+      ).__validate();
+      await setDoc(vlamLikeRef, vlamLike);
 
-    const vlamRef = doc(db, 'vlams', vlamPostId);
+      const vlamRef = doc(db, 'vlams', vlamPostId);
 
-    await updateDoc(vlamRef, {
-      totalNumberOfLikes: increment(1),
-    });
-    return [vlamLike, null];
+      await updateDoc(vlamRef, {
+        totalNumberOfLikes: increment(1),
+      });
+      return [vlamLike, null];
+    } else {
+      console.log('parentVlamError: ', parentVlamError);
+    }
   } catch (error) {
     console.log(error);
     return [false, error];
   }
 };
 
-export const unlikeVlamPost = async (currentUserId, vlamPostId) => {
+export const unlikeVlamPost = async (currentUserId, vlamPostId, vlamAuthorId) => {
   const db = getFirestore(firebaseApp);
   const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUserId);
 
