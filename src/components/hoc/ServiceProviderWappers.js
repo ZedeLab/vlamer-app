@@ -19,11 +19,11 @@ export const ServicesProviderWrapper = (props) => {
         <PageProvider theme={theme}>
           <AuthProvider>
             <VoltAccessProvider>
-              <LikesAccessProvider>
-                <FeedsVlamListProvider>
-                  <CurrentUserVlamListProvider>{children}</CurrentUserVlamListProvider>
-                </FeedsVlamListProvider>
-              </LikesAccessProvider>
+              <FeedsVlamListProvider>
+                <CurrentUserVlamListProvider>
+                  <LikesAccessProvider>{children}</LikesAccessProvider>
+                </CurrentUserVlamListProvider>
+              </FeedsVlamListProvider>
             </VoltAccessProvider>
           </AuthProvider>
         </PageProvider>

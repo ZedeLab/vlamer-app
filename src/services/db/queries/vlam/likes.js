@@ -10,6 +10,7 @@ import {
   query,
   where,
   Timestamp,
+  onSnapshot,
 } from 'firebase/firestore';
 import { getVlamById } from '.';
 import firebaseApp from '../../../../utils/firebase';
@@ -82,5 +83,23 @@ export const unlikeVlamPost = async (currentUserId, vlamPostId, vlamAuthorId) =>
   } catch (error) {
     console.log(error);
     return [false, error];
+  }
+};
+
+export const onCurrentUserLikes = async (userId) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const vlamLikeRef = collectionGroup(db, 'likes');
+    const docRef = query(vlamLikeRef, where('id', '==', userId));
+
+    const snapShotObj = {
+      docRef: docRef,
+      eventHandler: onSnapshot,
+    };
+    return [snapShotObj, null];
+  } catch (error) {
+    console.log(error);
+    return [null, error];
   }
 };

@@ -31,8 +31,6 @@ const VlamPostCard = (props) => {
   const dispatch = useDispatch();
 
   const { isVlamLiked } = useLikesAccess();
-  const [isLiked, setIsLiked] = useState(isVlamLiked(id));
-  const [totalPostLikes, setTotalPostLikes] = useState(totalLikes);
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
@@ -45,25 +43,10 @@ const VlamPostCard = (props) => {
   };
 
   const likeVlamPostHandler = async () => {
-    if (isLiked) {
+    if (isVlamLiked(id)) {
       const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
-
-      if (reqSuccessful) {
-        setIsLiked(false);
-        setTotalPostLikes(totalPostLikes - 1);
-      } else {
-        console.log('reqError: ', reqError);
-      }
     } else {
-      console.log(authorAccount.id);
       const [reqSuccessful, reqError] = await likeVlamPost(user.id, id, authorAccount.id);
-
-      if (reqSuccessful) {
-        setIsLiked(true);
-        setTotalPostLikes(totalPostLikes + 1);
-      } else {
-        console.log('reqError: ', reqError);
-      }
     }
   };
 
@@ -152,7 +135,7 @@ const VlamPostCard = (props) => {
             <View style={styles.row}>
               <LottieIcon
                 withActive
-                isActive={isLiked}
+                isActive={isVlamLiked(id)}
                 onNotActiveFrame={{ x: 7, y: 7 }}
                 onActiveFrame={{ x: 41, y: 41 }}
                 autoPlay={true}
@@ -161,7 +144,7 @@ const VlamPostCard = (props) => {
                 style={styles.iconHeart}
               />
               <Text style={{ ...styles.text, ...styles.greyText, ...styles.iconHeartText }}>
-                {totalPostLikes} likes
+                {totalLikes} likes
               </Text>
             </View>
           </TouchableWithoutFeedback>

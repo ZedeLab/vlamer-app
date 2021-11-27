@@ -1,6 +1,6 @@
 import { Timestamp } from '@firebase/firestore';
 import { id } from 'date-fns/locale';
-import React, { useState, useContext, createContext, useEffect } from 'react';
+import React, { useState, useContext, createContext, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserFeedList } from '../store/actors';
 import { formatTime } from '../utils/timeManager';
@@ -23,8 +23,8 @@ function useProvideFeedsList() {
   const dispatch = useDispatch();
   const { currentUserFeedList } = useSelector(selectActors);
 
-  useEffect(async () => {
-    if (currentUserFeedList) {
+  useMemo(async () => {
+    if (user) {
       const [{ eventHandler, docRef }, _] = await onNewVlamInUserVlamFeedList();
 
       const unsubscribe = eventHandler(docRef, (querySnapshot) => {
@@ -42,9 +42,15 @@ function useProvideFeedsList() {
         dispatch(setCurrentUserFeedList(feedList));
       });
 
-      return unsubscribe;
+      return () => {
+        if (user) {
+          return unsubscribe;
+        } else {
+          return unsubscribe();
+        }
+      };
     }
-  }, []);
+  }, [user]);
 
   return {};
 }
