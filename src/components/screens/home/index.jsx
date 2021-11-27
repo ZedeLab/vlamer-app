@@ -20,20 +20,20 @@ export default Home = () => {
   const navigation = useNavigation();
   const actors = useSelector(selectActors);
 
-  useEffect(() => {
-    if (user) {
-      const fetchFeedsVlamList = async () => {
-        const [vlamList, error] = await getUserVlamFeedList(user.id);
+  // useEffect(() => {
+  //   if (user) {
+  //     const fetchFeedsVlamList = async () => {
+  //       const [vlamList, error] = await getUserVlamFeedList(user.id);
 
-        if (vlamList) {
-          dispatch(setCurrentUserFeedList(vlamList));
-        } else {
-          console.log('Error: ', error);
-        }
-      };
-      fetchFeedsVlamList();
-    }
-  }, [user]);
+  //       if (vlamList) {
+  //         dispatch(setCurrentUserFeedList(vlamList));
+  //       } else {
+  //         console.log('Error: ', error);
+  //       }
+  //     };
+  //     fetchFeedsVlamList();
+  //   }
+  // }, [user]);
 
   if (!user || !actors.currentUserFeedList) {
     return <Text>Loading...</Text>;
