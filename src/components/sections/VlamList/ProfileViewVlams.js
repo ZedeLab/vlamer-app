@@ -23,10 +23,10 @@ const renderVlamList = () => {
           <VlamPosts
             key={uuid()}
             id={item.id}
-            authorAccount={focusedUser}
+            authorAccount={item.__ownerAccountSnapShot}
             vlamType={''}
             likes={item.likes}
-            totalLikes={item.totalLikes}
+            totalLikes={item.totalNumberOfLikes}
             message={item.message}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}
@@ -89,7 +89,9 @@ const useStyle = (LIST_SIZE) =>
     },
 
     scene: {
-      paddingHorizontal: theme.spacing(0.5),
+      alignItems: 'center',
+      paddingHorizontal: theme.spacing(0.7),
+      paddingVertical: theme.spacing(0.7),
     },
 
     tabBar: {
@@ -104,10 +106,5 @@ const useStyle = (LIST_SIZE) =>
       textTransform: 'capitalize',
       alignSelf: 'center',
       marginRight: theme.spacing(0.5),
-    },
-    vlamList: {
-      height: 300,
-      width: 300,
-      backgroundColor: 'red',
     },
   });

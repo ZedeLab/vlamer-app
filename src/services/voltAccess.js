@@ -4,13 +4,13 @@ import { v4 as uuid } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { addNewVlamPost } from './db/queries/vlam';
-import { transferFromVoltToInAction } from './db/queries/volt';
+import { transferFromVoltToInAction } from './db/queries/user/volt';
 import { selectActors, setCurrentUserVolt } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useAuth } from './auth';
 import { notifyError } from '../store/errors';
-import { getUserVolt } from './db/queries/volt';
+import { getUserVolt } from './db/queries/user/volt';
 
 const VoltAccessContext = createContext();
 
@@ -26,26 +26,19 @@ export const useVoltAccess = () => {
 function useProvideVoltAccess() {
   const dispatch = useDispatch();
   const { user } = useAuth();
-
-  useEffect(async () => {
-    if (user) {
-      const [volt, voltError] = await getUserVolt(user.id);
-
-      if (volt) {
-        dispatch(setCurrentUserVolt(volt));
-      } else {
-        console.log('Problem fetching user volt');
-      }
-    }
-  }, [user]);
+  const actors = useSelector(selectActors);
 
   const startNewVlam = async (message, participatingPrice, winingPrice, numberOfParticipants) => {
     dispatch(notifyLoadingStart({ type: 'form/post' }));
 
-    const [success, failedError] = await transferFromVoltToInAction(user.id, winingPrice);
+    const [success, failedError] = await transferFromVoltToInAction(
+      user.id,
+      actors.userVolt.id,
+      winingPrice
+    );
 
     if (success) {
-      const [vlam, error] = await addNewVlamPost({
+      const [vlam, error] = await addNewVlamPost(user.id, {
         id: uuid(),
         author: user.id,
         message: message,
@@ -53,6 +46,7 @@ function useProvideVoltAccess() {
         winingPrice: parseInt(winingPrice),
         numberOfParticipants: parseInt(numberOfParticipants),
       });
+
       if (vlam) {
         dispatch(notifyLoadingFinish());
         return vlam;

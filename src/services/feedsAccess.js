@@ -16,10 +16,6 @@ export const useFeedsList = () => {
 
 function useProvideFeedsList() {
   const { user } = useAuth();
-  const REQUEST_LIMIT = 10;
-  const dispatch = useDispatch();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loadMoreVlams, setLoadMoreVlams] = useState(false);
   const { currentUserFeedList } = useSelector(selectActors);
 
   return {

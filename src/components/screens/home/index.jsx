@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/core';
 import { useSelector } from 'react-redux';
 import { selectActors, setCurrentUserFeedList } from '../../../store/actors';
 import { LottieIcon } from '../../common/animations';
-import { getUserFeedList } from '../../../services/db/queries/site';
+import { getUserVlamFeedList } from '../../../services/db/queries/vlam';
 import { useAuth } from '../../../services/auth';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
@@ -23,7 +23,7 @@ export default Home = () => {
   useEffect(() => {
     if (user) {
       const fetchFeedsVlamList = async () => {
-        const [vlamList, error] = await getUserFeedList(user.id);
+        const [vlamList, error] = await getUserVlamFeedList(user.id);
 
         if (vlamList) {
           dispatch(setCurrentUserFeedList(vlamList));
@@ -45,8 +45,8 @@ export default Home = () => {
         key={uuid()}
         id={item.id}
         likes={item.likes}
-        totalLikes={item.totalLikes}
-        authorAccount={item.authorAccount}
+        totalLikes={item.totalNumberOfLikes}
+        authorAccount={item.__ownerAccountSnapShot}
         postedAt={item.postedAt}
         vlamType={''}
         message={item.message}
@@ -60,13 +60,14 @@ export default Home = () => {
   };
 
   return (
-    <PageAux>
+    <PageAux noGutter>
       <CompleteRegistrationBanner />
       <FlatList
         data={actors.currentUserFeedList}
         renderItem={renderVlams}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        style={styles.wrapper}
         // onEndReachedThreshold={0.2}
         // onEndReached={(event) => setLoadMoreVlams(true)}
       />

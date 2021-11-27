@@ -2,6 +2,9 @@ import { StyleSheet } from 'react-native';
 import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    paddingHorizontal: theme.spacing(0.4),
+  },
   container: {
     flex: 1,
     alignSelf: 'stretch',

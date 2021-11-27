@@ -9,6 +9,8 @@ const initialState = {
   focusedUser: null,
   currentUserConnections: null,
   focusedUserConnections: null,
+  currentUserLikes: null,
+  focusedUserLikes: null,
   currentUserFeedList: null,
   currentUserVlamList: null,
   profileVlamList: null,
@@ -79,6 +81,22 @@ export const actorsSlice = createSlice({
     resetFocusedUserVolt: (state, action) => {
       state.focusedUserVolt = action.payload;
     },
+
+    setCurrentUserLikes: (state, action) => {
+      state.currentUserLikes = action.payload;
+    },
+
+    resetCurrentUserLikes: (state, action) => {
+      state.currentUserLikes = null;
+    },
+
+    setFocusedUserLikes: (state, action) => {
+      state.focusedUserLikes = action.payload;
+    },
+
+    resetFocusedUserLikes: (state, action) => {
+      state.focusedUserLikes = null;
+    },
   },
 });
 
@@ -99,6 +117,10 @@ export const {
   setCurrentUserFeedList,
   setCurrentUserVlamList,
   setProfileVlamList,
+  setCurrentUserLikes,
+  setFocusedUserLikes,
+  resetCurrentUserLikes,
+  resetFocusedUserLikes,
 } = actorsSlice.actions;
 
 // Selectors

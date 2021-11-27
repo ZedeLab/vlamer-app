@@ -1,6 +1,5 @@
-import { useRoute } from '@react-navigation/core';
-import React, { Component, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text } from 'react-native';
 import { useAuth } from '../../../services/auth';
 import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
@@ -12,13 +11,12 @@ import {
   setProfileVlamList,
 } from '../../../store/actors';
 import { useSelector } from 'react-redux';
-import UserVlams from '../../sections/VlamList/CurrentUserVlams';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getUserConnections } from '../../../services/db/queries/connections';
-import { getUserVolt } from '../../../services/db/queries/volt.js';
+import { getUserConnections } from '../../../services/db/queries/user/connections';
+import { getUserVolt } from '../../../services/db/queries/user/volt';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
-import { getUserVlamList } from '../../../services/db/queries/site';
+import { getUserVlamList } from '../../../services/db/queries/vlam';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -31,7 +29,6 @@ const Profile = ({ navigation, route }) => {
       const fetchProfileVlamList = async () => {
         const [vlamList, vlamListError] = await getUserVlamList(focusedUser.id, user.id);
         const [connections, connectionError] = await getUserConnections(focusedUser.id);
-
         const [volt, voltError] = await getUserVolt(focusedUser.id);
 
         if (vlamList) {

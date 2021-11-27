@@ -8,7 +8,8 @@ import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
-import { toggleVlamPostLike } from '../../../services/db/queries/vlam';
+import { likeVlamPost, unlikeVlamPost } from '../../../services/db/queries/vlam/likes';
+import { useLikesAccess } from '../../../services/likesAccess';
 
 const VlamPostCard = (props) => {
   const {
@@ -28,28 +29,41 @@ const VlamPostCard = (props) => {
 
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const [isLiked, setIsLiked] = useState(likes !== undefined);
+
+  const { isVlamLiked } = useLikesAccess();
+  const [isLiked, setIsLiked] = useState(isVlamLiked(id));
   const [totalPostLikes, setTotalPostLikes] = useState(totalLikes);
 
   const goToProfileHandler = async () => {
     dispatch(setFocusedUser(authorAccount));
 
-    navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+    if (user.id === authorAccount.id) {
+      navigation.navigate('User');
+    } else {
+      navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+    }
   };
 
   const likeVlamPostHandler = async () => {
-    const [reqSuccessful, reqError] = await toggleVlamPostLike(user.id, id, totalPostLikes);
+    if (isLiked) {
+      const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
 
-    if (reqSuccessful) {
-      if (reqSuccessful.type === 'like') {
-        setIsLiked(true);
-        setTotalPostLikes(totalPostLikes + 1);
-      } else if (reqSuccessful.type === 'unlike') {
+      if (reqSuccessful) {
         setIsLiked(false);
         setTotalPostLikes(totalPostLikes - 1);
+      } else {
+        console.log('reqError: ', reqError);
       }
     } else {
-      console.log('reqError: ', reqError);
+      console.log(authorAccount.id);
+      const [reqSuccessful, reqError] = await likeVlamPost(user.id, id, authorAccount.id);
+
+      if (reqSuccessful) {
+        setIsLiked(true);
+        setTotalPostLikes(totalPostLikes + 1);
+      } else {
+        console.log('reqError: ', reqError);
+      }
     }
   };
 

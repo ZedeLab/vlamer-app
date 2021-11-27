@@ -1,18 +1,12 @@
-import { useRoute } from '@react-navigation/core';
-import React, { Component, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '../../../services/auth';
-import {
-  selectActors,
-  setCurrentUserConnections,
-  setCurrentUserVlamList,
-} from '../../../store/actors';
+import { selectActors, setCurrentUserVlamList } from '../../../store/actors';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import UserVlams from '../../sections/VlamList/CurrentUserVlams';
-import { getUserConnections } from '../../../services/db/queries/connections';
-import { getUserVlamList } from '../../../services/db/queries/site';
+import { getUserVlamList } from '../../../services/db/queries/vlam';
 
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();
@@ -22,14 +16,12 @@ const UserProfile = ({ navigation, route }) => {
   useEffect(async () => {
     if (user) {
       const fetchUserVlamList = async () => {
-        const [vlamList, error] = await getUserVlamList(user.id, user.id);
-        const [connections, connectionsError] = await getUserConnections(user.id);
+        const [vlamList, error] = await getUserVlamList(user.id);
 
-        if (vlamList && connections) {
+        if (vlamList) {
           dispatch(setCurrentUserVlamList(vlamList));
-          dispatch(setCurrentUserConnections(connections));
         } else {
-          console.log('connectionsError: ', connectionsError, '\nvlamListError: ', error);
+          console.log('\nvlamListError: ', error);
         }
       };
       fetchUserVlamList();
@@ -39,11 +31,11 @@ const UserProfile = ({ navigation, route }) => {
   if (!user || !actors.currentUserConnections || !actors.userVolt || !actors.currentUserVlamList) {
     return (
       <PageAux>
-        <Text>Loading...</Text>
+        <Text onPress={() => navigation.push('AddVlam')}>Loading...</Text>
       </PageAux>
     );
   }
-
+  console.log();
   return (
     <PageAux noGutter style={styles.pageContainer}>
       <ScrollView style={styles.pagesWrapper}>

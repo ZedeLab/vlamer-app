@@ -7,6 +7,7 @@ import { Provider as StateProvider } from 'react-redux';
 import theme from '../../utils/theme';
 import { store } from '../../store/store';
 import { FeedsVlamListProvider } from '../../services/feedsAccess';
+import { LikesAccessProvider } from '../../services/likesAccess';
 
 export const ServicesProviderWrapper = (props) => {
   const { children } = props;
@@ -17,7 +18,9 @@ export const ServicesProviderWrapper = (props) => {
         <PageProvider theme={theme}>
           <AuthProvider>
             <VoltAccessProvider>
-              <FeedsVlamListProvider>{children}</FeedsVlamListProvider>
+              <LikesAccessProvider>
+                <FeedsVlamListProvider>{children}</FeedsVlamListProvider>
+              </LikesAccessProvider>
             </VoltAccessProvider>
           </AuthProvider>
         </PageProvider>
