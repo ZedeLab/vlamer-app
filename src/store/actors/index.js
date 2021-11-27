@@ -12,8 +12,8 @@ const initialState = {
   currentUserLikes: null,
   focusedUserLikes: null,
   currentUserFeedList: [],
-  currentUserVlamList: null,
-  profileVlamList: null,
+  profileVlamList: [],
+  currentUserVlamList: [],
   focusedUserVolt: null,
 };
 
