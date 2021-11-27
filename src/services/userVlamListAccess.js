@@ -48,7 +48,7 @@ function useProvideCurrentUserVlamList() {
 
       return unsubscribe;
     }
-  }, [user]);
+  }, []);
 
   return {};
 }
