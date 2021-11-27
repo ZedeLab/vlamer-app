@@ -8,6 +8,7 @@ import {
   query,
   where,
   Timestamp,
+  onSnapshot,
 } from 'firebase/firestore';
 import firebaseApp from '../../../../utils/firebase';
 import { formatTime } from '../../../../utils/timeManager';
@@ -100,6 +101,24 @@ export const getUserVlamFeedList = async () => {
     });
 
     return [vlamList, null];
+  } catch (error) {
+    console.log(error);
+    return [null, error];
+  }
+};
+
+export const onNewVlamInUserVlamFeedList = async () => {
+  const db = getFirestore(firebaseApp);
+  const vlamsRef = collection(db, 'vlams');
+  // Currently showing only all vlams with onPlay state
+  const docRef = query(vlamsRef, where('state', '==', 'onPlay'));
+
+  const snapShotObj = {
+    docRef: docRef,
+    eventHandler: onSnapshot,
+  };
+  try {
+    return [snapShotObj, null];
   } catch (error) {
     console.log(error);
     return [null, error];
