@@ -1,5 +1,5 @@
 import { getDocs, collection, getFirestore } from 'firebase/firestore';
-import firebaseApp from '../../../utils/firebase';
+import firebaseApp from '../../utils/firebase';
 
 export const getStaticData = async () => {
   try {

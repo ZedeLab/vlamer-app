@@ -8,7 +8,7 @@ import { setFocusedUser } from '../../../store/actors';
 import { useDispatch } from 'react-redux';
 import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
-import { likeVlamPost, unlikeVlamPost } from '../../../services/db/queries/vlam/likes';
+import { likeVlamPost, unlikeVlamPost } from '../../../db/queries/vlam/likes';
 import { useLikesAccess } from '../../../services/likesAccess';
 
 const VlamPostCard = (props) => {

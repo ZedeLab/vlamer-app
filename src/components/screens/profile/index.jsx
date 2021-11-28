@@ -12,11 +12,11 @@ import {
 } from '../../../store/actors';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getUserConnections } from '../../../services/db/queries/user/connections';
-import { getUserVolt } from '../../../services/db/queries/user/volt';
+import { getUserConnections } from '../../../db/queries/user/connections';
+import { getUserVolt } from '../../../db/queries/user/volt';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
-import { getUserVlamList } from '../../../services/db/queries/vlam';
+import { getUserVlamList } from '../../../db/queries/vlam';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();

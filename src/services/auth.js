@@ -12,9 +12,9 @@ import { useDispatch } from 'react-redux';
 
 import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
-import { addNewUser } from './db/queries/user';
+import { addNewUser } from '../db/queries/user';
 
-import { addNewUserConnection, getUserConnections } from './db/queries/user/connections';
+import { addNewUserConnection, getUserConnections } from '../db/queries/user/connections';
 import { notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
@@ -27,9 +27,9 @@ import {
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
-import { getUserByEmail } from './db/queries/user';
-import { addNewUserVolt, getUserVolt } from './db/queries/user/volt';
-import { getVlamLikesByUserId } from './db/queries/vlam/likes';
+import { getUserByEmail } from '../db/queries/user';
+import { addNewUserVolt, getUserVolt } from '../db/queries/user/volt';
+import { getVlamLikesByUserId } from '../db/queries/vlam/likes';
 
 const authContext = createContext();
 

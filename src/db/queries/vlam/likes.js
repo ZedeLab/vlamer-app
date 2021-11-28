@@ -13,8 +13,8 @@ import {
   onSnapshot,
 } from 'firebase/firestore';
 import { getVlamById } from '.';
-import firebaseApp from '../../../../utils/firebase';
-import { formatTime } from '../../../../utils/timeManager';
+import firebaseApp from '../../../utils/firebase';
+import { formatTime } from '../../../utils/timeManager';
 import { VlamLike } from '../../models/VlamLike';
 
 export const getVlamLikesByUserId = async (userId) => {
