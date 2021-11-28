@@ -21,10 +21,11 @@ const renderVlamList = () => {
       {profileVlamList.map((item) => {
         return (
           <VlamPosts
-            key={uuid()}
+            key={item.id}
             id={item.id}
             authorAccount={item.__ownerAccountSnapShot}
             vlamType={''}
+            likeIds={item.likeUsersIds}
             likes={item.likes}
             totalLikes={item.totalNumberOfLikes}
             message={item.message}

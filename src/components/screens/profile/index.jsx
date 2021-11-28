@@ -16,31 +16,51 @@ import { getUserConnections } from '../../../db/queries/user/connections';
 import { getUserVolt } from '../../../db/queries/user/volt';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
-import { getUserVlamList } from '../../../db/queries/vlam';
+import { getUserVlamList, onNewVlamInUserProfile } from '../../../db/queries/vlam';
+import { formatTime } from '../../../utils/timeManager';
+import { Timestamp } from '@firebase/firestore';
 
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
-  const { focusedUser, focusedUserConnections, focusedUserVolt, profileVlamList } =
-    useSelector(selectActors);
+  const {
+    focusedUser,
+    focusedUserConnections,
+    focusedUserVolt,
+    profileVlamList,
+    resetProfileVlamList,
+  } = useSelector(selectActors);
 
   useEffect(() => {
     if (focusedUser) {
       const fetchProfileVlamList = async () => {
-        const [vlamList, vlamListError] = await getUserVlamList(focusedUser.id, user.id);
         const [connections, connectionError] = await getUserConnections(focusedUser.id);
         const [volt, voltError] = await getUserVolt(focusedUser.id);
+        const [{ eventHandler, docRef }, _] = await onNewVlamInUserProfile(focusedUser.id);
 
-        if (vlamList) {
+        const unsubscribe = eventHandler(docRef, (querySnapshot) => {
+          let vlamList = profileVlamList ? [...profileVlamList] : [];
+
+          querySnapshot.forEach((doc) => {
+            const document = doc.data();
+            const formattedCreatedAt = formatTime(
+              new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
+            );
+
+            vlamList.push({ ...document, createdAt: formattedCreatedAt });
+          });
           dispatch(setProfileVlamList(vlamList));
           dispatch(setFocusedUserConnections(connections));
           dispatch(setFocusedUserVolt(volt));
-        } else {
-        }
+        });
+        return () => {
+          dispatch(resetProfileVlamList());
+          unsubscribe();
+        };
       };
       fetchProfileVlamList();
     }
-  }, [focusedUser]);
+  }, [user]);
 
   if (!focusedUser || !focusedUserConnections || !focusedUserVolt || !profileVlamList) {
     return (
