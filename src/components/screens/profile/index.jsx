@@ -23,8 +23,13 @@ import { Timestamp } from '@firebase/firestore';
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
-  const { focusedUser, focusedUserConnections, focusedUserVolt, profileVlamList } =
-    useSelector(selectActors);
+  const {
+    focusedUser,
+    focusedUserConnections,
+    focusedUserVolt,
+    profileVlamList,
+    resetProfileVlamList,
+  } = useSelector(selectActors);
 
   useEffect(() => {
     if (focusedUser) {
@@ -48,10 +53,14 @@ const Profile = ({ navigation, route }) => {
           dispatch(setFocusedUserConnections(connections));
           dispatch(setFocusedUserVolt(volt));
         });
+        return () => {
+          dispatch(resetProfileVlamList());
+          unsubscribe();
+        };
       };
       fetchProfileVlamList();
     }
-  }, []);
+  }, [user]);
 
   if (!focusedUser || !focusedUserConnections || !focusedUserVolt || !profileVlamList) {
     return (

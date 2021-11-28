@@ -41,7 +41,9 @@ function useProvideCurrentUserVlamList() {
             new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
           );
 
-          vlamList.push({ ...document, createdAt: formattedCreatedAt });
+          if (!currentUserVlamList.find((item) => item.id === document.id)) {
+            vlamList.push({ ...document, createdAt: formattedCreatedAt });
+          }
         });
         dispatch(setCurrentUserVlamList(vlamList));
       });
