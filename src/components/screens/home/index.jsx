@@ -26,9 +26,10 @@ export default Home = () => {
   const renderVlams = ({ item }) => {
     return (
       <VlamPosts
-        key={uuid()}
+        key={item.id}
         id={item.id}
         likes={item.likes}
+        likeIds={item.likeUsersIds}
         totalLikes={item.totalNumberOfLikes}
         authorAccount={item.__ownerAccountSnapShot}
         postedAt={item.postedAt}

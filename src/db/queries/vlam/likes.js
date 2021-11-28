@@ -11,6 +11,8 @@ import {
   where,
   Timestamp,
   onSnapshot,
+  arrayUnion,
+  arrayRemove,
 } from 'firebase/firestore';
 import { getVlamById } from '.';
 import firebaseApp from '../../../utils/firebase';
@@ -57,6 +59,7 @@ export const likeVlamPost = async (currentUserId, vlamPostId) => {
 
       await updateDoc(vlamRef, {
         totalNumberOfLikes: increment(1),
+        likeUsersIds: arrayUnion(currentUserId),
       });
       return [vlamLike, null];
     } else {
@@ -78,6 +81,7 @@ export const unlikeVlamPost = async (currentUserId, vlamPostId, vlamAuthorId) =>
 
     await updateDoc(vlamRef, {
       totalNumberOfLikes: increment(-1),
+      likeUsersIds: arrayRemove(currentUserId),
     });
     return [true, null];
   } catch (error) {

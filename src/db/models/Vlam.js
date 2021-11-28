@@ -1,4 +1,4 @@
-import { number, object, string } from 'yup';
+import { number, object, string, array } from 'yup';
 import { v4 as uuid } from 'uuid';
 
 export class Vlam {
@@ -24,6 +24,7 @@ export class Vlam {
           seconds: number().required(),
           nanoseconds: number().required(),
         },
+        likeUsersIds: array().of(string()),
         __ownerAccountSnapShot: object().required(),
       })
         .camelCase(false)
@@ -52,6 +53,7 @@ export class Vlam {
       totalNumberOfComments: 0,
       totalNumberOfParticipants: 0,
       createdAt: new Date(),
+      likeUsersIds: [],
       __ownerAccountSnapShot: restOwnerAccount,
     };
   }

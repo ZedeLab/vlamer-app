@@ -24,6 +24,7 @@ const VlamPostCard = (props) => {
     numberOfParticipants,
     participatingPrice,
     winingPrice,
+    likeIds,
     ...restProps
   } = props;
 
@@ -43,7 +44,7 @@ const VlamPostCard = (props) => {
   };
 
   const likeVlamPostHandler = async () => {
-    if (isVlamLiked(id)) {
+    if (isVlamLiked(likeIds)) {
       const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
     } else {
       const [reqSuccessful, reqError] = await likeVlamPost(user.id, id, authorAccount.id);
@@ -135,7 +136,7 @@ const VlamPostCard = (props) => {
             <View style={styles.row}>
               <LottieIcon
                 withActive
-                isActive={isVlamLiked(id)}
+                isActive={isVlamLiked(likeIds)}
                 onNotActiveFrame={{ x: 7, y: 7 }}
                 onActiveFrame={{ x: 41, y: 41 }}
                 autoPlay={true}
