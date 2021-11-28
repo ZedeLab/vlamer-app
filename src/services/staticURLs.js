@@ -1,6 +1,6 @@
 import React, { useState, useContext, createContext, useEffect } from 'react';
-import { getStaticData } from './db/queries/site';
-import { StaticData } from './db/models/staticData';
+import { getStaticData } from '../db/queries/site';
+import { StaticData } from '../db/models/staticData';
 
 const staticDataContext = createContext();
 

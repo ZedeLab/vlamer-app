@@ -12,8 +12,8 @@ import {
   orderBy,
   limit,
 } from 'firebase/firestore';
-import firebaseApp from '../../../../utils/firebase';
-import { formatTime } from '../../../../utils/timeManager';
+import firebaseApp from '../../../utils/firebase';
+import { formatTime } from '../../../utils/timeManager';
 import { Vlam } from '../../models/Vlam';
 import { getUserById } from '../user';
 

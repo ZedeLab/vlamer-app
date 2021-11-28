@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserFeedList } from '../store/actors';
 import { formatTime } from '../utils/timeManager';
 import { useAuth } from './auth';
-import { onNewVlamInUserVlamFeedList } from './db/queries/vlam';
+import { onNewVlamInUserVlamFeedList } from '../db/queries/vlam';
 
 const FeedsListContext = createContext();
 

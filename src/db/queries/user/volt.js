@@ -9,7 +9,7 @@ import {
   updateDoc,
   increment,
 } from 'firebase/firestore';
-import firebaseApp from '../../../../utils/firebase';
+import firebaseApp from '../../../utils/firebase';
 import { UserVolt } from '../../models/UserVolt';
 
 export const transferFromVoltToInAction = async (userId, voltId, amount) => {

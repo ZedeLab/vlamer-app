@@ -6,7 +6,7 @@ import theme from '../../../utils/theme';
 import { AnimatedNumberText, LottieIcon } from '../../common/animations';
 import { AvatarIcon } from '../../common/icons';
 import { PrimaryButton, SecondaryButton } from '../../common/buttons';
-import { User } from '../../../services/db/models/user';
+import { User } from '../../../db/models/user';
 import { useNavigation } from '@react-navigation/core';
 import AddVlamScreen from '../../screens/UserProfile/AddVlam.screen';
 import { useSelector } from 'react-redux';

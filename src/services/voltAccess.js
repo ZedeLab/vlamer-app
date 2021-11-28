@@ -1,16 +1,15 @@
-import React, { useEffect, useContext, createContext } from 'react';
+import React, { useContext, createContext } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { addNewVlamPost } from './db/queries/vlam';
-import { transferFromVoltToInAction } from './db/queries/user/volt';
-import { selectActors, setCurrentUserVolt } from '../store/actors';
+import { addNewVlamPost } from '../db/queries/vlam';
+import { transferFromVoltToInAction } from '../db/queries/user/volt';
+import { selectActors } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useAuth } from './auth';
 import { notifyError } from '../store/errors';
-import { getUserVolt } from './db/queries/user/volt';
 
 const VoltAccessContext = createContext();
 

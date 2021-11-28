@@ -1,5 +1,5 @@
 import { doc, getDocs, setDoc, collection, getFirestore, query, where } from 'firebase/firestore';
-import firebaseApp from '../../../../utils/firebase';
+import firebaseApp from '../../../utils/firebase';
 import { UserConnections } from '../../models/UserConnections';
 import { v4 as uuid } from 'uuid';
 

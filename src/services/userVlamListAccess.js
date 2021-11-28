@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserVlamList } from '../store/actors';
 import { formatTime } from '../utils/timeManager';
 import { useAuth } from './auth';
-import { onNewVlamInUserProfile } from './db/queries/vlam';
+import { onNewVlamInUserProfile } from '../db/queries/vlam';
 
 const CurrentUserVlamListContext = createContext();
 

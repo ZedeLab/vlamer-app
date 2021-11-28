@@ -4,7 +4,7 @@ import React, { useContext, createContext, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectActors, setCurrentUserLikes } from '../store/actors';
 import { formatTime } from '../utils/timeManager';
-import { onCurrentUserLikes } from './db/queries/vlam/likes';
+import { onCurrentUserLikes } from '../db/queries/vlam/likes';
 
 const LikesAccessContext = createContext();
 
