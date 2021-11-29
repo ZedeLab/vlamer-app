@@ -19,6 +19,8 @@ const ChatRoom = () => {
   const [convos, setConvos] = useState(conversations);
   const scrollRef = useRef(null);
 
+  useEffect(() => {}, []);
+
   const onSend = () => {
     setConvos([...convos, { message, received: false }]);
     setMessage('');
@@ -32,7 +34,7 @@ const ChatRoom = () => {
     <View style={{ flex: 1 }} onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <View style={styles.container}>
-          <Header data={params.data} />
+          <Header data={params.data.receiver} />
           <View style={styles.conversation}>
             <FlatList
               ref={scrollRef}
