@@ -11,11 +11,12 @@ import {
   startAt,
   updateDoc,
   setDoc,
+  arrayUnion,
 } from 'firebase/firestore';
 import { useAuth } from './auth';
 import { Message } from '../db/models/message';
 import { Chat } from '../db/models/chat';
-import { uuid } from 'yup';
+import { v4 as uuid } from 'uuid';
 
 const useChat = () => {
   const { user } = useAuth();
@@ -31,24 +32,28 @@ const useChat = () => {
         user = snapshot.data();
       }
     });
-    const { hasPreviousChats, chatId } = await checkIfUsersHavePreviousChats(user);
+    const { hasPreviousChats, chat } = await checkIfUsersHavePreviousChats(user);
+
     if (hasPreviousChats) {
-      await fetchMessages(chatId);
-      await makeLastMessageSeen(chatId);
+      await fetchMessages(chat.id);
+      await makeLastMessageSeen(chat);
       setIsFirstTime(false);
     } else {
       setIsFirstTime(true);
+      return [];
     }
   };
 
-  const makeLastMessageSeen = async (chatId) => {
-    try {
-      await updateDoc(doc(db, 'chats', chatId), {
-        hasUnreadMessage: false,
-      });
-    } catch (err) {
-      console.log(err);
-      throw new Error(err);
+  const makeLastMessageSeen = async (chat) => {
+    if (chat.lastMessageSender !== user.id) {
+      try {
+        await updateDoc(doc(db, 'chats', chat.id), {
+          hasUnreadMessage: false,
+        });
+      } catch (err) {
+        console.log(err);
+        throw new Error(err);
+      }
     }
   };
 
@@ -59,7 +64,6 @@ const useChat = () => {
       const messages = [];
       const collections = await getDocs(docRef);
       collections.forEach((collectionDoc) => {
-        console.log(collectionDoc.data());
         messages.push({ id: collectionDoc.id, ...collectionDoc.data() });
       });
       setMessages(messages);
@@ -77,8 +81,7 @@ const useChat = () => {
 
     try {
       if (isFirstTime) {
-        chatRoom = await createChatRoom(chatData);
-        console.log('result', chatRoom);
+        chatRoom = await createChatRoom(message, chatData);
       }
 
       await setDoc(doc(db, 'chats', chatRoom.id, 'messages', messageData.id), messageData);
@@ -86,6 +89,7 @@ const useChat = () => {
         lastMessage: message,
         lastMessageDate: messageData.createdAt,
         lastMessageSender: user.id,
+        hasUnreadMessage: true,
       });
       setMessages([...messages, messageData]);
     } catch (err) {
@@ -93,14 +97,29 @@ const useChat = () => {
     }
   };
 
-  const createChatRoom = async (data) => {
-    const chatData = {
-      id: uuid(),
-      members: [user.id, data.sender.id],
-    };
-    const chat = new Chat(chatData).__validate();
-    const result = await setDoc(db, 'chats', chat.id, chat);
-    return result;
+  const createChatRoom = async (message, data) => {
+    try {
+      const chatData = {
+        id: uuid(),
+        members: [user.id, data.receiver.id],
+        lastMessage: message,
+        lastMessageDate: new Date(),
+        lastMessageSender: user.id,
+        createdAt: new Date(),
+        hasUnreadMessage: true,
+      };
+      await updateDoc(doc(db, 'users', user.id), {
+        chats: arrayUnion(chatData.id),
+      });
+      await updateDoc(doc(db, 'users', data.receiver.id), {
+        chats: arrayUnion(chatData.id),
+      });
+      // const chat = await new Chat(chatData).__validate();
+      await setDoc(doc(db, 'chats', chatData.id), chatData);
+      return chatData;
+    } catch (err) {
+      console.log('error here', err);
+    }
   };
 
   // two cases here... either the logged in user have previously contacted the account or not.
@@ -112,16 +131,17 @@ const useChat = () => {
         allChats.push(doc.data());
       }
     });
-    let chatId = '';
+    let chat = {};
     const hasPreviousChats =
       Boolean(account.chats) &&
-      allChats.some(({ id, members }) => {
+      allChats.some((data) => {
+        const { members, id } = data;
         if (members.includes(account.id) && members.includes(user.id)) {
-          chatId = id;
+          chat = data;
         }
         return members.includes(account.id) && members.includes(user.id);
       });
-    return { hasPreviousChats, chatId };
+    return { hasPreviousChats, chat };
   };
 
   const fetchChatById = async (chatId) => {
@@ -130,10 +150,10 @@ const useChat = () => {
       if (snapshot.exists) {
         const chat = await snapshot.data();
         const senderId = await getSenderId(chat);
-        const senderData = await getSenderProfile(senderId);
+        const messageReceiverData = await getMessageReceiverData(senderId);
         return {
           ...chat,
-          sender: { ...senderData },
+          receiver: { ...messageReceiverData },
         };
       }
     });
@@ -145,7 +165,7 @@ const useChat = () => {
     })[0];
   };
 
-  const getSenderProfile = async (senderId) => {
+  const getMessageReceiverData = async (senderId) => {
     const userRef = doc(db, 'users', senderId);
     return await getDoc(userRef).then((snapshot) => {
       if (snapshot.exists) {
@@ -162,10 +182,8 @@ const useChat = () => {
 
   const getUserChats = async () => {
     const userRef = doc(db, 'users', user.id);
-
     let userChatIds = [];
     await getDoc(userRef).then((snapshot) => {
-      console.log(snapshot);
       if (snapshot.exists()) {
         if (snapshot.data().chats) {
           userChatIds = snapshot.data().chats;
@@ -179,7 +197,7 @@ const useChat = () => {
       const result = await fetchChatById(id);
       chats.push(result);
     }
-    return chats;
+    return chats.sort((a, b) => a.lastMessageDate < b.lastMessageDate);
   };
 
   return {

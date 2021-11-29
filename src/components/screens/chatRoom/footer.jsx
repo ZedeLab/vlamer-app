@@ -10,7 +10,7 @@ const Footer = ({ onSend, onTyping, message }) => (
       <Entypo name="attachment" size={22} color="black" />
     </TouchableOpacity>
     <TextInput
-      keyboardType="ascii-capable"
+      keyboardType="default"
       underlineColorAndroid="transparent"
       underlineColor="transparent"
       style={styles.input}

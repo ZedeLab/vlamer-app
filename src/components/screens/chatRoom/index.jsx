@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styles } from './styles';
 import {
   View,
@@ -12,17 +12,23 @@ import Header from './header';
 import Footer from './footer';
 import MessageBubble from './messageBubble';
 import { conversations } from '../../../utils/__mock__/convo';
+import useChat from '../../../services/chat';
 
 const ChatRoom = () => {
   const { params } = useRoute();
   const [message, setMessage] = useState('');
-  const [convos, setConvos] = useState(conversations);
   const scrollRef = useRef(null);
+  const { initiateChat, messages, sendMessage } = useChat();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const initiateChatRoom = async () => {
+      await initiateChat(params.data.receiver);
+    };
+    initiateChatRoom();
+  }, []);
 
   const onSend = () => {
-    setConvos([...convos, { message, received: false }]);
+    sendMessage(message, params.data);
     setMessage('');
   };
 
@@ -39,7 +45,7 @@ const ChatRoom = () => {
             <FlatList
               ref={scrollRef}
               onContentSizeChange={() => scrollRef.current.scrollToEnd({ animated: true })}
-              data={convos}
+              data={messages}
               renderItem={({ item }) => {
                 return <MessageBubble data={item} />;
               }}
