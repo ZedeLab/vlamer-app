@@ -60,13 +60,18 @@ export const AdminViewActionButtons = (props) => {
 export const UserViewActionButtons = (props) => {
   const { focusedAccount } = props;
   const { user } = useAuth();
+  const { navigate } = useNavigation();
 
   const followUserHandler = async () => {};
 
   return (
     <View style={styles.actionsContainer}>
       <SecondaryButton style={styles.editButton}> follow</SecondaryButton>
-      <PrimaryButton outlined style={styles.editButton}>
+      <PrimaryButton
+        outlined
+        style={styles.editButton}
+        onPress={() => navigate('Chat Room', { data: { receiver: focusedAccount } })}
+      >
         Message
       </PrimaryButton>
     </View>

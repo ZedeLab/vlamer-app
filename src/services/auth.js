@@ -57,22 +57,26 @@ function useProvideAuth() {
 
       if (user) {
         const [account, error] = await getUserByEmail(user.email);
-        const [volt, voltError] = await getUserVolt(account.id);
-        const [connections, connectionsError] = await getUserConnections(account.id);
-        // const [likes, likesError] = await getVlamLikesByUserId(account.id);
+        if (account) {
+          const [volt, voltError] = await getUserVolt(account.id);
+          const [connections, connectionsError] = await getUserConnections(account.id);
+          // const [likes, likesError] = await getVlamLikesByUserId(account.id);
 
-        if (account && volt && connections) {
-          setUser(account);
-          dispatch(setCurrentUserVolt(volt));
-          dispatch(setCurrentUserConnections(connections));
-          // dispatch(setCurrentUserLikes(likes));
+          if (account && volt && connections) {
+            setUser(account);
+            dispatch(setCurrentUserVolt(volt));
+            dispatch(setCurrentUserConnections(connections));
+            // dispatch(setCurrentUserLikes(likes));
+          } else {
+            dispatch(
+              notifyError({
+                type: 'auth',
+                message: 'Problem fetching account',
+              })
+            );
+          }
         } else {
-          dispatch(
-            notifyError({
-              type: 'auth',
-              message: 'Problem fetching account',
-            })
-          );
+          setUser(null);
         }
       } else {
         setUser(null);

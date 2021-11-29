@@ -16,7 +16,7 @@ const Header = ({ data }) => {
         {data.firstName} {data.lastName}
       </Text>
       <TouchableOpacity onPress={() => {}}>
-        <AvatarIcon imgSrc={data.userAvatar} size={40} />
+        <AvatarIcon imgSrc={data.avatarURL} size={40} />
       </TouchableOpacity>
     </View>
   );
