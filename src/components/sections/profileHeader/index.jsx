@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styles } from './styles';
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, Text, View } from 'react-native';
 import { useAuth } from '../../../services/auth';
 import theme from '../../../utils/theme';
 import { AnimatedNumberText, LottieIcon } from '../../common/animations';
 import { AvatarIcon } from '../../common/icons';
-import { PrimaryButton, SecondaryButton } from '../../common/buttons';
-import { User } from '../../../db/models/user';
+import { DangerButton, PrimaryButton, SecondaryButton, SuccessButton } from '../../common/buttons';
 import { useNavigation } from '@react-navigation/core';
-import AddVlamScreen from '../../screens/UserProfile/AddVlam.screen';
-import { useSelector } from 'react-redux';
-import { selectActors } from '../../../store/actors';
+import { sendConnectionRequest } from '../../../db/queries/user/connections';
 
 export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
   const coverImage = { uri: coverImageURL };
@@ -60,15 +57,33 @@ export const AdminViewActionButtons = (props) => {
 export const UserViewActionButtons = (props) => {
   const { focusedAccount } = props;
   const { user } = useAuth();
+  const [isUserConnected, setIsUserConnected] = useState(false);
 
-  const followUserHandler = async () => {};
+  const connectHandler = async () => {
+    if (isUserConnected) {
+    } else {
+      // const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
+      const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedAccount);
+      console.log(reqError);
+    }
+  };
 
   return (
     <View style={styles.actionsContainer}>
-      <SecondaryButton style={styles.editButton}> follow</SecondaryButton>
-      <PrimaryButton outlined style={styles.editButton}>
-        Message
-      </PrimaryButton>
+      {isUserConnected ? (
+        <View>
+          <DangerButton style={styles.editButton}> unsubscribe </DangerButton>
+          <SecondaryButton outlined style={styles.editButton}>
+            Message
+          </SecondaryButton>
+        </View>
+      ) : (
+        <View>
+          <SuccessButton style={styles.editButton} onPress={connectHandler}>
+            connect
+          </SuccessButton>
+        </View>
+      )}
     </View>
   );
 };

@@ -1,27 +1,17 @@
-import { doc, getDocs, setDoc, collection, getFirestore, query, where } from 'firebase/firestore';
+import {
+  doc,
+  getDocs,
+  setDoc,
+  collection,
+  getFirestore,
+  query,
+  where,
+  arrayRemove,
+  arrayUnion,
+} from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
-import { UserConnections } from '../../models/UserConnections';
+import { ConnectionTypes, UserConnections } from '../../models/UserConnections';
 import { v4 as uuid } from 'uuid';
-
-export const addNewUserConnection = async (currentUserId) => {
-  const db = getFirestore(firebaseApp);
-
-  try {
-    const userConnections = await new UserConnections({
-      ...UserConnections.getDefaultData(),
-      targetAccount: uuid(),
-    }).__validate();
-
-    await setDoc(
-      doc(db, 'users', currentUserId, 'connections', userConnections.id),
-      userConnections
-    );
-
-    return [userConnections, null];
-  } catch (error) {
-    return [null, error];
-  }
-};
 
 export const getUserConnections = async (id) => {
   const db = getFirestore(firebaseApp);
@@ -41,3 +31,27 @@ export const getUserConnections = async (id) => {
     return [null, error];
   }
 };
+
+export const sendConnectionRequest = async (currentUserAccount, eventOwnerAccount) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const newConnectionObj = await UserConnections.getDefaultData(
+      ConnectionTypes.type.REQUESTING,
+      currentUserAccount,
+      eventOwnerAccount
+    );
+
+    const newConnection = await new UserConnections(newConnectionObj).__validate();
+
+    const connectionsRef = doc(db, 'users', currentUserAccount.id, 'connections', newConnection.id);
+    await setDoc(connectionsRef, newConnection);
+
+    return [true, null];
+  } catch (error) {
+    console.log({ ...error });
+    return [false, error];
+  }
+};
+
+// export const getUserConnections = async () => {};

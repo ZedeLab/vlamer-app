@@ -87,4 +87,16 @@ export const styles = StyleSheet.create({
     textTransform: 'capitalize',
     paddingHorizontal: theme.spacing(1),
   },
+
+  dangerButton: {
+    backgroundColor: theme.colors.error,
+  },
+
+  customButtonText: {
+    fontSize: theme.spacing(0.65),
+  },
+
+  SuccessButton: {
+    backgroundColor: theme.colors.success,
+  },
 });

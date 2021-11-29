@@ -5,6 +5,38 @@ import theme from '../../../utils/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { styles as defaultStyles } from './styles';
 
+export const SuccessButton = ({ style, outlined, children, ...restProps }) => {
+  return (
+    <TouchableHighlight
+      {...restProps}
+      style={{
+        ...defaultStyles.button,
+        ...defaultStyles.SuccessButton,
+      }}
+    >
+      <Text style={{ ...defaultStyles.buttonText, ...defaultStyles.customButtonText }}>
+        {children}
+      </Text>
+    </TouchableHighlight>
+  );
+};
+
+export const DangerButton = ({ style, outlined, children, ...restProps }) => {
+  return (
+    <TouchableHighlight
+      {...restProps}
+      style={{
+        ...defaultStyles.button,
+        ...defaultStyles.dangerButton,
+      }}
+    >
+      <Text style={{ ...defaultStyles.buttonText, ...defaultStyles.customButtonText }}>
+        {children}
+      </Text>
+    </TouchableHighlight>
+  );
+};
+
 export const PrimaryButton = ({ style, outlined, children, ...restProps }) => {
   return (
     <TouchableHighlight

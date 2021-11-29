@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
 
   actionsContainer: {
     alignItems: 'flex-end',
+    width: theme.spacing(10),
   },
 
   sectionsWrapper: {
