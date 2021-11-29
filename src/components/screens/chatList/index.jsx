@@ -14,7 +14,6 @@ export default () => {
   useEffect(() => {
     const fetchChatList = async () => {
       const result = await getUserChats();
-      console.log(result);
       setChats(result);
     };
     fetchChatList();

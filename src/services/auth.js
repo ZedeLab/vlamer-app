@@ -125,7 +125,6 @@ function useProvideAuth() {
     try {
       const auth = getAuth();
       const account = await signInWithEmailAndPassword(auth, email, password);
-
       setUser(account.user);
       return account.user;
     } catch (error) {
