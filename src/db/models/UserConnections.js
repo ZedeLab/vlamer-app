@@ -26,7 +26,10 @@ export class UserConnections {
         id: string().required(),
         type: string().required().oneOf(Object.values(ConnectionTypes.type)),
         status: string().required().oneOf(Object.values(ConnectionTypes.status)),
-        createdAt: date().required(),
+        createdAt: {
+          seconds: number().required(),
+          nanoseconds: number().required(),
+        },
         __parentAccountSnapshot: object().required(),
         __eventOwnerAccountSnapshot: object().required(),
       })
@@ -46,13 +49,11 @@ export class UserConnections {
   static __takeAccountSnapshot(account) {
     try {
       return object({
-        account: string().required(),
+        id: string().required(),
         username: string().required(),
         firstName: string().required(),
         lastName: string().required(),
-        emailVerified: boolean(),
-        avatarURL: string().required(),
-        coverImageURL: string().url(),
+        avatarURL: string().url(),
       })
         .required()
         .camelCase(false)

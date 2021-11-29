@@ -5,6 +5,7 @@ import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import {
+  resetProfileVlamList,
   selectActors,
   setFocusedUserConnections,
   setFocusedUserVolt,
@@ -12,7 +13,10 @@ import {
 } from '../../../store/actors';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getUserConnections } from '../../../db/queries/user/connections';
+import {
+  getUserConnections,
+  getUserConnectionsByUserId,
+} from '../../../db/queries/user/connections';
 import { getUserVolt } from '../../../db/queries/user/volt';
 import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
@@ -23,23 +27,18 @@ import { Timestamp } from '@firebase/firestore';
 const Profile = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
-  const {
-    focusedUser,
-    focusedUserConnections,
-    focusedUserVolt,
-    profileVlamList,
-    resetProfileVlamList,
-  } = useSelector(selectActors);
+  const { focusedUser, focusedUserConnections, focusedUserVolt, profileVlamList } =
+    useSelector(selectActors);
 
   useEffect(() => {
     if (focusedUser) {
       const fetchProfileVlamList = async () => {
-        const [connections, connectionError] = await getUserConnections(focusedUser.id);
+        const [connections, connectionError] = await getUserConnectionsByUserId(focusedUser.id);
         const [volt, voltError] = await getUserVolt(focusedUser.id);
         const [{ eventHandler, docRef }, _] = await onNewVlamInUserProfile(focusedUser.id);
 
         const unsubscribe = eventHandler(docRef, (querySnapshot) => {
-          let vlamList = profileVlamList ? [...profileVlamList] : [];
+          let vlamList = [];
 
           querySnapshot.forEach((doc) => {
             const document = doc.data();

@@ -10,6 +10,7 @@ import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
 import { likeVlamPost, unlikeVlamPost } from '../../../db/queries/vlam/likes';
 import { useLikesAccess } from '../../../services/likesAccess';
+import { getUserById } from '../../../db/queries/user';
 
 const VlamPostCard = (props) => {
   const {
@@ -34,12 +35,18 @@ const VlamPostCard = (props) => {
   const { isVlamLiked } = useLikesAccess();
 
   const goToProfileHandler = async () => {
-    dispatch(setFocusedUser(authorAccount));
+    const [focusedUser, focusedUserError] = await getUserById(authorAccount.id);
 
-    if (user.id === authorAccount.id) {
-      navigation.navigate('User');
+    if (focusedUser) {
+      dispatch(setFocusedUser(focusedUser));
+
+      if (user.id === authorAccount.id) {
+        navigation.navigate('User');
+      } else {
+        navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+      }
     } else {
-      navigation.push('Profile', { screen: ProfileScreen, userId: authorAccount?.firstName });
+      console.log('Problem fetching user account');
     }
   };
 

@@ -6,12 +6,14 @@ import {
   getFirestore,
   query,
   where,
-  arrayRemove,
-  arrayUnion,
+  collectionGroup,
+  Timestamp,
+  onSnapshot,
 } from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
 import { ConnectionTypes, UserConnections } from '../../models/UserConnections';
 import { v4 as uuid } from 'uuid';
+import { formatTime } from '../../../utils/timeManager';
 
 export const getUserConnections = async (id) => {
   const db = getFirestore(firebaseApp);
@@ -36,6 +38,7 @@ export const sendConnectionRequest = async (currentUserAccount, eventOwnerAccoun
   const db = getFirestore(firebaseApp);
 
   try {
+    console.log('eventOwnerAccount: ', currentUserAccount);
     const newConnectionObj = await UserConnections.getDefaultData(
       ConnectionTypes.type.REQUESTING,
       currentUserAccount,
@@ -54,4 +57,48 @@ export const sendConnectionRequest = async (currentUserAccount, eventOwnerAccoun
   }
 };
 
+export const getUserConnectionsByUserId = async (currentUserAccountId) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const userConnectionsRef = collectionGroup(db, 'connections');
+    const docQueryRef = query(
+      userConnectionsRef,
+      where('__parentAccountSnapshot.id', '==', currentUserAccountId)
+    );
+
+    let userConnections = [];
+    const querySnapshot = await getDocs(docQueryRef);
+    querySnapshot.forEach((doc) => {
+      const { createdAt, ...document } = doc.data();
+      const formattedCreatedAt = formatTime(
+        new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
+      );
+      userConnections.push({ id: doc.id, ...document, createdAt: formattedCreatedAt });
+    });
+
+    return [userConnections, null];
+  } catch (error) {
+    console.log({ ...error });
+    return [false, error];
+  }
+};
+
+export const subscribeToCurrentUserConnection = async (userId) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const vlamLikeRef = collectionGroup(db, 'connections');
+    const docRef = query(vlamLikeRef, where('__parentAccountSnapshot.id', '==', userId));
+
+    const snapShotObj = {
+      docRef: docRef,
+      eventHandler: onSnapshot,
+    };
+    return [snapShotObj, null];
+  } catch (error) {
+    console.log(error);
+    return [null, error];
+  }
+};
 // export const getUserConnections = async () => {};

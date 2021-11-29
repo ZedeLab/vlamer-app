@@ -14,22 +14,18 @@ import * as Google from 'expo-google-app-auth';
 import { GOOGLE_ANDROID_CLIENT_ID } from '@env';
 import { addNewUser } from '../db/queries/user';
 
-import { getUserConnections } from '../db/queries/user/connections';
 import { notifyError } from '../store/errors';
 import {
   resetCurrentUserConnections,
   setCurrentUserVolt,
   resetCurrentUser,
   resetCurrentUserVolt,
-  setCurrentUserConnections,
-  setCurrentUserLikes,
 } from '../store/actors';
 import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 
 import { useStaticData } from './staticURLs';
 import { getUserByEmail } from '../db/queries/user';
 import { addNewUserVolt, getUserVolt } from '../db/queries/user/volt';
-import { getVlamLikesByUserId } from '../db/queries/vlam/likes';
 
 const authContext = createContext();
 
@@ -58,13 +54,11 @@ function useProvideAuth() {
       if (user) {
         const [account, error] = await getUserByEmail(user.email);
         const [volt, voltError] = await getUserVolt(account.id);
-        const [connections, connectionsError] = await getUserConnections(account.id);
-        // const [likes, likesError] = await getVlamLikesByUserId(account.id);
 
-        if (account && volt && connections) {
+        // const [likes, likesError] = await getVlamLikesByUserId(account.id);
+        if (account && volt) {
           setUser(account);
           dispatch(setCurrentUserVolt(volt));
-          dispatch(setCurrentUserConnections(connections));
           // dispatch(setCurrentUserLikes(likes));
         } else {
           dispatch(
@@ -77,7 +71,6 @@ function useProvideAuth() {
       } else {
         setUser(null);
         dispatch(resetCurrentUser());
-        dispatch(resetCurrentUserConnections());
         dispatch(resetCurrentUserVolt());
       }
       dispatch(notifyLoadingFinish());

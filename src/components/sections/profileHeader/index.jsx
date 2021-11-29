@@ -8,6 +8,9 @@ import { AvatarIcon } from '../../common/icons';
 import { DangerButton, PrimaryButton, SecondaryButton, SuccessButton } from '../../common/buttons';
 import { useNavigation } from '@react-navigation/core';
 import { sendConnectionRequest } from '../../../db/queries/user/connections';
+import { useSelector } from 'react-redux';
+import { selectActors } from '../../../store/actors';
+import { useUserConnections } from '../../../services/userConnectionsAccess';
 
 export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
   const coverImage = { uri: coverImageURL };
@@ -55,22 +58,23 @@ export const AdminViewActionButtons = (props) => {
 };
 
 export const UserViewActionButtons = (props) => {
-  const { focusedAccount } = props;
+  // const { focusedAccount } = props;
   const { user } = useAuth();
-  const [isUserConnected, setIsUserConnected] = useState(false);
+  const { focusedUser } = useSelector(selectActors);
+  const { isUserConnected, hasPendingUserConnection } = useUserConnections();
 
   const connectHandler = async () => {
-    if (isUserConnected) {
+    if (isUserConnected(focusedUser.id)) {
     } else {
       // const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
-      const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedAccount);
+      const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedUser);
       console.log(reqError);
     }
   };
 
   return (
     <View style={styles.actionsContainer}>
-      {isUserConnected ? (
+      {isUserConnected(focusedUser.id) ? (
         <View>
           <DangerButton style={styles.editButton}> unsubscribe </DangerButton>
           <SecondaryButton outlined style={styles.editButton}>
@@ -80,7 +84,7 @@ export const UserViewActionButtons = (props) => {
       ) : (
         <View>
           <SuccessButton style={styles.editButton} onPress={connectHandler}>
-            connect
+            {hasPendingUserConnection(focusedUser.id) ? 'pending' : 'connect'}
           </SuccessButton>
         </View>
       )}

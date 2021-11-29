@@ -1,10 +1,5 @@
 import { useAuth } from './auth';
-import { Timestamp } from '@firebase/firestore';
-import React, { useContext, createContext, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectActors, setCurrentUserLikes } from '../store/actors';
-import { formatTime } from '../utils/timeManager';
-import { onCurrentUserLikes } from '../db/queries/vlam/likes';
+import React, { useContext, createContext } from 'react';
 
 const LikesAccessContext = createContext();
 

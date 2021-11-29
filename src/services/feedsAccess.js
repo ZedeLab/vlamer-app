@@ -28,7 +28,8 @@ function useProvideFeedsList() {
       const [{ eventHandler, docRef }, _] = await onNewVlamInUserVlamFeedList();
 
       const unsubscribe = eventHandler(docRef, (querySnapshot) => {
-        let feedList = currentUserFeedList ? [...currentUserFeedList] : [];
+        let feedList = [];
+
         querySnapshot.docChanges().forEach((change) => {
           if (change.type === 'modified') {
             console.log('Modified vlam: ', change.doc.data());
