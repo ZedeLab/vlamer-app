@@ -46,6 +46,7 @@ function useProvideAuth() {
   const { getRandomAvatar, getRandomCoverImage } = useStaticData();
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
+
   const signInWithFacebook = () => {
     console.log('Sing in with Facebook');
   };

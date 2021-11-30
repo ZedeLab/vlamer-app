@@ -4,17 +4,15 @@ import { styles } from './styles';
 import ChatListHeader from '../../sections/chatListHeader';
 import MessageCard from '../../sections/messageCard';
 import { Searchbar } from 'react-native-paper';
-import useChat from '../../../services/chat';
+import { useChat } from '../../../services/chat';
 
 export default () => {
-  const [chats, setChats] = useState([]);
   const [showSearch, toggleSearch] = useState(false);
-  const { getUserChats } = useChat();
+  const { fetchChats, chats } = useChat();
 
   useEffect(() => {
     const fetchChatList = async () => {
-      const result = await getUserChats();
-      setChats(result);
+      await fetchChats();
     };
     fetchChatList();
   }, []);

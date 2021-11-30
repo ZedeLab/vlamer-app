@@ -11,8 +11,7 @@ import { useRoute } from '@react-navigation/native';
 import Header from './header';
 import Footer from './footer';
 import MessageBubble from './messageBubble';
-import { conversations } from '../../../utils/__mock__/convo';
-import useChat from '../../../services/chat';
+import { useChat } from '../../../services/chat';
 
 const ChatRoom = () => {
   const { params } = useRoute();
