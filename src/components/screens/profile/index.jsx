@@ -18,7 +18,7 @@ import {
   getUserConnectionsByUserId,
 } from '../../../db/queries/user/connections';
 import { getUserVolt } from '../../../db/queries/user/volt';
-import ProfileViewVlams from '../../sections/VlamList/ProfileViewVlams';
+import ProfileViewVlams from '../../sections/lists/VlamList/ProfileViewVlams';
 import { useDispatch } from 'react-redux';
 import { getUserVlamList, onNewVlamInUserProfile } from '../../../db/queries/vlam';
 import { formatTime } from '../../../utils/timeManager';

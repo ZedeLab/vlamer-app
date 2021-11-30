@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import theme from '../../../utils/theme';
-import VlamPosts from '../cards/VlamPostCard';
-import { selectActors } from '../../../store/actors';
+import theme from '../../../../utils/theme';
+import VlamPosts from '../../cards/VlamPostCard';
+import { selectActors } from '../../../../store/actors';
 import { useSelector } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 import { useNavigation } from '@react-navigation/core';

@@ -4,7 +4,7 @@ import theme from '../../../utils/theme';
 export const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    width: '90%',
+    width: '100%',
     padding: theme.spacing(0.3),
   },
   mainSection: {
@@ -128,5 +128,12 @@ export const styles = StyleSheet.create({
     height: theme.spacing(2.4),
     position: 'relative',
     top: theme.spacing(-0.05),
+  },
+
+  fullWidth: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing(0.3),
   },
 });

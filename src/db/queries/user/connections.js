@@ -9,6 +9,8 @@ import {
   collectionGroup,
   Timestamp,
   onSnapshot,
+  updateDoc,
+  runTransaction,
 } from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
 import { ConnectionTypes, UserConnections } from '../../models/UserConnections';
@@ -38,7 +40,6 @@ export const sendConnectionRequest = async (currentUserAccount, eventOwnerAccoun
   const db = getFirestore(firebaseApp);
 
   try {
-    console.log('eventOwnerAccount: ', currentUserAccount);
     const newConnectionObj = await UserConnections.getDefaultData(
       ConnectionTypes.type.REQUESTING,
       currentUserAccount,
@@ -89,10 +90,15 @@ export const subscribeToCurrentUserConnection = async (userId) => {
 
   try {
     const vlamLikeRef = collectionGroup(db, 'connections');
-    const docRef = query(vlamLikeRef, where('__parentAccountSnapshot.id', '==', userId));
+    const inUserConnections = query(vlamLikeRef, where('__parentAccountSnapshot.id', '==', userId));
+    const outsideUserConnections = query(
+      vlamLikeRef,
+      where('__eventOwnerAccountSnapshot.id', '==', userId)
+    );
 
     const snapShotObj = {
-      docRef: docRef,
+      inUserConnections: inUserConnections,
+      outsideUserConnections: outsideUserConnections,
       eventHandler: onSnapshot,
     };
     return [snapShotObj, null];
@@ -101,4 +107,34 @@ export const subscribeToCurrentUserConnection = async (userId) => {
     return [null, error];
   }
 };
-// export const getUserConnections = async () => {};
+
+export const acceptConnectionRequest = async (userId, connectionId) => {
+  const db = getFirestore(firebaseApp);
+
+  const connectionRef = doc(db, 'users', userId, 'connections', connectionId);
+
+  try {
+    updateDoc(connectionRef, {
+      status: ConnectionTypes.status.ACCEPTED,
+    });
+    return [true, null];
+  } catch (error) {
+    console.log(error);
+    return [false, error];
+  }
+};
+
+export const ignoreConnectionRequest = async (userId, connectionId) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    await updateDoc(doc(db, 'connections', connectionId), {
+      status: ConnectionTypes.status.DECLINED,
+    });
+
+    return [true, null];
+  } catch (error) {
+    console.log({ ...error });
+    return [false, error];
+  }
+};

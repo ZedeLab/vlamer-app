@@ -30,28 +30,64 @@ function useProvideUserConnections() {
   const { user } = useAuth();
   const dispatch = useDispatch();
   const { currentUserConnections } = useSelector(selectActors);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
-  useMemo(async () => {
+  useEffect(() => {
+    const fullConnectionList = followers.concat(following);
+    dispatch(setCurrentUserConnections(fullConnectionList));
+
+    return () => {
+      dispatch(resetCurrentUserConnections());
+    };
+  }, [following, followers]);
+
+  useEffect(async () => {
     if (user) {
-      const [{ eventHandler, docRef }, _] = await subscribeToCurrentUserConnection(user.id);
+      const [{ eventHandler, inUserConnections, outsideUserConnections }, _] =
+        await subscribeToCurrentUserConnection(user.id);
+
       try {
-        const unsubscribe = eventHandler(docRef, (querySnapshot) => {
-          let userConnections = [];
+        const unsubscribeInUserConnections = eventHandler(
+          inUserConnections,
+          (querySnapshot) => {
+            const userConnectionsList = [];
+            querySnapshot.forEach((doc) => {
+              const document = doc.data();
+              const formattedCreatedAt = formatTime(
+                new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
+              );
+              userConnectionsList.push({ ...document, createdAt: formattedCreatedAt });
+            });
+            setFollowing(userConnectionsList);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
 
-          querySnapshot.forEach((doc) => {
-            const document = doc.data();
-            const formattedCreatedAt = formatTime(
-              new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
-            );
+        const unsubscribeOutsideUserConnections = eventHandler(
+          outsideUserConnections,
+          (querySnapshot) => {
+            const userConnectionsList = [];
+            querySnapshot.forEach((doc) => {
+              const document = doc.data();
+              const formattedCreatedAt = formatTime(
+                new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
+              );
 
-            userConnections.push({ ...document, createdAt: formattedCreatedAt });
-          });
-
-          dispatch(setCurrentUserConnections(userConnections));
-        });
-
+              userConnectionsList.push({ ...document, createdAt: formattedCreatedAt });
+            });
+            setFollowers(userConnectionsList);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        // dispatch(setCurrentUserConnections(userConnectionsList));
         return () => {
-          return unsubscribe();
+          unsubscribeOutsideUserConnections();
+          unsubscribeInUserConnections();
         };
       } catch (err) {
         console.log(err);
@@ -59,22 +95,43 @@ function useProvideUserConnections() {
     }
   }, [user]);
 
-  const isUserConnected = (targetUserId) => {
+  const isUserConnected = (currentUserId, targetUserId) => {
     return (
       currentUserConnections.find((userConnection) => {
-        console.log(
-          '__eventOwnerAccountSnapshotId: ',
-          userConnection.__eventOwnerAccountSnapshot.id
-        );
         return (
-          userConnection.__eventOwnerAccountSnapshot.id === targetUserId &&
-          userConnection.status === ConnectionTypes.status.ACCEPTED
+          (userConnection.status === ConnectionTypes.status.ACCEPTED &&
+            userConnection.__eventOwnerAccountSnapshot.id === currentUserId) ||
+          userConnection.__parentAccountSnapshot.id === targetUserId
         );
       }) !== undefined
     );
   };
 
-  const hasPendingUserConnection = (targetUserId) => {
+  const isUserFollowing = (currentUserId, targetUserId) => {
+    return (
+      currentUserConnections.find((userConnection) => {
+        return (
+          userConnection.status === ConnectionTypes.status.ACCEPTED &&
+          userConnection.__eventOwnerAccountSnapshot.id === targetUserId &&
+          userConnection.__parentAccountSnapshot.id === currentUserId
+        );
+      }) !== undefined
+    );
+  };
+
+  const isFollowingUser = (currentUserId, targetUserId) => {
+    return (
+      currentUserConnections.find((userConnection) => {
+        return (
+          userConnection.status === ConnectionTypes.status.ACCEPTED &&
+          userConnection.__eventOwnerAccountSnapshot.id === targetUserId &&
+          userConnection.__parentAccountSnapshot.id === currentUserId
+        );
+      }) !== undefined
+    );
+  };
+
+  const hasUserPendingUserConnection = (targetUserId) => {
     return (
       currentUserConnections.find((userConnection) => {
         return (
@@ -87,6 +144,8 @@ function useProvideUserConnections() {
 
   return {
     isUserConnected,
-    hasPendingUserConnection,
+    isUserFollowing,
+    isFollowingUser,
+    hasUserPendingUserConnection,
   };
 }

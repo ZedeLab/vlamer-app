@@ -61,10 +61,11 @@ export const UserViewActionButtons = (props) => {
   // const { focusedAccount } = props;
   const { user } = useAuth();
   const { focusedUser } = useSelector(selectActors);
-  const { isUserConnected, hasPendingUserConnection } = useUserConnections();
+  const { isUserConnected, hasUserPendingUserConnection, isUserFollowing, isFollowingUser } =
+    useUserConnections();
 
   const connectHandler = async () => {
-    if (isUserConnected(focusedUser.id)) {
+    if (isUserFollowing(user.id, focusedUser.id)) {
     } else {
       // const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
       const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedUser);
@@ -74,7 +75,7 @@ export const UserViewActionButtons = (props) => {
 
   return (
     <View style={styles.actionsContainer}>
-      {isUserConnected(focusedUser.id) ? (
+      {isUserFollowing(user.id, focusedUser.id) ? (
         <View>
           <DangerButton style={styles.editButton}> unsubscribe </DangerButton>
           <SecondaryButton outlined style={styles.editButton}>
@@ -84,7 +85,7 @@ export const UserViewActionButtons = (props) => {
       ) : (
         <View>
           <SuccessButton style={styles.editButton} onPress={connectHandler}>
-            {hasPendingUserConnection(focusedUser.id) ? 'pending' : 'connect'}
+            {hasUserPendingUserConnection(focusedUser.id) ? 'pending' : 'connect'}
           </SuccessButton>
         </View>
       )}

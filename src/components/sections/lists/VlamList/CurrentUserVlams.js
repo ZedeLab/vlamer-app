@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import globalTheme from '../../../utils/theme';
-import VlamPosts from '../cards/VlamPostCard';
-import { selectActors } from '../../../store/actors';
+import globalTheme from '../../../../utils/theme';
+import VlamPosts from '../../cards/VlamPostCard';
+import { selectActors } from '../../../../store/actors';
 import { useSelector } from 'react-redux';
-import { useAuth } from '../../../services/auth';
+import { useAuth } from '../../../../services/auth';
 import { useNavigation } from '@react-navigation/core';
-import theme from '../../../utils/theme';
+import theme from '../../../../utils/theme';
 
 let LIST_SIZE = 0;
 
