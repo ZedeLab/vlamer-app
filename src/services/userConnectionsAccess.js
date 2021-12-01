@@ -119,16 +119,34 @@ function useProvideUserConnections() {
     );
   };
 
+  const totalNumberOfUsersFollowing = (currentUserId) => {
+    return currentUserConnections.filter((userConnection) => {
+      return (
+        userConnection.status === ConnectionTypes.status.ACCEPTED &&
+        userConnection.__parentAccountSnapshot.id === currentUserId
+      );
+    }).length;
+  };
+
   const isFollowingUser = (currentUserId, targetUserId) => {
     return (
       currentUserConnections.find((userConnection) => {
         return (
           userConnection.status === ConnectionTypes.status.ACCEPTED &&
-          userConnection.__eventOwnerAccountSnapshot.id === targetUserId &&
-          userConnection.__parentAccountSnapshot.id === currentUserId
+          userConnection.__parentAccountSnapshot.id === targetUserId &&
+          userConnection.__eventOwnerAccountSnapshot.id === currentUserId
         );
       }) !== undefined
     );
+  };
+
+  const totalNumberOfFollowers = (currentUserId) => {
+    return currentUserConnections.filter((userConnection) => {
+      return (
+        userConnection.status === ConnectionTypes.status.ACCEPTED &&
+        userConnection.__eventOwnerAccountSnapshot.id === currentUserId
+      );
+    }).length;
   };
 
   const hasUserPendingUserConnection = (targetUserId) => {
@@ -146,6 +164,8 @@ function useProvideUserConnections() {
     isUserConnected,
     isUserFollowing,
     isFollowingUser,
+    totalNumberOfFollowers,
+    totalNumberOfUsersFollowing,
     hasUserPendingUserConnection,
   };
 }

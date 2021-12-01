@@ -7,10 +7,15 @@ import { AnimatedNumberText, LottieIcon } from '../../common/animations';
 import { AvatarIcon } from '../../common/icons';
 import { DangerButton, PrimaryButton, SecondaryButton, SuccessButton } from '../../common/buttons';
 import { useNavigation } from '@react-navigation/core';
-import { sendConnectionRequest } from '../../../db/queries/user/connections';
+import {
+  deleteConnectionRequest,
+  getConnectionByInvolvedUsers,
+  sendConnectionRequest,
+} from '../../../db/queries/user/connections';
 import { useSelector } from 'react-redux';
 import { selectActors } from '../../../store/actors';
 import { useUserConnections } from '../../../services/userConnectionsAccess';
+import { ConnectionTypes } from '../../../db/models/UserConnections';
 
 export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
   const coverImage = { uri: coverImageURL };
@@ -26,12 +31,18 @@ export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, follow
         <AvatarIcon imgSrc={avatarURL} style={styles.avatar} size={theme.spacing(5)} />
       </View>
       <View style={styles.sectionContainer}>
-        <AnimatedNumberText value={followers} textStyle={{ ...styles.text, ...styles.stateText }} />
+        <AnimatedNumberText
+          value={parseInt(followers)}
+          textStyle={{ ...styles.text, ...styles.stateText }}
+        />
 
         <Text style={styles.text}>followers</Text>
       </View>
       <View style={styles.sectionContainer}>
-        <AnimatedNumberText value={following} textStyle={{ ...styles.text, ...styles.stateText }} />
+        <AnimatedNumberText
+          value={parseInt(following)}
+          textStyle={{ ...styles.text, ...styles.stateText }}
+        />
         <Text style={styles.text}>following</Text>
       </View>
     </ImageBackground>
@@ -65,11 +76,24 @@ export const UserViewActionButtons = (props) => {
     useUserConnections();
 
   const connectHandler = async () => {
-    if (isUserFollowing(user.id, focusedUser.id)) {
+    if (hasUserPendingUserConnection(focusedUser.id)) {
+      unsubscribeHandler();
     } else {
-      // const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
       const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedUser);
-      console.log(reqError);
+      reqError && console.log(reqError);
+    }
+  };
+
+  const unsubscribeHandler = async () => {
+    const [connection, fetchError] = await getConnectionByInvolvedUsers(user.id, focusedUser.id);
+    fetchError && console.log('fetchConnectionError: ', fetchError);
+
+    if (
+      (connection && connection[0].status === ConnectionTypes.status.PENDING) ||
+      (connection && connection[0].status === ConnectionTypes.status.ACCEPTED)
+    ) {
+      const [isDeleted, deleteError] = await deleteConnectionRequest(user.id, connection[0].id);
+      deleteError && console.log('deletedError: ', deleteError);
     }
   };
 
@@ -77,7 +101,9 @@ export const UserViewActionButtons = (props) => {
     <View style={styles.actionsContainer}>
       {isUserFollowing(user.id, focusedUser.id) ? (
         <View>
-          <DangerButton style={styles.editButton}> unsubscribe </DangerButton>
+          <DangerButton style={styles.editButton} onPress={unsubscribeHandler}>
+            unsubscribe
+          </DangerButton>
           <SecondaryButton outlined style={styles.editButton}>
             Message
           </SecondaryButton>
@@ -98,14 +124,15 @@ export default ProfileUserCard = (props) => {
   const { account, admin, currentUser, userVolt, accountConnections, children, ...restProps } =
     props;
   const navigation = useNavigation();
+  const { totalNumberOfFollowers, totalNumberOfUsersFollowing } = useUserConnections();
 
   return (
     <View style={styles.container}>
       <AnimatedCoverImage
         avatarURL={account.avatarURL}
         coverImageURL={account.coverImageURL}
-        followers={accountConnections.length}
-        following={accountConnections.length}
+        followers={totalNumberOfFollowers(user.id)}
+        following={totalNumberOfUsersFollowing(user.id)}
       />
       <View style={styles.sectionsWrapper}>
         <View style={styles.userInfoSection}>

@@ -10,7 +10,7 @@ import {
   Timestamp,
   onSnapshot,
   updateDoc,
-  runTransaction,
+  deleteDoc,
 } from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
 import { ConnectionTypes, UserConnections } from '../../models/UserConnections';
@@ -58,14 +58,14 @@ export const sendConnectionRequest = async (currentUserAccount, eventOwnerAccoun
   }
 };
 
-export const getUserConnectionsByUserId = async (currentUserAccountId) => {
+export const getUserConnectionsByUserId = async (currentUserId) => {
   const db = getFirestore(firebaseApp);
 
   try {
     const userConnectionsRef = collectionGroup(db, 'connections');
     const docQueryRef = query(
       userConnectionsRef,
-      where('__parentAccountSnapshot.id', '==', currentUserAccountId)
+      where('__parentAccountSnapshot.id', '==', currentUserId)
     );
 
     let userConnections = [];
@@ -126,15 +126,63 @@ export const acceptConnectionRequest = async (userId, connectionId) => {
 
 export const ignoreConnectionRequest = async (userId, connectionId) => {
   const db = getFirestore(firebaseApp);
+  const connectionRef = doc(db, 'users', userId, 'connections', connectionId);
 
   try {
-    await updateDoc(doc(db, 'connections', connectionId), {
+    await updateDoc(connectionRef, {
       status: ConnectionTypes.status.DECLINED,
     });
 
     return [true, null];
   } catch (error) {
     console.log({ ...error });
+    return [false, error];
+  }
+};
+
+export const getConnectionByInvolvedUsers = async (currentUserId, eventOwnerId) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const userConnectionsRef = collectionGroup(db, 'connections');
+    const docQueryRef = query(
+      userConnectionsRef,
+      where('__parentAccountSnapshot.id', '==', currentUserId),
+      where('__eventOwnerAccountSnapshot.id', '==', eventOwnerId)
+    );
+
+    let userConnections = [];
+    const querySnapshot = await getDocs(docQueryRef);
+    querySnapshot.forEach(
+      (doc) => {
+        const { createdAt, ...document } = doc.data();
+        const formattedCreatedAt = formatTime(
+          new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
+        );
+        userConnections.push({ id: doc.id, ...document, createdAt: formattedCreatedAt });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    return [userConnections, null];
+  } catch (error) {
+    console.log({ ...error });
+    return [false, error];
+  }
+};
+
+export const deleteConnectionRequest = async (userId, connectionId) => {
+  const db = getFirestore(firebaseApp);
+
+  try {
+    const connectionRef = doc(db, 'users', userId, 'connections', connectionId);
+    await deleteDoc(connectionRef);
+
+    return [true, null];
+  } catch (error) {
+    console.log('error: ', error);
     return [false, error];
   }
 };
