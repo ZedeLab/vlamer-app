@@ -160,6 +160,27 @@ function useProvideUserConnections() {
     );
   };
 
+  const hasUserPendingSentRequests = (currentUserId) => {
+    return (
+      currentUserConnections.find((userConnection) => {
+        return (
+          userConnection.status === ConnectionTypes.status.PENDING &&
+          userConnection.__parentAccountSnapshot.id === currentUserId
+        );
+      }) !== undefined
+    );
+  };
+
+  const hasUserPendingReceivedRequests = (currentUserId) => {
+    return (
+      currentUserConnections.find((userConnection) => {
+        return (
+          userConnection.status === ConnectionTypes.status.PENDING &&
+          userConnection.__eventOwnerAccountSnapshot.id === currentUserId
+        );
+      }) !== undefined
+    );
+  };
   return {
     isUserConnected,
     isUserFollowing,
@@ -167,5 +188,7 @@ function useProvideUserConnections() {
     totalNumberOfFollowers,
     totalNumberOfUsersFollowing,
     hasUserPendingUserConnection,
+    hasUserPendingSentRequests,
+    hasUserPendingReceivedRequests,
   };
 }

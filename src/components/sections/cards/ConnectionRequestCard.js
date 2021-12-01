@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { styles } from './styles';
 import CardWrapper from '../../hoc/CardWrapper';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
-import { Avatar, Divider, Paragraph } from 'react-native-paper';
-import { ProfileScreen } from '../../screens';
-import { setFocusedUser } from '../../../store/actors';
+import { Avatar } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
-import { likeVlamPost, unlikeVlamPost } from '../../../db/queries/vlam/likes';
-import { useLikesAccess } from '../../../services/likesAccess';
-import { getUserById } from '../../../db/queries/user';
 import { DangerButton, SuccessButton } from '../../common/buttons';
 import {
   acceptConnectionRequest,

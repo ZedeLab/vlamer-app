@@ -25,7 +25,7 @@ export const LottieAnimation = ({ src, loadFallBack, style, ...restProps }) => {
 };
 
 export const AnimatedNumberText = (props) => {
-  const { textStyle, animProps, value, children } = props;
+  const { textStyle, animProps, badge, value, children } = props;
 
   const { number } = useSpring({
     x: 0,

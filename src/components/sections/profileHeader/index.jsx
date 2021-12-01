@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { styles } from './styles';
-import { ImageBackground, Text, View } from 'react-native';
+import { ImageBackground, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useAuth } from '../../../services/auth';
 import theme from '../../../utils/theme';
 import { AnimatedNumberText, LottieIcon } from '../../common/animations';
@@ -16,9 +16,23 @@ import { useSelector } from 'react-redux';
 import { selectActors } from '../../../store/actors';
 import { useUserConnections } from '../../../services/userConnectionsAccess';
 import { ConnectionTypes } from '../../../db/models/UserConnections';
+import { Badge } from 'react-native-paper';
 
-export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, following }) => {
+export const AnimatedCoverImage = ({
+  navigation,
+  avatarURL,
+  coverImageURL,
+  followers,
+  following,
+}) => {
   const coverImage = { uri: coverImageURL };
+  const { user } = useAuth();
+  const { hasUserPendingSentRequests, hasUserPendingReceivedRequests } = useUserConnections();
+
+  const gotToConnectionsScreen = () => {
+    navigation.push('Connections');
+  };
+
   return (
     <ImageBackground
       source={coverImage}
@@ -30,21 +44,27 @@ export const AnimatedCoverImage = ({ avatarURL, coverImageURL, followers, follow
       <View style={styles.avatarContainer}>
         <AvatarIcon imgSrc={avatarURL} style={styles.avatar} size={theme.spacing(5)} />
       </View>
-      <View style={styles.sectionContainer}>
-        <AnimatedNumberText
-          value={parseInt(followers)}
-          textStyle={{ ...styles.text, ...styles.stateText }}
-        />
+      <TouchableWithoutFeedback onPress={gotToConnectionsScreen}>
+        <View style={styles.sectionContainer}>
+          {hasUserPendingSentRequests(user.id) && <Badge size={7}></Badge>}
+          <AnimatedNumberText
+            value={parseInt(followers)}
+            textStyle={{ ...styles.text, ...styles.stateText }}
+          />
 
-        <Text style={styles.text}>followers</Text>
-      </View>
-      <View style={styles.sectionContainer}>
-        <AnimatedNumberText
-          value={parseInt(following)}
-          textStyle={{ ...styles.text, ...styles.stateText }}
-        />
-        <Text style={styles.text}>following</Text>
-      </View>
+          <Text style={styles.text}>followers</Text>
+        </View>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={gotToConnectionsScreen}>
+        <View style={styles.sectionContainer}>
+          {hasUserPendingReceivedRequests(user.id) && <Badge size={7}></Badge>}
+          <AnimatedNumberText
+            value={parseInt(following)}
+            textStyle={{ ...styles.text, ...styles.stateText }}
+          />
+          <Text style={styles.text}>following</Text>
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 };
@@ -129,6 +149,7 @@ export default ProfileUserCard = (props) => {
   return (
     <View style={styles.container}>
       <AnimatedCoverImage
+        navigation={navigation}
         avatarURL={account.avatarURL}
         coverImageURL={account.coverImageURL}
         followers={totalNumberOfFollowers(user.id)}

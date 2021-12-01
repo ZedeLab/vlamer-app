@@ -131,9 +131,13 @@ export const styles = StyleSheet.create({
   },
 
   fullWidth: {
-    width: '100%',
+    alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacing(0.3),
+  },
+
+  textSection: {
+    paddingLeft: theme.spacing(0.5),
   },
 });

@@ -1,50 +1,25 @@
 import React, { useState } from 'react';
 import { View, useWindowDimensions, StyleSheet, Dimensions, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { selectActors } from '../../../store/actors';
+import { selectActors } from '../../../../store/actors';
 import { useSelector } from 'react-redux';
-import { useAuth } from '../../../services/auth';
+import { useAuth } from '../../../../services/auth';
 import { useNavigation } from '@react-navigation/core';
-import theme from '../../../utils/theme';
-import ConnectionRequestCard from '../cards/ConnectionRequestCard';
-import { ConnectionTypes } from '../../../db/models/UserConnections';
+import theme from '../../../../utils/theme';
+import ConnectionRequestCard from '../../cards/ConnectionRequestCard';
+import { ConnectionTypes } from '../../../../db/models/UserConnections';
+import {
+  renderFollowersConnectionList,
+  renderFollowingConnectionList,
+  renderPendingConnectionList,
+} from './list';
 
 let LIST_SIZE = 0;
 
-const renderVlamList = () => {
-  const { user } = useAuth();
-  const navigation = useNavigation();
-  const actors = useSelector(selectActors);
-
-  return (
-    <View>
-      {actors.currentUserConnections
-        .filter(
-          (userConnection) =>
-            userConnection.status === ConnectionTypes.status.PENDING &&
-            userConnection.__eventOwnerAccountSnapshot.id === user.id
-        )
-        .map((item) => {
-          return (
-            <ConnectionRequestCard
-              key={item.id}
-              id={item.id}
-              parentId={item.__parentAccountSnapshot.id}
-              firstName={item.__parentAccountSnapshot.firstName}
-              lastName={item.__parentAccountSnapshot.lastName}
-              username={item.__parentAccountSnapshot.username}
-              createdAt={item.__parentAccountSnapshot.createdAt}
-            />
-          );
-        })}
-    </View>
-  );
-};
-
 const renderScene = SceneMap({
-  allScene: () => renderVlamList(),
-  wonScene: () => renderVlamList(),
-  earningStats: () => renderVlamList(),
+  pendingScene: () => renderPendingConnectionList(),
+  followingScene: () => renderFollowingConnectionList(),
+  followersScene: () => renderFollowersConnectionList(),
 });
 
 export default function NotificationTab() {
@@ -54,9 +29,9 @@ export default function NotificationTab() {
   const [index, setIndex] = useState(0);
 
   const [routes] = useState([
-    { key: 'allScene', title: 'All' },
-    { key: 'wonScene', title: 'Won' },
-    { key: 'earningStats', title: 'Earning Stats' },
+    { key: 'pendingScene', title: 'Pending' },
+    { key: 'followingScene', title: 'Following' },
+    { key: 'followersScene', title: 'Followers' },
   ]);
 
   const renderTabBar = (props) => (

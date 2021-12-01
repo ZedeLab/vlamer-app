@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     borderRadius: theme.shapes.borderRadios,
     marginBottom: theme.spacing(0.8),
     backgroundColor: theme.colors.common,
-    width: '96.5%',
+    width: '97%',
   },
 });

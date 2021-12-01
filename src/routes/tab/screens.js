@@ -14,6 +14,7 @@ import { Text } from 'react-native';
 import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import AddVlamScreen from '../../components/screens/UserProfile/AddVlam.screen';
 import { CurrentUserVlamListProvider } from '../../services/userVlamListAccess';
+import ConnectionsScreen from '../../components/screens/UserProfile/Connections.screen';
 
 const HomeStack = createStackNavigator();
 export const HomeStackScreen = ({ route }) => {
@@ -85,6 +86,7 @@ export const UserProfileStackScreen = ({ route, navigation }) => {
     >
       <UserProfileStack.Screen name="User" component={UserProfileScreen} />
       <UserProfileStack.Screen name="AddVlam" component={AddVlamScreen} />
+      <UserProfileStack.Screen name="Connections" component={ConnectionsScreen} />
     </UserProfileStack.Navigator>
   );
 };
