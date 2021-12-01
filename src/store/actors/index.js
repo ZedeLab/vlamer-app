@@ -7,7 +7,7 @@ const initialState = {
   user: null,
   userVolt: null,
   focusedUser: null,
-  currentUserConnections: null,
+  currentUserConnections: [],
   focusedUserConnections: null,
   currentUserLikes: null,
   focusedUserLikes: null,

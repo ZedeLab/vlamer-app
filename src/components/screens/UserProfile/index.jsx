@@ -6,7 +6,7 @@ import { useCurrentUserVlamList } from '../../../services/userVlamListAccess';
 import { selectActors, setCurrentUserVlamList } from '../../../store/actors';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
-import UserVlams from '../../sections/VlamList/CurrentUserVlams';
+import UserVlams from '../../sections/lists/VlamList/CurrentUserVlams';
 
 const UserProfile = ({ navigation, route }) => {
   const { user } = useAuth();

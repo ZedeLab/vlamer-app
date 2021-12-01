@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
-import { Text } from 'react-native';
+import React from 'react';
+import { ScrollView, Text } from 'react-native';
 import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
 
 export default () => {
   return (
-    <PageAux>
-      <Text> Notification screen</Text>
+    <PageAux noGutter>
+      <ScrollView style={styles.pagesWrapper}>
+        <Text>Notification screen</Text>
+      </ScrollView>
     </PageAux>
   );
 };

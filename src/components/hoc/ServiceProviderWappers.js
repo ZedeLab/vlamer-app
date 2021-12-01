@@ -10,6 +10,7 @@ import { store } from '../../store/store';
 import { FeedsVlamListProvider } from '../../services/feedsAccess';
 import { LikesAccessProvider } from '../../services/likesAccess';
 import { CurrentUserVlamListProvider } from '../../services/userVlamListAccess';
+import { UserConnectionProvider } from '../../services/userConnectionsAccess';
 
 export const ServicesProviderWrapper = (props) => {
   const { children } = props;
@@ -19,15 +20,17 @@ export const ServicesProviderWrapper = (props) => {
       <StateProvider store={store}>
         <PageProvider theme={theme}>
           <AuthProvider>
-            <ChatProvider>
-              <VoltAccessProvider>
-                <FeedsVlamListProvider>
-                  <CurrentUserVlamListProvider>
-                    <LikesAccessProvider>{children}</LikesAccessProvider>
-                  </CurrentUserVlamListProvider>
-                </FeedsVlamListProvider>
-              </VoltAccessProvider>
-            </ChatProvider>
+            <UserConnectionProvider>
+              <ChatProvider>
+                <VoltAccessProvider>
+                  <FeedsVlamListProvider>
+                    <CurrentUserVlamListProvider>
+                      <LikesAccessProvider>{children}</LikesAccessProvider>
+                    </CurrentUserVlamListProvider>
+                  </FeedsVlamListProvider>
+                </VoltAccessProvider>
+              </ChatProvider>
+            </UserConnectionProvider>
           </AuthProvider>
         </PageProvider>
       </StateProvider>

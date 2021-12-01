@@ -28,12 +28,14 @@ function useProvideFeedsList() {
       const [{ eventHandler, docRef }, _] = await onNewVlamInUserVlamFeedList();
 
       const unsubscribe = eventHandler(docRef, (querySnapshot) => {
-        let feedList = currentUserFeedList ? [...currentUserFeedList] : [];
-        querySnapshot.docChanges().forEach((change) => {
-          if (change.type === 'modified') {
-            console.log('Modified vlam: ', change.doc.data());
-          }
-        });
+        let feedList = [];
+
+        // querySnapshot.docChanges().forEach((change) => {
+        //   if (change.type === 'modified') {
+        //     console.log('Modified vlam: ', change.doc.data());
+        //   }
+        // });
+
         querySnapshot.forEach((doc) => {
           const document = doc.data();
           const formattedCreatedAt = formatTime(
