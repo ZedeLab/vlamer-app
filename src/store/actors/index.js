@@ -59,7 +59,7 @@ export const actorsSlice = createSlice({
     },
 
     resetFocusedUserConnections: (state) => {
-      state.currentUserConnections = null;
+      state.currentUserConnections = [];
     },
 
     setCurrentUserFeedList: (state, action) => {
