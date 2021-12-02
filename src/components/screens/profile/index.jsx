@@ -5,6 +5,8 @@ import { styles } from './styles';
 import PageAux from '../../hoc/PageAux';
 import UserProfileHeader from '../../sections/profileHeader';
 import {
+  resetFocusedUserConnections,
+  resetFocusedUserVolt,
   resetProfileVlamList,
   selectActors,
   setFocusedUserConnections,
@@ -54,6 +56,8 @@ const Profile = ({ navigation, route }) => {
         });
         return () => {
           dispatch(resetProfileVlamList());
+          dispatch(resetFocusedUserVolt());
+          dispatch(resetFocusedUserConnections());
           unsubscribe();
         };
       };

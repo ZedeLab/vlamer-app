@@ -30,19 +30,13 @@ function useProvideFeedsList() {
       const unsubscribe = eventHandler(docRef, (querySnapshot) => {
         let feedList = [];
 
-        // querySnapshot.docChanges().forEach((change) => {
-        //   if (change.type === 'modified') {
-        //     console.log('Modified vlam: ', change.doc.data());
-        //   }
-        // });
-
         querySnapshot.forEach((doc) => {
           const document = doc.data();
           const formattedCreatedAt = formatTime(
             new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
           );
 
-          if (!currentUserFeedList.find((item) => item.id === document.id)) {
+          if (!feedList.find((item) => item.id === document.id)) {
             feedList.push({ ...document, createdAt: formattedCreatedAt });
           }
         });

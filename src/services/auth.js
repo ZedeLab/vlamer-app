@@ -72,7 +72,12 @@ function useProvideAuth() {
       dispatch(notifyLoadingFinish());
     });
 
-    return unsubscribe;
+    return () => {
+      setUser(null);
+      dispatch(resetCurrentUser());
+      dispatch(resetCurrentUserVolt());
+      unsubscribe();
+    };
   }, []);
 
   const signInWithGoogle = async () => {
