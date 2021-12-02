@@ -2,7 +2,7 @@ import { Timestamp } from '@firebase/firestore';
 import React, { useContext, createContext, useEffect, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectActors, setCurrentUserVlamList } from '../store/actors';
+import { resetCurrentUserVlamList, selectActors, setCurrentUserVlamList } from '../store/actors';
 import { formatTime } from '../utils/timeManager';
 import { useAuth } from './auth';
 import { onNewVlamInUserProfile } from '../db/queries/vlam';
@@ -29,11 +29,13 @@ function useProvideCurrentUserVlamList() {
   const { currentUserVlamList } = useSelector(selectActors);
 
   useMemo(async () => {
+    let unsubscribe;
+
     if (user) {
       const [{ eventHandler, docRef }, _] = await onNewVlamInUserProfile(user.id);
 
-      const unsubscribe = eventHandler(docRef, (querySnapshot) => {
-        let vlamList = currentUserVlamList ? [...currentUserVlamList] : [];
+      unsubscribe = eventHandler(docRef, (querySnapshot) => {
+        let vlamList = [];
 
         querySnapshot.forEach((doc) => {
           const document = doc.data();
@@ -41,21 +43,18 @@ function useProvideCurrentUserVlamList() {
             new Timestamp(document.createdAt.seconds, document.createdAt.nanoseconds).toDate()
           );
 
-          if (!currentUserVlamList.find((item) => item.id === document.id)) {
+          if (!vlamList.find((item) => item.id === document.id)) {
             vlamList.push({ ...document, createdAt: formattedCreatedAt });
           }
         });
         dispatch(setCurrentUserVlamList(vlamList));
       });
-
-      return () => {
-        if (user) {
-          return unsubscribe;
-        } else {
-          return unsubscribe();
-        }
-      };
     }
+
+    return () => {
+      dispatch(resetCurrentUserVlamList());
+      unsubscribe();
+    };
   }, [user]);
 
   return {};

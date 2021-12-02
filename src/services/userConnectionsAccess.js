@@ -43,12 +43,15 @@ function useProvideUserConnections() {
   }, [following, followers]);
 
   useEffect(async () => {
+    let unsubscribeInUserConnections;
+    let unsubscribeOutsideUserConnections;
+
     if (user) {
       const [{ eventHandler, inUserConnections, outsideUserConnections }, _] =
         await subscribeToCurrentUserConnection(user.id);
 
       try {
-        const unsubscribeInUserConnections = eventHandler(
+        unsubscribeInUserConnections = eventHandler(
           inUserConnections,
           (querySnapshot) => {
             const userConnectionsList = [];
@@ -66,7 +69,7 @@ function useProvideUserConnections() {
           }
         );
 
-        const unsubscribeOutsideUserConnections = eventHandler(
+        unsubscribeOutsideUserConnections = eventHandler(
           outsideUserConnections,
           (querySnapshot) => {
             const userConnectionsList = [];
@@ -85,13 +88,15 @@ function useProvideUserConnections() {
           }
         );
         // dispatch(setCurrentUserConnections(userConnectionsList));
-        return () => {
-          unsubscribeOutsideUserConnections();
-          unsubscribeInUserConnections();
-        };
       } catch (err) {
         console.log(err);
+        return;
       }
+
+      return () => {
+        unsubscribeOutsideUserConnections();
+        unsubscribeInUserConnections();
+      };
     }
   }, [user]);
 
