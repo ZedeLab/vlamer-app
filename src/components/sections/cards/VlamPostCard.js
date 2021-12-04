@@ -11,6 +11,8 @@ import { useAuth } from '../../../services/auth';
 import { likeVlamPost, unlikeVlamPost } from '../../../db/queries/vlam/likes';
 import { useLikesAccess } from '../../../services/likesAccess';
 import { getUserById } from '../../../db/queries/user';
+import { useNotificationsAccess } from '../../../services/notification';
+import { Notification, NotificationTypes } from '../../../db/models/notification';
 
 const VlamPostCard = (props) => {
   const {
@@ -29,10 +31,10 @@ const VlamPostCard = (props) => {
     ...restProps
   } = props;
 
-  const { user } = useAuth();
+  const { user, expoPushToken } = useAuth();
   const dispatch = useDispatch();
-
   const { isVlamLiked } = useLikesAccess();
+  const { sendPushNotification } = useNotificationsAccess();
 
   const goToProfileHandler = async () => {
     const [focusedUser, focusedUserError] = await getUserById(authorAccount.id);
@@ -51,10 +53,26 @@ const VlamPostCard = (props) => {
   };
 
   const likeVlamPostHandler = async () => {
+    const [focusedUser, focusedUserError] = await getUserById(authorAccount.id);
+
     if (isVlamLiked(likeIds)) {
-      const [reqSuccessful, reqError] = await unlikeVlamPost(user.id, id, authorAccount.id);
+      const [reqSuccessful, reqError] = await unlikeVlamPost(user, focusedUser, id);
     } else {
-      const [reqSuccessful, reqError] = await likeVlamPost(user.id, id, authorAccount.id);
+      const notification = await new Notification(
+        Notification.GetDefaultVlamValue({
+          title: 'Vlam notifications',
+          body: `${user.firstName} liked you vlam post.`,
+          to: focusedUser.deviceIds,
+          ownerId: user.id,
+          data: {
+            type: NotificationTypes.vlam.LIKE,
+          },
+        })
+      ).__validate();
+
+      const [reqSuccessful, reqError] = await likeVlamPost(user, focusedUser, id, notification);
+
+      const isSent = await sendPushNotification(focusedUser.deviceIds, notification);
     }
   };
 

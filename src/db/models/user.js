@@ -1,4 +1,4 @@
-import { boolean, date, object, string, ref as yupRef } from 'yup';
+import { boolean, date, object, string, ref as yupRef, array } from 'yup';
 import { v4 as uuid } from 'uuid';
 export class User {
   constructor(newUserData, userVolt, userConnection) {
@@ -23,6 +23,7 @@ export class User {
         coverImageURL: string().url().default(null),
         createdAt: date().required().default(new Date()),
         gender: string().required().oneOf(['male', 'female', 'other']).default('other'),
+        deviceIds: array().of(string()),
       })
         .camelCase(false)
         .validate(data, { stripUnknown: true, strict: true, abortEarly: false });
