@@ -15,9 +15,12 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { getVlamById } from '.';
+import { useProvideNotificationsAccess } from '../../../services/notification';
 import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
+import { NotificationTypes } from '../../models/notification';
 import { VlamLike } from '../../models/VlamLike';
+import { addNewNotification } from '../user/notifications';
 
 export const getVlamLikesByUserId = async (userId) => {
   const db = getFirestore(firebaseApp);
@@ -42,16 +45,16 @@ export const getVlamLikesByUserId = async (userId) => {
   }
 };
 
-export const likeVlamPost = async (currentUserId, vlamPostId) => {
+export const likeVlamPost = async (currentUser, targetUser, vlamPostId, notification) => {
   const db = getFirestore(firebaseApp);
-  const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUserId);
+  const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUser.id);
 
   try {
     let [parentVlam, parentVlamError] = await getVlamById(vlamPostId);
 
     if (parentVlam) {
       const vlamLike = await new VlamLike(
-        VlamLike.GetDefaultVlamLikeValue(currentUserId, parentVlam)
+        VlamLike.GetDefaultVlamLikeValue(currentUser.id, parentVlam)
       ).__validate();
       await setDoc(vlamLikeRef, vlamLike);
 
@@ -59,8 +62,11 @@ export const likeVlamPost = async (currentUserId, vlamPostId) => {
 
       await updateDoc(vlamRef, {
         totalNumberOfLikes: increment(1),
-        likeUsersIds: arrayUnion(currentUserId),
+        likeUsersIds: arrayUnion(currentUser.id),
       });
+
+      await addNewNotification(currentUser, targetUser.deviceIds, notification);
+
       return [vlamLike, null];
     } else {
       console.log('parentVlamError: ', parentVlamError);
@@ -71,17 +77,17 @@ export const likeVlamPost = async (currentUserId, vlamPostId) => {
   }
 };
 
-export const unlikeVlamPost = async (currentUserId, vlamPostId, vlamAuthorId) => {
+export const unlikeVlamPost = async (currentUser, targetUser, vlamId) => {
   const db = getFirestore(firebaseApp);
-  const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUserId);
+  const vlamLikeRef = doc(db, 'vlams', vlamId, 'likes', currentUser.id);
 
   try {
     await deleteDoc(vlamLikeRef);
-    const vlamRef = doc(db, 'vlams', vlamPostId);
+    const vlamRef = doc(db, 'vlams', vlamId);
 
     await updateDoc(vlamRef, {
       totalNumberOfLikes: increment(-1),
-      likeUsersIds: arrayRemove(currentUserId),
+      likeUsersIds: arrayRemove(currentUser.id),
     });
     return [true, null];
   } catch (error) {

@@ -26,6 +26,17 @@ import { notifyLoadingFinish, notifyLoadingStart } from '../store/loading';
 import { useStaticData } from './staticURLs';
 import { getUserByEmail } from '../db/queries/user';
 import { addNewUserVolt, getUserVolt } from '../db/queries/user/volt';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const authContext = createContext();
 
@@ -42,6 +53,7 @@ function useProvideAuth() {
   const { getRandomAvatar, getRandomCoverImage } = useStaticData();
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
+  const [expoPushToken, setExpoPushToken] = useState('');
 
   const signInWithFacebook = () => {
     console.log('Sing in with Facebook');
@@ -56,17 +68,17 @@ function useProvideAuth() {
         const [account, error] = await getUserByEmail(user.email);
         const [volt, voltError] = await getUserVolt(account.id);
 
-        // const [likes, likesError] = await getVlamLikesByUserId(account.id);
         if (account && volt) {
+          const token = await registerForPushNotificationsAsync();
+          setExpoPushToken(token);
           setUser(account);
           dispatch(setCurrentUserVolt(volt));
-          // dispatch(setCurrentUserLikes(likes));
         } else {
           setUser(null);
+          dispatch(resetCurrentUserVolt());
         }
       } else {
         setUser(null);
-        dispatch(resetCurrentUser());
         dispatch(resetCurrentUserVolt());
       }
       dispatch(notifyLoadingFinish());
@@ -74,7 +86,6 @@ function useProvideAuth() {
 
     return () => {
       setUser(null);
-      dispatch(resetCurrentUser());
       dispatch(resetCurrentUserVolt());
       unsubscribe();
     };
@@ -131,6 +142,7 @@ function useProvideAuth() {
     try {
       const auth = getAuth();
       const account = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await registerForPushNotificationsAsync();
 
       const [newAccount, error] = await addNewUser({
         id: account.user.uid,
@@ -145,6 +157,7 @@ function useProvideAuth() {
         avatarURL: getRandomAvatar().url,
         coverImageURL: getRandomCoverImage().url,
         gender: null,
+        deviceIds: [token],
       });
 
       if (newAccount) {
@@ -175,6 +188,36 @@ function useProvideAuth() {
     return await signOutFirebase(auth);
   };
 
+  const registerForPushNotificationsAsync = async () => {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    return token;
+  };
+
   return {
     user,
     signOut,
@@ -182,5 +225,7 @@ function useProvideAuth() {
     signInWithEmail,
     signInWithFacebook,
     signInWithGoogle,
+    expoPushToken,
+    registerForPushNotificationsAsync,
   };
 }
