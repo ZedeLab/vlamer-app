@@ -17,6 +17,8 @@ import { selectActors } from '../../../store/actors';
 import { useUserConnections } from '../../../services/userConnectionsAccess';
 import { ConnectionTypes } from '../../../db/models/UserConnections';
 import { Badge } from 'react-native-paper';
+import { Notification, NotificationTypes } from '../../../db/models/notification';
+import { useNotificationsAccess } from '../../../services/notification';
 
 export const AnimatedCoverImage = ({
   navigation,
@@ -91,6 +93,7 @@ export const AdminViewActionButtons = (props) => {
 export const UserViewActionButtons = (props) => {
   const { user } = useAuth();
   const { focusedUser } = useSelector(selectActors);
+  const { sendPushNotification } = useNotificationsAccess();
   const { isUserConnected, hasUserPendingUserConnection, isUserFollowing, isFollowingUser } =
     useUserConnections();
 
@@ -99,6 +102,19 @@ export const UserViewActionButtons = (props) => {
       unsubscribeHandler();
     } else {
       const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedUser);
+      const notification = await new Notification(
+        Notification.GetDefaultVlamValue({
+          title: 'Connection notification',
+          body: `${user.firstName} wants to connect with you`,
+          to: focusedUser.deviceIds,
+          ownerId: user.id,
+          data: {
+            type: NotificationTypes.connection.follow,
+          },
+        })
+      ).__validate();
+
+      const isSent = await sendPushNotification(focusedUser.deviceIds, notification);
       reqError && console.log(reqError);
     }
   };

@@ -2,9 +2,12 @@ import { array, object, string, number, boolean } from 'yup';
 import { v4 as uuid } from 'uuid';
 
 export const NotificationTypes = {
-  post: {
+  vlam: {
     LIKE: 'vlamPostLike',
     COMMENT: 'commentOnVlamPost',
+  },
+  connection: {
+    follow: 'followRequest',
   },
 };
 
@@ -23,7 +26,12 @@ export class Notification {
         title: string().required(),
         body: string().required(),
         data: object({
-          type: string().required().oneOf(Object.values(NotificationTypes.post)),
+          type: string()
+            .required()
+            .oneOf([
+              ...Object.values(NotificationTypes.vlam),
+              ...Object.values(NotificationTypes.connection),
+            ]),
         }).required(),
         createdAt: {
           seconds: number().required(),

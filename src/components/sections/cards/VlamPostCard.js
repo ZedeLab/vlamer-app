@@ -60,12 +60,12 @@ const VlamPostCard = (props) => {
     } else {
       const notification = await new Notification(
         Notification.GetDefaultVlamValue({
-          title: 'Friend request',
-          body: 'You have a new like on your vlam post💜',
+          title: 'Vlam notifications',
+          body: `${user.firstName} liked you vlam post.`,
           to: focusedUser.deviceIds,
           ownerId: user.id,
           data: {
-            type: NotificationTypes.post.LIKE,
+            type: NotificationTypes.vlam.LIKE,
           },
         })
       ).__validate();
