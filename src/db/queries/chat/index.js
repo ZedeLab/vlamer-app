@@ -28,8 +28,9 @@ export const initiateChat = async (currentUser, account) => {
     });
 
     const { hasPreviousChats, chat } = await checkIfUsersHavePreviousChats(currentUser, user);
+    let messages = [];
     if (hasPreviousChats) {
-      const messages = await fetchMessages(chat.id);
+      messages = await fetchMessages(chat.id);
       await makeLastMessageSeen(currentUser, chat);
       return { data: { isFirstTime: false, messages }, error: null };
     } else {
