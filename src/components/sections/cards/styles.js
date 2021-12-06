@@ -4,11 +4,11 @@ import theme from '../../../utils/theme';
 export const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    width: '100%',
+    // width: '100%',
     padding: theme.spacing(0.3),
   },
   mainSection: {
-    width: '96%',
+    // width: '96%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   headerMainSection: {
-    width: '65%',
+    // width: '65%',
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
@@ -120,7 +120,7 @@ export const styles = StyleSheet.create({
     marginVertical: theme.spacing(0.3),
   },
   messageContainer: {
-    width: '95%',
+    // width: '95%',
   },
 
   iconHeart: {

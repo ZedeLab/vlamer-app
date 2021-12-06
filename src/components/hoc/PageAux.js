@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   gutter: {
-    marginTop: 0,
     paddingHorizontal: theme.spacing(0.8),
   },
 });

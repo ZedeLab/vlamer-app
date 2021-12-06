@@ -23,6 +23,7 @@ export default () => {
       return (
         <ConnectionRequestNotificationCard
           id={item.data.id}
+          accountId={item.__fullAccount.id}
           avatar={item.__fullAccount.avatarURL}
           firstName={item.__fullAccount.firstName}
           lastName={item.__fullAccount.lastName}
@@ -35,6 +36,7 @@ export default () => {
       return (
         <VlamLikeNotificationCard
           id={item.data.id}
+          accountId={item.__fullAccount.id}
           avatar={item.__fullAccount.avatarURL}
           firstName={item.__fullAccount.firstName}
           lastName={item.__fullAccount.lastName}

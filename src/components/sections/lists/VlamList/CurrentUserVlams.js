@@ -91,9 +91,7 @@ const useStyle = (LIST_SIZE) =>
     },
 
     scene: {
-      alignItems: 'center',
-      paddingHorizontal: theme.spacing(0.7),
-      paddingVertical: theme.spacing(0.7),
+      paddingVertical: theme.spacing(0.4),
     },
 
     tabBar: {

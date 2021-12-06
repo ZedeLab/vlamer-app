@@ -6,10 +6,15 @@ import { Avatar, Paragraph } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { useAuth } from '../../../../services/auth';
 import { PrimaryButton } from '../../../common/buttons';
+import { setFocusedUser } from '../../../../store/actors';
+import { getUserById } from '../../../../db/queries/user';
+import { useNavigation } from '@react-navigation/core';
+import { ProfileScreen } from '../../../screens';
 
 const VlamLikeNotificationCard = (props) => {
   const {
     id,
+    accountId,
     avatar,
     firstName,
     lastName,
@@ -20,14 +25,31 @@ const VlamLikeNotificationCard = (props) => {
   } = props;
 
   const { user } = useAuth();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const goToProfileHandler = async () => {
+    const [focusedUser, focusedUserError] = await getUserById(accountId);
+
+    if (focusedUser) {
+      dispatch(setFocusedUser(focusedUser));
+
+      if (user.id === accountId) {
+        navigation.navigate('User');
+      } else {
+        navigation.push('Profile', { screen: ProfileScreen, userId: firstName });
+      }
+    } else {
+      console.log('Problem fetching user account');
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>
         <Avatar.Image size={44} source={{ uri: avatar }} />
         <View style={styles.userInfoContainer}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={goToProfileHandler}>
             <View>
               <Text style={{ ...styles.text, ...styles.title }}>{firstName + ' ' + lastName}</Text>
               <Text style={styles.highlight}>
