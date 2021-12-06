@@ -1,8 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getUserChats, initiateChat, sendMessage as sendMessageQuery } from '../db/queries/chat';
+import {
+  checkForIncomingMessages,
+  getMessageReceiverData,
+  getSenderId,
+  getUserChats,
+  initiateChat,
+  sendMessage as sendMessageQuery,
+} from '../db/queries/chat';
 import { notifyError } from '../store/errors';
 import { useAuth } from './auth';
+import _ from 'lodash';
 
 const ChatContext = React.createContext();
 
@@ -15,8 +23,60 @@ export const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    //TODO: initial new message fetch here.
+    let unsubscribe = null;
+    const listenToMessages = async () => {
+      const { data, error } = await checkForIncomingMessages(user.id);
+      if (data) {
+        const { eventHandler, docRef } = data;
+        let allChats = [];
+        let modifiedChat = {};
+        unsubscribe = eventHandler(docRef, (querySnapshot) => {
+          querySnapshot.docChanges().forEach(async (change) => {
+            let chat = change.doc.data();
+            if (chat) {
+              const receiverId = await getSenderId(user, chat);
+              const messageReceiverProfile = await getMessageReceiverData(receiverId);
+              modifiedChat = { ...change.doc.data(), receiver: messageReceiverProfile };
+              if (chat.lastMessageSender !== user.id) {
+                setMessages([
+                  ...messages,
+                  {
+                    createdAt: chat.lastMessageDate,
+                    message: chat.lastMessage,
+                    id: chat.lastMessageId,
+                    senderId: chat.lastMessageSender,
+                  },
+                ]);
+              }
+            }
+          });
+          querySnapshot.docs.forEach(async (doc) => {
+            let chat = doc.data();
+            const receiverId = await getSenderId(user, chat);
+            const messageReceiverProfile = await getMessageReceiverData(receiverId);
+            allChats.push({ ...chat, receiver: messageReceiverProfile });
+            const result = await cleanUpChatsArray(allChats, modifiedChat);
+            setChats(result);
+          });
+        });
+      }
+    };
+    listenToMessages();
+    return () => {
+      unsubscribe && unsubscribe();
+    };
   }, []);
+
+  const cleanUpChatsArray = (allChats, modifiedChat) => {
+    let result = allChats
+      .map((item) => {
+        if (item.id === modifiedChat.id) return modifiedChat;
+        return item;
+      })
+      .sort((a, b) => a.lastMessageDate < b.lastMessageDate);
+
+    return _.uniqBy(result, (item) => item.id);
+  };
 
   const fetchChats = async () => {
     const { data, error } = await getUserChats(user);

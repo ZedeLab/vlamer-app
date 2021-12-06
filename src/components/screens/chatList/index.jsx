@@ -8,13 +8,15 @@ import { useChat } from '../../../services/chat';
 
 export default () => {
   const [showSearch, toggleSearch] = useState(false);
-  const { fetchChats, chats } = useChat();
+  const { chats, fetchChats } = useChat();
 
   useEffect(() => {
-    const fetchChatList = async () => {
-      await fetchChats();
+    const getAllChats = async () => {
+      if (!chats.length) {
+        await fetchChats();
+      }
     };
-    fetchChatList();
+    getAllChats();
   }, []);
 
   return (

@@ -16,6 +16,7 @@ export class Chat {
         lastMessageDate: date().default(new Date()),
         hasUnreadMessage: boolean(),
         lastMessageSender: string().uuid().default(uuid()),
+        lastMessageId: string().uuid().default(uuid()),
         createdAt: date().default(new Date()),
       })
         .camelCase(false)

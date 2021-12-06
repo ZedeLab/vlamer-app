@@ -11,9 +11,34 @@ import {
   updateDoc,
   setDoc,
   arrayUnion,
+  where,
+  collectionGroup,
+  onSnapshot,
 } from 'firebase/firestore';
 import { Message } from '../../models/message';
 import { v4 as uuid } from 'uuid';
+
+export const checkForIncomingMessages = async (userId) => {
+  try {
+    const db = getFirestore(firebaseApp);
+    const chatsRef = collectionGroup(db, 'chats');
+    const docRef = query(chatsRef, where('members', 'array-contains', userId));
+
+    const snapShotObj = {
+      docRef: docRef,
+      eventHandler: onSnapshot,
+    };
+    return {
+      data: snapShotObj,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
 
 /**********************************************/
 export const initiateChat = async (currentUser, account) => {
@@ -67,6 +92,7 @@ export const checkIfUsersHavePreviousChats = async (currentUser, account) => {
 };
 
 export const makeLastMessageSeen = async (user, chat) => {
+  const db = getFirestore(firebaseApp);
   if (chat.lastMessageSender !== user.id) {
     try {
       await updateDoc(doc(db, 'chats', chat.id), {
@@ -100,18 +126,18 @@ export const fetchMessages = async (chatId) => {
 export const sendMessage = async (user, message, chatData) => {
   const db = getFirestore(firebaseApp);
   let chatRoom = chatData;
-  // this will be moved to the model.{ message, senderId: user.id }
   const messageObj = { message, senderId: user.id, ...Message.getDefaultMessageValue() };
   const messageData = await new Message(messageObj).__validate();
 
   try {
     if (chatData.isFirstTime) {
-      chatRoom = await createChatRoom(user, message, chatData);
+      chatRoom = await createChatRoom(user, messageData, chatData);
     }
 
     await setDoc(doc(db, 'chats', chatRoom.id, 'messages', messageData.id), messageData);
     await updateDoc(doc(db, 'chats', chatRoom.id), {
       lastMessage: message,
+      lastMessageId: messageData.id,
       lastMessageDate: messageData.createdAt,
       lastMessageSender: user.id,
       hasUnreadMessage: true,
@@ -129,9 +155,10 @@ export const createChatRoom = async (user, message, data) => {
     const chatData = {
       id: uuid(),
       members: [user.id, data.receiver.id],
-      lastMessage: message,
+      lastMessage: message.message,
       lastMessageDate: new Date(),
       lastMessageSender: user.id,
+      lastMessageId: message.id,
       createdAt: new Date(),
       hasUnreadMessage: true,
     };
@@ -154,9 +181,27 @@ export const createChatRoom = async (user, message, data) => {
 /*****  Functions to fetch user chats*****/
 
 export const getUserChats = async (user) => {
+  const db = getFirestore(firebaseApp);
+
   try {
-    const db = getFirestore(firebaseApp);
-    const userRef = doc(db, 'users', user.id);
+    let userChatIds = await getUserChatIds(user.id);
+    let chats = [];
+    for (const id of userChatIds) {
+      const result = await fetchChatById(user, id);
+      chats.push(result);
+    }
+    chats = chats.sort((a, b) => a.lastMessageDate < b.lastMessageDate);
+    return { data: chats, error: null };
+  } catch (error) {
+    console.log(error);
+    return { data: null, error };
+  }
+};
+
+export const getUserChatIds = async (userId) => {
+  const db = getFirestore(firebaseApp);
+  const userRef = doc(db, 'users', userId);
+  try {
     let userChatIds = [];
     await getDoc(userRef).then((snapshot) => {
       if (snapshot.exists()) {
@@ -167,15 +212,9 @@ export const getUserChats = async (user) => {
         }
       }
     });
-    let chats = [];
-    for (const id of userChatIds) {
-      const result = await fetchChatById(user, id);
-      chats.push(result);
-    }
-    chats = chats.sort((a, b) => a.lastMessageDate < b.lastMessageDate);
-    return { data: chats, error: null };
-  } catch (error) {
-    return { data: null, error };
+    return userChatIds;
+  } catch (err) {
+    throw new Error(err);
   }
 };
 
