@@ -1,5 +1,15 @@
-import { getDocs, collection, getFirestore, query, where, setDoc, doc } from 'firebase/firestore';
+import {
+  getDocs,
+  collection,
+  getFirestore,
+  query,
+  where,
+  setDoc,
+  doc,
+  Timestamp,
+} from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
+import { formatTime } from '../../../utils/timeManager';
 import { User } from '../../models/user';
 
 export const findUsersFromUserIdList = async (userIdList) => {
@@ -11,12 +21,14 @@ export const findUsersFromUserIdList = async (userIdList) => {
     const userList = [];
     const querySnapshot = await getDocs(docRef);
     querySnapshot.forEach((doc) => {
-      const document = doc.data();
-      userList.push({ id: doc.id, ...document });
+      const { createdAt, ...document } = doc.data();
+      const formattedTime = formatTime(new Date(createdAt));
+      userList.push({ id: doc.id, createdAt: formattedTime, ...document });
     });
 
     return [userList, null];
   } catch (error) {
+    console.error(error);
     return [null, error];
   }
 };

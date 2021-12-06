@@ -1,7 +1,12 @@
+import theme from '../../../utils/theme';
+
 const { StyleSheet } = require('react-native');
 
 export const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: theme.spacing(0.4),
+    width: '100%',
+  },
+  contentContainer: {
+    paddingHorizontal: 'auto',
   },
 });

@@ -6,6 +6,7 @@ import { AxiosExpoInstance } from '../../utils/AxiosExpoInstance';
 import { useAuth } from '../auth';
 import { getUserNotificationByUserId } from '../../db/queries/user/notifications';
 import { addNewNotification } from '../../db/queries/user/notifications';
+import { NotificationTypes } from '../../db/models/notification';
 
 const NotificationsAccessContext = createContext();
 
@@ -113,7 +114,7 @@ export const useProvideNotificationsAccess = () => {
       to: targetDevices,
       data: {
         id: uuid(),
-        type: type,
+        type: NotificationTypes.vlam.LIKE,
         ownerId: ownerId,
         targetId: targetUserId,
         seen: false,
@@ -136,7 +137,7 @@ export const useProvideNotificationsAccess = () => {
       to: targetDevices,
       data: {
         id: uuid(),
-        type: type,
+        type: NotificationTypes.connection.follow,
         ownerId: ownerId,
         targetId: targetUserId,
         seen: false,

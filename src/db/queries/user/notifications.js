@@ -9,6 +9,7 @@ import {
   collectionGroup,
   Timestamp,
 } from 'firebase/firestore';
+import { findUsersFromUserIdList } from '.';
 import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
 import { Notification } from '../../models/notification';
@@ -39,15 +40,36 @@ export const getUserNotificationByUserId = async (currentUserId) => {
     const docQueryRef = query(userConnectionsRef, where('data.targetId', '==', currentUserId));
 
     let userNotifications = [];
+    const usersAccountIdList = [];
     const querySnapshot = await getDocs(docQueryRef);
 
     querySnapshot.forEach((doc) => {
-      const { createdAt, ...document } = doc.data();
+      const { data, ...document } = doc.data();
 
-      userNotifications.push({ id: doc.id, ...document, createdAt });
+      userNotifications.push({
+        id: doc.id,
+        ...document,
+        data: {
+          ...data,
+          createdAt: formatTime(
+            new Timestamp(data.createdAt.seconds, data.createdAt.nanoseconds).toDate()
+          ),
+        },
+      });
+
+      usersAccountIdList.find((id) => data.ownerId === id) || usersAccountIdList.push(data.ownerId);
     });
 
-    return [userNotifications, null];
+    const [accounts, accountListError] = await findUsersFromUserIdList(usersAccountIdList);
+
+    const fullList = userNotifications.map((singleNotification) => {
+      return {
+        ...singleNotification,
+        __fullAccount: accounts.find((user) => user.id === singleNotification.data.ownerId),
+      };
+    });
+
+    return [fullList, null];
   } catch (error) {
     console.log(error);
     return [false, error];
