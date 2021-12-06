@@ -1,10 +1,11 @@
 import React, { useContext, createContext, useState, useEffect, useRef } from 'react';
 
 import * as Notifications from 'expo-notifications';
-
+import { v4 as uuid } from 'uuid';
 import { AxiosExpoInstance } from '../../utils/AxiosExpoInstance';
 import { useAuth } from '../auth';
 import { getUserNotificationByUserId } from '../../db/queries/user/notifications';
+import { addNewNotification } from '../../db/queries/user/notifications';
 
 const NotificationsAccessContext = createContext();
 
@@ -30,23 +31,28 @@ export const useProvideNotificationsAccess = () => {
 
   useEffect(async () => {
     if (user) {
+      let notificationsList = [];
       const [userNotifications, notificationError] = await getUserNotificationByUserId(user.id);
 
-      notificationError && console.log('notificationError: ', notificationError);
+      console.log(notificationError);
+      if (userNotifications) {
+        notificationsList = userNotifications.filter((item) => item.data.seen === false);
+      }
 
       // This listener is fired whenever a notification is received while the app is foregrounded
       notificationListener.current = Notifications.addNotificationReceivedListener(
         (notification) => {
-          setNotification(notification);
+          const { body, data, sound, subtitle, title } = notification.request.content;
+          notificationsList.push({ body, data, sound, subtitle, title });
         }
       );
-
-      // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-      responseListener.current = Notifications.addNotificationResponseReceivedListener(
-        (response) => {
-          console.log('New notification response: ', response);
-        }
-      );
+      setNotification(notificationsList);
+      // // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+      // responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      //   (response) => {
+      //     // console.log('New notification response: ', response);
+      //   }
+      // );
 
       return () => {
         Notifications.removeNotificationSubscription(notificationListener.current);
@@ -72,9 +78,78 @@ export const useProvideNotificationsAccess = () => {
     return expoResp.data;
   };
 
+  const dbQueryWithNotification = async (
+    query,
+    onSuccessAction,
+    onErrorAction,
+    notificationProps
+  ) => {
+    const [queryResult, queryError] = query;
+
+    if (queryResult) {
+      onSuccessAction(queryResult);
+
+      const [isAdded, notificationError] = await addNewNotification(
+        notificationProps.data.targetId,
+        notificationProps
+      );
+      await sendPushNotification(notificationProps.to, notificationProps);
+    } else {
+      onErrorAction(queryError);
+    }
+  };
+
+  const getVlamNotificationStarter = (
+    currentUserFirstName,
+    type,
+    targetDevices,
+    ownerId,
+    targetUserId
+  ) => {
+    return {
+      title: 'Vlam notifications',
+      sound: 'default',
+      body: `${currentUserFirstName} liked you vlam post.`,
+      to: targetDevices,
+      data: {
+        id: uuid(),
+        type: type,
+        ownerId: ownerId,
+        targetId: targetUserId,
+        seen: false,
+        createdAt: new Date(),
+      },
+    };
+  };
+
+  const getConnectionNotificationStarter = (
+    currentUserFirstName,
+    type,
+    targetDevices,
+    ownerId,
+    targetUserId
+  ) => {
+    return {
+      title: 'Connection notifications',
+      sound: 'default',
+      body: `${currentUserFirstName} wants to connect with you.`,
+      to: targetDevices,
+      data: {
+        id: uuid(),
+        type: type,
+        ownerId: ownerId,
+        targetId: targetUserId,
+        seen: false,
+        createdAt: new Date(),
+      },
+    };
+  };
   return {
     expoPushToken,
     notification,
     sendPushNotification,
+    dbQueryWithNotification,
+    getVlamNotificationStarter,
+    getConnectionNotificationStarter,
   };
 };

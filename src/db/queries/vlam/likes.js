@@ -15,12 +15,9 @@ import {
   arrayRemove,
 } from 'firebase/firestore';
 import { getVlamById } from '.';
-import { useProvideNotificationsAccess } from '../../../services/notification';
 import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
-import { NotificationTypes } from '../../models/notification';
 import { VlamLike } from '../../models/VlamLike';
-import { addNewNotification } from '../user/notifications';
 
 export const getVlamLikesByUserId = async (userId) => {
   const db = getFirestore(firebaseApp);
@@ -45,7 +42,7 @@ export const getVlamLikesByUserId = async (userId) => {
   }
 };
 
-export const likeVlamPost = async (currentUser, targetUser, vlamPostId, notification) => {
+export const likeVlamPost = async (currentUser, targetUser, vlamPostId) => {
   const db = getFirestore(firebaseApp);
   const vlamLikeRef = doc(db, 'vlams', vlamPostId, 'likes', currentUser.id);
 
@@ -64,8 +61,6 @@ export const likeVlamPost = async (currentUser, targetUser, vlamPostId, notifica
         totalNumberOfLikes: increment(1),
         likeUsersIds: arrayUnion(currentUser.id),
       });
-
-      await addNewNotification(currentUser, targetUser.deviceIds, notification);
 
       return [vlamLike, null];
     } else {

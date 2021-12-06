@@ -12,28 +12,21 @@ import {
 import firebaseApp from '../../../utils/firebase';
 import { formatTime } from '../../../utils/timeManager';
 import { Notification } from '../../models/notification';
-import { UserVolt } from '../../models/UserVolt';
 
-export const addNewNotification = async (currentUser, expoPushTokens, newNotificationData) => {
+export const addNewNotification = async (targetUserId, newNotificationData) => {
   const db = getFirestore(firebaseApp);
 
   try {
-    const userVolt = await new Notification(
-      Notification.GetDefaultVlamValue({
-        to: [...expoPushTokens],
-        ownerId: currentUser.id,
-        sound: 'default',
-        title: newNotificationData.title,
-        body: newNotificationData.body,
-        data: { ...newNotificationData.data },
-      })
-    ).__validate();
+    const userNotification = await new Notification(newNotificationData).__validate();
 
-    await setDoc(doc(db, 'users', currentUser.id, 'notifications', userVolt.id), userVolt);
+    await setDoc(
+      doc(db, 'users', userNotification.data.targetId, 'notifications', userNotification.data.id),
+      userNotification
+    );
 
-    return [userVolt, null];
+    return [true, null];
   } catch (error) {
-    console.log('Notification validation error: ', error);
+    console.error('Notification error: ', error);
     return [null, error];
   }
 };
@@ -43,17 +36,15 @@ export const getUserNotificationByUserId = async (currentUserId) => {
 
   try {
     const userConnectionsRef = collectionGroup(db, 'notifications');
-    const docQueryRef = query(userConnectionsRef, where('ownerId', '==', currentUserId));
+    const docQueryRef = query(userConnectionsRef, where('data.targetId', '==', currentUserId));
 
     let userNotifications = [];
     const querySnapshot = await getDocs(docQueryRef);
 
     querySnapshot.forEach((doc) => {
       const { createdAt, ...document } = doc.data();
-      const formattedCreatedAt = formatTime(
-        new Timestamp(createdAt.seconds, createdAt.nanoseconds).toDate()
-      );
-      userNotifications.push({ id: doc.id, ...document, createdAt: formattedCreatedAt });
+
+      userNotifications.push({ id: doc.id, ...document, createdAt });
     });
 
     return [userNotifications, null];
