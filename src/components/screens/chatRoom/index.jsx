@@ -6,28 +6,32 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   FlatList,
+  Platform,
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Header from './header';
 import Footer from './footer';
 import MessageBubble from './messageBubble';
 import { useChat } from '../../../services/chat';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChatRoom = () => {
   const { params } = useRoute();
   const [message, setMessage] = useState('');
+  const [chatRoom, setChatRoom] = useState({});
   const scrollRef = useRef(null);
   const { initiateChat, messages, sendMessage } = useChat();
 
   useEffect(() => {
     const initiateChatRoom = async () => {
-      await initiateChat(params.data.receiver);
+      const chat = await initiateChat(params.data.receiver);
+      setChatRoom(chat);
     };
     initiateChatRoom();
   }, []);
 
   const onSend = () => {
-    sendMessage(message, params.data);
+    sendMessage(message, { ...params.data, ...chatRoom });
     setMessage('');
   };
 
@@ -36,8 +40,12 @@ const ChatRoom = () => {
   };
 
   return (
-    <View style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled
+    >
+      <SafeAreaView style={styles.container}>
         <View style={styles.container}>
           <Header data={params.data.receiver} />
           <View style={styles.conversation}>
@@ -54,8 +62,8 @@ const ChatRoom = () => {
           </View>
           <Footer message={message} onSend={onSend} onTyping={onTyping} />
         </View>
-      </KeyboardAvoidingView>
-    </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

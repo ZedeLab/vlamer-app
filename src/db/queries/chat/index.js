@@ -57,9 +57,9 @@ export const initiateChat = async (currentUser, account) => {
     if (hasPreviousChats) {
       messages = await fetchMessages(chat.id);
       await makeLastMessageSeen(currentUser, chat);
-      return { data: { isFirstTime: false, messages }, error: null };
+      return { data: { isFirstTime: false, messages, chat }, error: null };
     } else {
-      return { data: { isFirstTime: true, messages }, error: null };
+      return { data: { isFirstTime: true, messages, chat }, error: null };
     }
   } catch (error) {
     return { data: null, error };
@@ -134,7 +134,8 @@ export const sendMessage = async (user, message, chatData) => {
       chatRoom = await createChatRoom(user, messageData, chatData);
     }
 
-    await setDoc(doc(db, 'chats', chatRoom.id, 'messages', messageData.id), messageData);
+    const messageRef = doc(db, 'chats', chatRoom.id, 'messages', messageData.id);
+    await setDoc(messageRef, messageData);
     await updateDoc(doc(db, 'chats', chatRoom.id), {
       lastMessage: message,
       lastMessageId: messageData.id,

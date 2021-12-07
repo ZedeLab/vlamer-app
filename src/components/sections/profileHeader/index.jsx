@@ -92,7 +92,7 @@ export const AdminViewActionButtons = (props) => {
 
 export const UserViewActionButtons = (props) => {
   const { user } = useAuth();
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
   const { focusedUser } = useSelector(selectActors);
   const { sendPushNotification } = useNotificationsAccess();
   const { dbQueryWithNotification, getConnectionNotificationStarter } = useNotificationsAccess();
@@ -142,7 +142,7 @@ export const UserViewActionButtons = (props) => {
           <SecondaryButton
             outlined
             style={styles.editButton}
-            onPress={() => navigation.navigate('Chat Room', { data: { receiver: focusedUser } })}
+            onPress={() => navigate('Chat Room', { data: { receiver: focusedUser } })}
           >
             Message
           </SecondaryButton>
