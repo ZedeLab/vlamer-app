@@ -94,6 +94,7 @@ export const UserViewActionButtons = (props) => {
   const { user } = useAuth();
   const { focusedUser } = useSelector(selectActors);
   const { sendPushNotification } = useNotificationsAccess();
+  const { dbQueryWithNotification, getConnectionNotificationStarter } = useNotificationsAccess();
   const { isUserConnected, hasUserPendingUserConnection, isUserFollowing, isFollowingUser } =
     useUserConnections();
 
@@ -101,21 +102,18 @@ export const UserViewActionButtons = (props) => {
     if (hasUserPendingUserConnection(focusedUser.id)) {
       unsubscribeHandler();
     } else {
-      const [reqSuccessful, reqError] = await sendConnectionRequest(user, focusedUser);
-      const notification = await new Notification(
-        Notification.GetDefaultVlamValue({
-          title: 'Connection notification',
-          body: `${user.firstName} wants to connect with you`,
-          to: focusedUser.deviceIds,
-          ownerId: user.id,
-          data: {
-            type: NotificationTypes.connection.follow,
-          },
-        })
-      ).__validate();
-
-      const isSent = await sendPushNotification(focusedUser.deviceIds, notification);
-      reqError && console.log(reqError);
+      await dbQueryWithNotification(
+        await sendConnectionRequest(user, focusedUser),
+        (data) => console.log('success : '),
+        (error) => console.log('failed: '),
+        getConnectionNotificationStarter(
+          user.firstName,
+          NotificationTypes.vlam.LIKE,
+          focusedUser.deviceIds,
+          user.id,
+          focusedUser.id
+        )
+      );
     }
   };
 

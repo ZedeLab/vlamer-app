@@ -12,6 +12,7 @@ export const SuccessButton = ({ style, outlined, children, ...restProps }) => {
       style={{
         ...defaultStyles.button,
         ...defaultStyles.SuccessButton,
+        ...style,
       }}
     >
       <Text style={{ ...defaultStyles.buttonText, ...defaultStyles.customButtonText }}>
@@ -28,6 +29,7 @@ export const DangerButton = ({ style, outlined, children, ...restProps }) => {
       style={{
         ...defaultStyles.button,
         ...defaultStyles.dangerButton,
+        ...style,
       }}
     >
       <Text style={{ ...defaultStyles.buttonText, ...defaultStyles.customButtonText }}>
