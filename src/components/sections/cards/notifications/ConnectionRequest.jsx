@@ -46,18 +46,20 @@ const ConnectionRequestNotificationCard = (props) => {
 
   return (
     <View style={styles.container}>
-      <Avatar.Image size={44} source={{ uri: avatar }} />
-      <View style={styles.userInfoContainer}>
-        <TouchableWithoutFeedback onPress={goToProfileHandler}>
-          <View>
-            <Text style={{ ...styles.text, ...styles.title }}>{firstName + ' ' + lastName}</Text>
-            <Text style={styles.highlight}>
-              {'@'}
-              {username}
-            </Text>
-            <Text style={styles.greyText}>Sent {createdAt}</Text>
-          </View>
-        </TouchableWithoutFeedback>
+      <View style={styles.rowContainer}>
+        <Avatar.Image size={44} source={{ uri: avatar }} />
+        <View style={styles.userInfoContainer}>
+          <TouchableWithoutFeedback onPress={goToProfileHandler}>
+            <View>
+              <Text style={{ ...styles.text, ...styles.title }}>{firstName + ' ' + lastName}</Text>
+              <Text style={styles.highlight}>
+                {'@'}
+                {username}
+              </Text>
+              <Text style={styles.greyText}>Sent {createdAt}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
 
       <View style={styles.contentContainer}>

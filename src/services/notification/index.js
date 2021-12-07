@@ -4,9 +4,15 @@ import * as Notifications from 'expo-notifications';
 import { v4 as uuid } from 'uuid';
 import { AxiosExpoInstance } from '../../utils/AxiosExpoInstance';
 import { useAuth } from '../auth';
-import { getUserNotificationByUserId } from '../../db/queries/user/notifications';
+import {
+  getUserNotificationByUserId,
+  onUserNotificationChangeSnapshot,
+} from '../../db/queries/user/notifications';
 import { addNewNotification } from '../../db/queries/user/notifications';
 import { NotificationTypes } from '../../db/models/notification';
+import { Timestamp } from '@firebase/firestore';
+import { formatTime } from '../../utils/timeManager';
+import { findUsersFromUserIdList } from '../../db/queries/user';
 
 const NotificationsAccessContext = createContext();
 
@@ -28,38 +34,52 @@ export const useProvideNotificationsAccess = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  const [notification, setNotification] = useState(false);
+  const [notification, setNotification] = useState([]);
 
   useEffect(async () => {
+    let unsubscribe;
     if (user) {
       let notificationsList = [];
-      const [userNotifications, notificationError] = await getUserNotificationByUserId(user.id);
+      const [{ eventHandler, docRef }, _] = await onUserNotificationChangeSnapshot(user.id);
 
-      console.log(notificationError);
-      if (userNotifications) {
-        notificationsList = userNotifications.filter((item) => item.data.seen === false);
-      }
+      unsubscribe = eventHandler(docRef, async (querySnapshot) => {
+        let userNotifications = [];
+        const usersAccountIdList = [];
 
-      // This listener is fired whenever a notification is received while the app is foregrounded
-      notificationListener.current = Notifications.addNotificationReceivedListener(
-        (notification) => {
-          const { body, data, sound, subtitle, title } = notification.request.content;
-          notificationsList.push({ body, data, sound, subtitle, title });
-        }
-      );
-      setNotification(notificationsList);
-      // // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-      // responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      //   (response) => {
-      //     // console.log('New notification response: ', response);
-      //   }
-      // );
+        querySnapshot.forEach((doc) => {
+          const { data, ...document } = doc.data();
 
-      return () => {
-        Notifications.removeNotificationSubscription(notificationListener.current);
-        Notifications.removeNotificationSubscription(responseListener.current);
-      };
+          userNotifications.push({
+            id: doc.id,
+            ...document,
+            data: {
+              ...data,
+              createdAt: formatTime(
+                new Timestamp(data.createdAt.seconds, data.createdAt.nanoseconds).toDate()
+              ),
+            },
+          });
+
+          usersAccountIdList.find((id) => data.ownerId === id) ||
+            usersAccountIdList.push(data.ownerId);
+        });
+
+        const [accounts, accountListError] = await findUsersFromUserIdList(usersAccountIdList);
+
+        const fullList = userNotifications.map((singleNotification) => {
+          return {
+            ...singleNotification,
+            __fullAccount: accounts.find((user) => user.id === singleNotification.data.ownerId),
+          };
+        });
+
+        setNotification(fullList);
+      });
     }
+    return () => {
+      unsubscribe();
+      setNotification([]);
+    };
   }, [user]);
 
   // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.dev/notifications

@@ -2,7 +2,7 @@ import {
   doc,
   getDocs,
   setDoc,
-  collection,
+  onSnapshot,
   getFirestore,
   query,
   where,
@@ -73,5 +73,22 @@ export const getUserNotificationByUserId = async (currentUserId) => {
   } catch (error) {
     console.log(error);
     return [false, error];
+  }
+};
+
+export const onUserNotificationChangeSnapshot = async (currentUserId) => {
+  const db = getFirestore(firebaseApp);
+  const userConnectionsRef = collectionGroup(db, 'notifications');
+  const docQueryRef = query(userConnectionsRef, where('data.targetId', '==', currentUserId));
+
+  const snapShotObj = {
+    docRef: docQueryRef,
+    eventHandler: onSnapshot,
+  };
+  try {
+    return [snapShotObj, null];
+  } catch (error) {
+    console.log(error);
+    return [null, error];
   }
 };

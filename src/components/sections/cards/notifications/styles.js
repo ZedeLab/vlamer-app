@@ -46,13 +46,13 @@ export const styles = StyleSheet.create({
 
   contentContainer: {
     alignItems: 'flex-end',
-    flexWrap: 'wrap',
+    maxWidth: theme.spacing(13),
   },
 
   message: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: theme.spacing(0.3),
-    marginVertical: theme.spacing(0.3),
+    // alignSelf: 'flex-start',
+    // paddingHorizontal: theme.spacing(0.3),
+    // marginVertical: theme.spacing(0.3),
   },
   button: {
     width: theme.spacing(5),
