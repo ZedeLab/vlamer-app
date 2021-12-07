@@ -8,12 +8,14 @@ export const styles = StyleSheet.create({
   },
 
   header: {
+    height: 80,
+    marginTop: -30,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingTop: '13%',
+    paddingTop: '10%',
     paddingBottom: '3%',
     paddingHorizontal: '3%',
     ...theme.shadows[1],

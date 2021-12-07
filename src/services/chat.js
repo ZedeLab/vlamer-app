@@ -16,6 +16,7 @@ const ChatContext = React.createContext();
 
 export const ChatProvider = ({ children }) => {
   const { user } = useAuth();
+  const [currentChatRoom, setCurrentChatRoom] = useState(null);
   // messages of the currently opened chat room
   const [messages, setMessages] = useState([]);
   const [isFirstTime, setIsFirstTime] = useState(false);
@@ -97,6 +98,7 @@ export const ChatProvider = ({ children }) => {
     if (data) {
       setIsFirstTime(data.isFirstTime);
       setMessages(data.messages);
+      return data.chat;
     } else {
       dispatch(
         notifyError({
