@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, TouchableHighlight, Text, View } from 'react-native';
+import { StyleSheet, TouchableHighlight, Text, View, Image } from 'react-native';
 import { Button } from 'react-native-paper';
 import theme from '../../../utils/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { styles as defaultStyles } from './styles';
+import GoogleIcon from '../../../../assets/svgs/google.png';
 
 export const SuccessButton = ({ style, outlined, children, ...restProps }) => {
   return (
@@ -110,7 +111,8 @@ export const GoogleLoginButton = ({ style, ...restProps }) => {
       style={{ ...style, ...defaultStyles.button, ...defaultStyles.google }}
     >
       <View style={defaultStyles.buttonContent}>
-        <Ionicons size={20} style={defaultStyles.icon_dark} name="logo-google" />
+        {/* <Ionicons size={20} style={defaultStyles.icon_dark} name="logo-google" /> */}
+        <Image style={defaultStyles.icon_img} source={GoogleIcon} />
         <Text style={defaultStyles.buttonText_dark}>Login with Google</Text>
       </View>
     </TouchableHighlight>

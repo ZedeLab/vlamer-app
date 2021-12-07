@@ -4,8 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SettingsScreen, ChatList, ProfileScreen } from '../../components/screens';
 
 import Header from '../../components/sections/header';
-import { UserProfileScreen } from '../../components/screens';
-import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import ChatRoom from '../../components/screens/chatRoom';
 
 const SettingsStack = createStackNavigator();

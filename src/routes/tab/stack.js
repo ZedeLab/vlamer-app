@@ -11,8 +11,6 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import theme from '../../utils/theme';
 import { AvatarIcon, TabBarIcon, TabBarNotificationIcon } from '../../components/common/icons';
-import { UserProfileScreen } from '../../components/screens';
-import ProfileViewHeader from '../../components/sections/profileViewHeader';
 import { useAuth } from '../../services/auth';
 
 const TabStack = createMaterialBottomTabNavigator();

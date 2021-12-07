@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   buttonContent: {
     alignSelf: 'center',
     flexDirection: 'row',
-    paddingVertical: theme.spacing(0.3),
+    paddingVertical: theme.spacing(0.4),
   },
   facebook: {
     backgroundColor: '#4267b2',
@@ -53,13 +53,20 @@ export const styles = StyleSheet.create({
     letterSpacing: 2,
     alignSelf: 'center',
     textTransform: 'capitalize',
-    // paddingHorizontal: theme.spacing(1),
+    paddingHorizontal: theme.spacing(1),
   },
   icon: {
     color: theme.colors.textSecondary,
   },
   icon_dark: {
     color: theme.colors.textPrimary,
+  },
+
+  icon_img: {
+    width: theme.spacing(1.1),
+    height: theme.spacing(1),
+    marginBottom: theme.spacing(0.2),
+    alignSelf: 'center',
   },
 
   outlinedPrimary: {
@@ -97,5 +104,10 @@ export const styles = StyleSheet.create({
 
   SuccessButton: {
     backgroundColor: theme.colors.success,
+  },
+
+  googleIcon: {
+    width: 20,
+    height: 20,
   },
 });

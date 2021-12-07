@@ -10,7 +10,7 @@ export const fieldNames = {
 };
 
 export const initialValues = {
-  [fieldNames.winningPrice]: 10,
+  [fieldNames.winningPrice]: 0,
   [fieldNames.participatingPrice]: 0,
   [fieldNames.profitMargin]: 100,
 
@@ -21,13 +21,17 @@ export const initialValues = {
 
 export const validationSchema = (voltCapacity) =>
   object({
-    [fieldNames.winningPrice]: number()
+    [fieldNames.winningPrice]: number(`${fieldNames.winningPrice} must be a number`)
       .required()
+      .min(10)
       .max(voltCapacity, `You only have ${voltCapacity} coins in your account`),
-    [fieldNames.participatingPrice]: number()
+    [fieldNames.participatingPrice]: number(`${fieldNames.participatingPrice} must be a number`)
       .required()
+      .min(3)
       .max(voltCapacity, `You only have ${voltCapacity} coins in your account`),
-    [fieldNames.profitMargin]: number().required().min(100),
+    [fieldNames.profitMargin]: number(`${fieldNames.profitMargin} must be a number`)
+      .required()
+      .min(100),
 
     [fieldNames.category]: string().min(6),
     // [fieldNames.tags]: array().of(string().oneOf(['chill', 'relax', 'lotto', 'fund'])),
