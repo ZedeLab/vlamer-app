@@ -34,7 +34,8 @@ const VlamPostCard = (props) => {
   const { user, expoPushToken } = useAuth();
   const dispatch = useDispatch();
   const { isVlamLiked } = useLikesAccess();
-  const { sendPushNotification } = useNotificationsAccess();
+  const { sendPushNotification, dbQueryWithNotification, getVlamNotificationStarter } =
+    useNotificationsAccess();
 
   const goToProfileHandler = async () => {
     const [focusedUser, focusedUserError] = await getUserById(authorAccount.id);
@@ -58,21 +59,18 @@ const VlamPostCard = (props) => {
     if (isVlamLiked(likeIds)) {
       const [reqSuccessful, reqError] = await unlikeVlamPost(user, focusedUser, id);
     } else {
-      const notification = await new Notification(
-        Notification.GetDefaultVlamValue({
-          title: 'Vlam notifications',
-          body: `${user.firstName} liked you vlam post.`,
-          to: focusedUser.deviceIds,
-          ownerId: user.id,
-          data: {
-            type: NotificationTypes.vlam.LIKE,
-          },
-        })
-      ).__validate();
-
-      const [reqSuccessful, reqError] = await likeVlamPost(user, focusedUser, id, notification);
-
-      const isSent = await sendPushNotification(focusedUser.deviceIds, notification);
+      await dbQueryWithNotification(
+        await likeVlamPost(user, focusedUser, id),
+        (data) => console.log('success : '),
+        (error) => console.log('failed: '),
+        getVlamNotificationStarter(
+          user.firstName,
+          NotificationTypes.vlam.LIKE,
+          focusedUser.deviceIds,
+          user.id,
+          focusedUser.id
+        )
+      );
     }
   };
 

@@ -46,6 +46,7 @@ export const ProfileStackScreen = ({ route, navigation }) => {
     <ProfileStack.Navigator
       screenOptions={{
         headerShown: false,
+        headerStatusBarHeight: 0,
       }}
     >
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />

@@ -3,7 +3,7 @@ import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: theme.spacing(0.4),
+    paddingVertical: theme.spacing(0.4),
   },
   container: {
     flex: 1,
@@ -27,17 +27,5 @@ export const styles = StyleSheet.create({
   },
   firstName: {
     fontSize: 32,
-  },
-
-  loaderContainer: {
-    width: '100%',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-
-  iconBig: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-    backgroundColor: 'transparent',
   },
 });

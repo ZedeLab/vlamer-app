@@ -4,13 +4,12 @@ import theme from '../../../utils/theme';
 export const styles = StyleSheet.create({
   button: {
     justifyContent: 'space-around',
-    elevation: 1,
+    // elevation: 1,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    margin: theme.spacing(0.5),
     borderRadius: theme.spacing(1),
-    margin: theme.spacing(1),
-    borderRadius: theme.spacing(1),
-    paddingVertical: theme.spacing(0.3),
+    paddingVertical: theme.spacing(0.4),
   },
   buttonContent: {
     alignSelf: 'center',
@@ -30,7 +29,7 @@ export const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,
-    paddingVertical: theme.spacing(0.8),
+    // paddingVertical: theme.spacing(0.8),
     ...theme.shadows[4],
   },
   secondaryButton: {
@@ -40,7 +39,7 @@ export const styles = StyleSheet.create({
 
   buttonText: {
     fontFamily: 'openSans-bold',
-    fontSize: theme.spacing(0.8),
+    fontSize: theme.spacing(0.7),
     color: theme.colors.textSecondary,
     letterSpacing: 2,
     alignSelf: 'center',
