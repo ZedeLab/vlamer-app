@@ -22,8 +22,8 @@ export const ServicesProviderWrapper = (props) => {
         <PageProvider theme={theme}>
           <AuthProvider>
             <NotificationsAccessProvider>
-              <UserConnectionProvider>
-                <ChatProvider>
+              <ChatProvider>
+                <UserConnectionProvider>
                   <VoltAccessProvider>
                     <FeedsVlamListProvider>
                       <CurrentUserVlamListProvider>
@@ -31,8 +31,8 @@ export const ServicesProviderWrapper = (props) => {
                       </CurrentUserVlamListProvider>
                     </FeedsVlamListProvider>
                   </VoltAccessProvider>
-                </ChatProvider>
-              </UserConnectionProvider>
+                </UserConnectionProvider>
+              </ChatProvider>
             </NotificationsAccessProvider>
           </AuthProvider>
         </PageProvider>
