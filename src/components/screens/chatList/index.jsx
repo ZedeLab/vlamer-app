@@ -11,14 +11,14 @@ export default () => {
   const [showSearch, toggleSearch] = useState(false);
   const { chats, fetchChats } = useChat();
 
-  useEffect(() => {
-    const getAllChats = async () => {
-      if (!chats.length) {
-        await fetchChats();
-      }
-    };
-    getAllChats();
-  }, []);
+  // useEffect(() => {
+  //   const getAllChats = async () => {
+  //     if (!chats.length) {
+  //       await fetchChats();
+  //     }
+  //   };
+  //   getAllChats();
+  // }, []);
 
   return (
     <View style={styles.container}>
