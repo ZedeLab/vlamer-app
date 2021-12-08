@@ -12,16 +12,16 @@ export const FullscreenAux = (props) => {
           backgroundColor={theme.colors.background}
           barStyle="dark-content"
         />
+        <View style={styles.container}>{children}</View>
       </SafeAreaView>
-      <View style={styles.container}>{children}</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignSelf: 'stretch',
+    width: '100%',
+    minHeight: '100%',
     justifyContent: 'center',
     backgroundColor: theme.colors.background,
   },

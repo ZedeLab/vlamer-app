@@ -4,18 +4,17 @@ import theme from '../../../utils/theme';
 export const styles = StyleSheet.create({
   button: {
     justifyContent: 'space-around',
-    elevation: 1,
+    // elevation: 1,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    margin: theme.spacing(0.5),
     borderRadius: theme.spacing(1),
-    margin: theme.spacing(1),
-    borderRadius: theme.spacing(1),
-    paddingVertical: theme.spacing(0.3),
+    paddingVertical: theme.spacing(0.4),
   },
   buttonContent: {
     alignSelf: 'center',
     flexDirection: 'row',
-    paddingVertical: theme.spacing(0.3),
+    paddingVertical: theme.spacing(0.4),
   },
   facebook: {
     backgroundColor: '#4267b2',
@@ -30,7 +29,7 @@ export const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,
-    paddingVertical: theme.spacing(0.8),
+    // paddingVertical: theme.spacing(0.8),
     ...theme.shadows[4],
   },
   secondaryButton: {
@@ -40,7 +39,7 @@ export const styles = StyleSheet.create({
 
   buttonText: {
     fontFamily: 'openSans-bold',
-    fontSize: theme.spacing(0.8),
+    fontSize: theme.spacing(0.7),
     color: theme.colors.textSecondary,
     letterSpacing: 2,
     alignSelf: 'center',
@@ -54,13 +53,20 @@ export const styles = StyleSheet.create({
     letterSpacing: 2,
     alignSelf: 'center',
     textTransform: 'capitalize',
-    // paddingHorizontal: theme.spacing(1),
+    paddingHorizontal: theme.spacing(1),
   },
   icon: {
     color: theme.colors.textSecondary,
   },
   icon_dark: {
     color: theme.colors.textPrimary,
+  },
+
+  icon_img: {
+    width: theme.spacing(1.1),
+    height: theme.spacing(1),
+    marginBottom: theme.spacing(0.2),
+    alignSelf: 'center',
   },
 
   outlinedPrimary: {
@@ -98,5 +104,10 @@ export const styles = StyleSheet.create({
 
   SuccessButton: {
     backgroundColor: theme.colors.success,
+  },
+
+  googleIcon: {
+    width: 20,
+    height: 20,
   },
 });

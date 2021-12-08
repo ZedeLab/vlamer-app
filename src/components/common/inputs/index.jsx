@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
-  TextInput,
   TouchableWithoutFeedback,
   View,
   Keyboard,
@@ -11,22 +10,34 @@ import {
 } from 'react-native';
 import { styles as defaultStyles } from './styles';
 import theme from '../../../utils/theme';
+import { TextInput } from 'react-native-paper';
+import { useField } from 'formik';
 
 export const InputText = (props) => {
-  const { style, label, children, ...restProps } = props;
+  const { style, label, error, errorText, ...restProps } = props;
+  const [pureFields, meta, helpers] = useField(props);
+  const { onBlur, onChange, value, ...field } = pureFields;
+
+  const changeHandler = (newValue) => {
+    helpers.setValue(newValue + '');
+    !meta.touched && helpers.setTouched(true);
+  };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={defaultStyles.container}>
-        <Text style={defaultStyles.label}> {label} </Text>
+    <TouchableWithoutFeedback style={defaultStyles.container} onPress={Keyboard.dismiss}>
+      <View>
         <TextInput
-          keyboardType="ascii-capable"
+          dense
+          {...field}
+          value={value + ''}
+          onChangeText={changeHandler}
+          error={meta.error && meta.touched}
+          activeUnderlineColor={theme.colors.accent}
+          label={label}
           {...restProps}
-          underlineColorAndroid="transparent"
           style={{ ...defaultStyles.textInput, ...style }}
-        >
-          {children}
-        </TextInput>
+        />
+        {meta.error && meta.touched && <Text style={defaultStyles.errorText}> {meta.error} </Text>}
       </View>
     </TouchableWithoutFeedback>
   );

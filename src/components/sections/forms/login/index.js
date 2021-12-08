@@ -14,19 +14,19 @@ import { useNavigation } from '@react-navigation/core';
 import { notifyLoadingFinish, notifyLoadingStart } from '../../../../store/loading';
 
 export const LogInForm = (props) => {
-  const errors = useSelector(selectError);
+  const netError = useSelector(selectError);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { signInWithFacebook, signInWithEmail, signInWithGoogle } = useAuth();
 
   // Close error message after 5 sec of showing (if available)
   useEffect(() => {
-    if (errors.type !== null) {
+    if (netError.type !== null) {
       setTimeout(() => {
         dispatch(notifyErrorResolved());
       }, 5000);
     }
-  }, [errors]);
+  }, [netError]);
 
   const googleAuthHandler = async () => {
     dispatch(notifyLoadingStart({ type: 'auth' }));
@@ -58,53 +58,50 @@ export const LogInForm = (props) => {
 
   return (
     <Surface style={styles.container}>
-      {errors?.type !== null && <Text style={styles.errorText}> {errors.message} </Text>}
-      <FacebookLoginButton style={styles.item} onPress={facebookAuthHandler}></FacebookLoginButton>
-      <GoogleLoginButton style={styles.item} onPress={googleAuthHandler}>
-        Login with Google
-      </GoogleLoginButton>
-      <View style={styles.dividersContainer}>
-        <Divider style={styles.divider} />
-        <Text> Or </Text>
-        <Divider style={styles.divider} />
-      </View>
-
       <Formik
         initialValues={formikHelpers.initialValues}
         onSubmit={onSubmitHandler}
         validationSchema={formikHelpers.validationSchema}
       >
-        {({ handleChange, values, handleSubmit, errors }) => (
-          <View>
-            {errors[formikHelpers.fieldNames.email] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.email]}</Text>
-            )}
+        {({ handleChange, values, handleSubmit, errors, touched }) => (
+          <View style={styles.formContentContainer}>
+            {netError && <Text style={styles.errorText}> {netError.message} </Text>}
             <InputText
+              name={formikHelpers.fieldNames.email}
               label={formikHelpers.fieldNames.email}
               placeholder="jone@doe.com"
-              onChangeText={handleChange(formikHelpers.fieldNames.email)}
-              value={values[formikHelpers.fieldNames.email]}
             />
-            {errors[formikHelpers.fieldNames.password] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.password]}</Text>
-            )}
+
             <InputText
+              name={formikHelpers.fieldNames.password}
               label={formikHelpers.fieldNames.password}
               placeholder="min 6 characters"
               secureTextEntry={true}
-              onChangeText={handleChange(formikHelpers.fieldNames.password)}
-              value={values[formikHelpers.fieldNames.password]}
             />
 
-            <PrimaryButton icon="account" style={styles.item} onPress={handleSubmit}>
+            <PrimaryButton icon="account" style={styles.submitButton} onPress={handleSubmit}>
               Login
             </PrimaryButton>
             <View style={styles.footer}>
-              <Text>Dont have an account </Text>
+              <Text>Don't have an account </Text>
               <Text style={styles.link} onPress={() => navigation.navigate('Register')}>
                 Register
               </Text>
             </View>
+
+            <View style={styles.dividersContainer}>
+              <Divider style={styles.divider} />
+              <Text> Or </Text>
+              <Divider style={styles.divider} />
+            </View>
+            {errors?.type !== null && <Text style={styles.errorText}> {errors.message} </Text>}
+            <FacebookLoginButton
+              style={styles.button}
+              onPress={facebookAuthHandler}
+            ></FacebookLoginButton>
+            <GoogleLoginButton style={styles.button} onPress={googleAuthHandler}>
+              Login with Google
+            </GoogleLoginButton>
           </View>
         )}
       </Formik>
@@ -115,16 +112,20 @@ export const LogInForm = (props) => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: theme.spacing(1),
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
   },
-  item: {
-    width: theme.spacing(22),
+  submitButton: {
+    paddingVertical: theme.spacing(0.8),
+  },
+  button: {
+    width: '90%',
   },
   dividersContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+    marginVertical: theme.spacing(1),
   },
   divider: {
     width: '35%',
@@ -137,10 +138,17 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignSelf: 'center',
+    marginTop: theme.spacing(1),
   },
   errorText: {
     fontSize: theme.spacing(0.8),
     color: theme.colors.error,
     alignSelf: 'center',
+  },
+  formContentContainer: {
+    flexDirection: 'column',
+    width: '100%',
+    paddingHorizontal: theme.spacing(1),
+    height: '200%',
   },
 });

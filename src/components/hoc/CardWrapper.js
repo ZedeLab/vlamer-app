@@ -17,9 +17,8 @@ export default CardWrapper;
 const styles = StyleSheet.create({
   container: {
     ...theme.shadows[1],
+    margin: theme.spacing(0.4),
     borderRadius: theme.shapes.borderRadios,
-    marginBottom: theme.spacing(0.8),
     backgroundColor: theme.colors.common,
-    width: '97%',
   },
 });

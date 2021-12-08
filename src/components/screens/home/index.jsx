@@ -46,13 +46,12 @@ export default Home = () => {
 
   return (
     <PageAux noGutter>
-      <CompleteRegistrationBanner />
       <FlatList
         data={actors.currentUserFeedList}
         renderItem={renderVlams}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        style={styles.wrapper}
+        contentContainerStyle={styles.wrapper}
         // onEndReachedThreshold={0.2}
         // onEndReached={(event) => setLoadMoreVlams(true)}
       />

@@ -44,21 +44,6 @@ export const RegisterForm = ({ navigation }) => {
 
   return (
     <Surface style={styles.container}>
-      {/* <FacebookLoginButton
-        style={styles.item}
-        onPress={() => console.log("Facebook login")}
-      ></FacebookLoginButton>
-      <GoogleLoginButton
-        style={styles.item}
-        onPress={() => console.log("Google login")}
-      >
-        Login with Google
-      </GoogleLoginButton>
-      <View style={styles.dividersContainer}>
-        <Divider style={styles.divider} />
-        <Text> Or </Text>
-        <Divider style={styles.divider} />
-      </View> */}
       {errors?.type !== null && <Text style={styles.errorText}> {errors.message} </Text>}
       <Formik
         initialValues={formikHelpers.initialValues}
@@ -66,61 +51,42 @@ export const RegisterForm = ({ navigation }) => {
         validationSchema={formikHelpers.validationSchema}
       >
         {({ handleChange, values, handleSubmit, errors }) => (
-          <View>
-            {errors[formikHelpers.fieldNames.firstName] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.firstName]}</Text>
-            )}
+          <View style={styles.formContentContainer}>
             <InputText
+              name={formikHelpers.fieldNames.firstName}
               label={formikHelpers.fieldNames.firstName}
               placeholder="Jon"
               autoComplete="name"
-              onChangeText={handleChange(formikHelpers.fieldNames.firstName)}
-              value={values[formikHelpers.fieldNames.firstName]}
             />
-            {errors[formikHelpers.fieldNames.lastName] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.lastName]}</Text>
-            )}
+
             <InputText
+              name={formikHelpers.fieldNames.lastName}
               label={formikHelpers.fieldNames.lastName}
               placeholder="Doe"
               autoComplete="name"
-              onChangeText={handleChange(formikHelpers.fieldNames.lastName)}
-              value={values[formikHelpers.fieldNames.lastName]}
             />
-            {errors[formikHelpers.fieldNames.email] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.email]}</Text>
-            )}
+
             <InputText
+              name={formikHelpers.fieldNames.email}
               label={formikHelpers.fieldNames.email}
               placeholder="jon@doe.com"
               autoComplete="email"
-              onChangeText={handleChange(formikHelpers.fieldNames.email)}
-              value={values[formikHelpers.fieldNames.email]}
             />
 
-            {errors[formikHelpers.fieldNames.password] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.password]}</Text>
-            )}
             <InputText
+              name={formikHelpers.fieldNames.password}
               label={formikHelpers.fieldNames.password}
               placeholder="min 6 character"
               secureTextEntry={true}
-              onChangeText={handleChange(formikHelpers.fieldNames.password)}
-              value={values[formikHelpers.fieldNames.password]}
             />
-            {errors[formikHelpers.fieldNames.confirmPassword] && (
-              <Text style={styles.errorText}>
-                {errors[formikHelpers.fieldNames.confirmPassword]}
-              </Text>
-            )}
+
             <InputText
+              name={formikHelpers.fieldNames.confirmPassword}
               label={formikHelpers.fieldNames.confirmPassword}
               placeholder="min 6 characterAbel"
               secureTextEntry={true}
-              onChangeText={handleChange(formikHelpers.fieldNames.confirmPassword)}
-              value={values[formikHelpers.fieldNames.confirmPassword]}
             />
-            <PrimaryButton icon="account" style={styles.item} onPress={handleSubmit}>
+            <PrimaryButton icon="account" style={styles.submitButton} onPress={handleSubmit}>
               Register
             </PrimaryButton>
             <View style={styles.footer}>
@@ -142,8 +108,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  item: {
-    width: theme.spacing(22),
+  submitButton: {
+    paddingVertical: theme.spacing(0.8),
   },
   dividersContainer: {
     flexDirection: 'row',
@@ -161,10 +127,17 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignSelf: 'center',
+    marginTop: theme.spacing(1),
   },
   errorText: {
     fontSize: theme.spacing(0.8),
     color: theme.colors.error,
     alignSelf: 'center',
+  },
+  formContentContainer: {
+    flexDirection: 'column',
+    width: '100%',
+    paddingHorizontal: theme.spacing(1),
+    height: '200%',
   },
 });

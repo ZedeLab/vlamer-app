@@ -86,13 +86,11 @@ const useStyle = (LIST_SIZE) =>
   StyleSheet.create({
     container: {
       width: Dimensions.get('window').width,
-      minHeight: theme.spacing(LIST_SIZE) * 15.8,
+      minHeight: theme.spacing(LIST_SIZE) * 20.8,
     },
 
     scene: {
-      alignItems: 'center',
-      paddingHorizontal: theme.spacing(0.7),
-      paddingVertical: theme.spacing(0.7),
+      paddingVertical: theme.spacing(0.4),
     },
 
     tabBar: {

@@ -14,8 +14,9 @@ import {
 } from 'firebase/firestore';
 import firebaseApp from '../../../utils/firebase';
 import { ConnectionTypes, UserConnections } from '../../models/UserConnections';
-import { v4 as uuid } from 'uuid';
 import { formatTime } from '../../../utils/timeManager';
+import { NotificationTypes } from '../../models/notification';
+import { useNotificationsAccess } from '../../../services/notification';
 
 export const getUserConnections = async (id) => {
   const db = getFirestore(firebaseApp);

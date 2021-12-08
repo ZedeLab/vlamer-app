@@ -81,57 +81,35 @@ export default StartNewVlamForm = ({ navigation }) => {
               <Text> New vlam </Text>
               <Divider style={styles.divider} />
             </View>
+            <View style={styles.formContentContainer}>
+              <InputText
+                name={formikHelpers.fieldNames.winningPrice}
+                label={formikHelpers.fieldNames.winningPrice}
+              />
 
-            <InputText
-              label={formikHelpers.fieldNames.winningPrice}
-              onChangeText={handleChange(formikHelpers.fieldNames.winningPrice)}
-              value={values[formikHelpers.fieldNames.winningPrice] + ''}
-            />
-            {errors[formikHelpers.fieldNames.winningPrice] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.winningPrice]}</Text>
-            )}
+              <InputText
+                name={formikHelpers.fieldNames.participatingPrice}
+                label={formikHelpers.fieldNames.participatingPrice}
+              />
 
-            <InputText
-              label={formikHelpers.fieldNames.participatingPrice}
-              onChangeText={handleChange(formikHelpers.fieldNames.participatingPrice)}
-              value={values[formikHelpers.fieldNames.participatingPrice] + ''}
-            />
-            {errors[formikHelpers.fieldNames.participatingPrice] && (
-              <Text style={styles.errorText}>
-                {errors[formikHelpers.fieldNames.participatingPrice]}
-              </Text>
-            )}
+              <InputText
+                editable={false}
+                name={formikHelpers.fieldNames.profitMargin}
+                label={formikHelpers.fieldNames.profitMargin}
+              />
 
-            <InputText
-              editable={false}
-              label={formikHelpers.fieldNames.profitMargin}
-              // onChangeText={handleChange}
-              value={values[formikHelpers.fieldNames.profitMargin] + ''}
-            />
-            {errors[formikHelpers.fieldNames.profitMargin] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.profitMargin]}</Text>
-            )}
+              <InputText
+                multiline
+                numberOfLines={5}
+                name={formikHelpers.fieldNames.description}
+                label={formikHelpers.fieldNames.description}
+                style={styles.multilineText}
+              />
 
-            <InputText
-              multiline
-              label={formikHelpers.fieldNames.description}
-              value={values[formikHelpers.fieldNames.description]}
-              onChangeText={handleChange(formikHelpers.fieldNames.description)}
-              style={styles.multilineText}
-            />
-            {errors[formikHelpers.fieldNames.description] && (
-              <Text style={styles.errorText}>{errors[formikHelpers.fieldNames.description]}</Text>
-            )}
-
-            <View style={styles.header}>
-              <Text>Create a new vlam and start earing </Text>
-              <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-                learn more
-              </Text>
+              <PrimaryButton icon="account" onPress={handleSubmit} style={styles.submitButton}>
+                post
+              </PrimaryButton>
             </View>
-            <PrimaryButton icon="account" onPress={handleSubmit} style={styles.submitButton}>
-              post
-            </PrimaryButton>
           </View>
         )}
       </Formik>
@@ -150,10 +128,14 @@ const styles = StyleSheet.create({
   item: {
     width: theme.spacing(22),
   },
-
+  submitButton: {
+    paddingVertical: theme.spacing(0.8),
+  },
   multilineText: {
     textAlign: 'justify',
-    paddingVertical: theme.spacing(1),
+    paddingHorizontal: theme.spacing(0.5),
+    marginVertical: theme.spacing(0.5),
+    height: theme.spacing(10),
   },
 
   dividersContainer: {
@@ -184,5 +166,11 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing(1),
     width: '100%',
     alignSelf: 'center',
+  },
+
+  formContentContainer: {
+    flexDirection: 'column',
+    paddingHorizontal: theme.spacing(1),
+    minHeight: '100%',
   },
 });

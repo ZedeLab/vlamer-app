@@ -3,20 +3,16 @@ import theme from '../../../utils/theme';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: theme.spacing(1),
+    backgroundColor: 'red',
   },
-  inner: {
-    padding: 24,
-    flex: 1,
-    justifyContent: 'space-around',
-  },
+
   textInput: {
-    padding: theme.spacing(0.5),
-    backgroundColor: theme.colors.paper,
+    height: theme.spacing(4.5),
+    backgroundColor: theme.colors.common,
     marginBottom: theme.spacing(1),
     borderColor: 'transparent',
     borderWidth: theme.spacing(0.01),
-    borderRadius: theme.spacing(0.5),
+    borderRadius: theme.spacing(1),
     fontSize: theme.spacing(0.8),
     fontFamily: 'openSans',
   },
@@ -26,5 +22,11 @@ export const styles = StyleSheet.create({
     letterSpacing: theme.spacing(0.1),
     fontSize: theme.spacing(0.8),
     fontFamily: 'openSans',
+  },
+
+  errorText: {
+    fontSize: theme.spacing(0.8),
+    color: theme.colors.error,
+    alignSelf: 'center',
   },
 });

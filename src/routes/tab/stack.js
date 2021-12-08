@@ -10,9 +10,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import theme from '../../utils/theme';
-import { AvatarIcon, TabBarIcon } from '../../components/common/icons';
-import { UserProfileScreen } from '../../components/screens';
-import ProfileViewHeader from '../../components/sections/profileViewHeader';
+import { AvatarIcon, TabBarIcon, TabBarNotificationIcon } from '../../components/common/icons';
 import { useAuth } from '../../services/auth';
 
 const TabStack = createMaterialBottomTabNavigator();
@@ -65,7 +63,11 @@ export default TabStackScreen = () => {
         options={{
           tabBarLabel: 'Notification',
           tabBarIcon: (iconProps) => (
-            <TabBarIcon iconName="notifications" style={styles.barIcon} {...iconProps} />
+            <TabBarNotificationIcon
+              iconName="notifications"
+              style={styles.barIcon}
+              {...iconProps}
+            />
           ),
         }}
         name="Notification"

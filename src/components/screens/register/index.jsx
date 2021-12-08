@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  ScrollView,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { styles } from './styles';
@@ -29,7 +30,7 @@ class Register extends Component {
   render() {
     return (
       <FullscreenAux>
-        <View style={styles.container}>
+        <View style={styles.animContainer}>
           <LottieAnimation
             src={require('../../../../assets/lottie/bot2.json')}
             loadFallBack={{
@@ -38,12 +39,10 @@ class Register extends Component {
             }}
             style={styles.botAnim}
           />
-          <KeyboardAvoidingView behavior="position">
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <RegisterForm navigation={this.props.navigation} />
-            </TouchableWithoutFeedback>
-          </KeyboardAvoidingView>
         </View>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <RegisterForm navigation={this.props.navigation} />
+        </ScrollView>
       </FullscreenAux>
     );
   }
