@@ -73,22 +73,7 @@ export const ChatProvider = ({ children }) => {
         return item;
       })
       .sort((a, b) => a.lastMessageDate < b.lastMessageDate);
-
     return _.uniqBy(result, (item) => item.id);
-  };
-
-  const fetchChats = async () => {
-    const { data, error } = await getUserChats(user);
-    if (data) {
-      setChats(data);
-    } else {
-      dispatch(
-        notifyError({
-          type: 'chat',
-          message: "Couldn't load messages. Please try again",
-        })
-      );
-    }
   };
 
   const initiateChatRoom = async (chatData) => {
@@ -124,7 +109,6 @@ export const ChatProvider = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
-        fetchChats,
         chats,
         messages,
         initiateChat: initiateChatRoom,

@@ -177,28 +177,6 @@ export const createChatRoom = async (user, message, data) => {
   }
 };
 
-/******************************************/
-
-/*****  Functions to fetch user chats*****/
-
-export const getUserChats = async (user) => {
-  const db = getFirestore(firebaseApp);
-
-  try {
-    let userChatIds = await getUserChatIds(user.id);
-    let chats = [];
-    for (const id of userChatIds) {
-      const result = await fetchChatById(user, id);
-      chats.push(result);
-    }
-    chats = chats.sort((a, b) => a.lastMessageDate < b.lastMessageDate);
-    return { data: chats, error: null };
-  } catch (error) {
-    console.log(error);
-    return { data: null, error };
-  }
-};
-
 export const getUserChatIds = async (userId) => {
   const db = getFirestore(firebaseApp);
   const userRef = doc(db, 'users', userId);

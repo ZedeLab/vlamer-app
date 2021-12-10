@@ -6,24 +6,17 @@ import MessageCard from '../../sections/messageCard';
 import { Searchbar } from 'react-native-paper';
 import { useChat } from '../../../services/chat';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import UserListModal from './userListModal';
 
 export default () => {
   const [showSearch, toggleSearch] = useState(false);
-  const { chats, fetchChats } = useChat();
-
-  // useEffect(() => {
-  //   const getAllChats = async () => {
-  //     if (!chats.length) {
-  //       await fetchChats();
-  //     }
-  //   };
-  //   getAllChats();
-  // }, []);
+  const [showUserListModal, toggleModal] = useState(true);
+  const { chats } = useChat();
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
-        <ChatListHeader showSearch={showSearch} toggleSearch={toggleSearch} />
+        <ChatListHeader showSearch={showSearch} onNewMessageButtonClick={toggleModal} />
         {showSearch && (
           <Searchbar placeholder="Search..." style={{ paddingLeft: 8, shadowOpacity: 0.04 }} />
         )}
@@ -37,6 +30,7 @@ export default () => {
             showsVerticalScrollIndicator={false}
           />
         </View>
+        {showUserListModal && <UserListModal />}
       </SafeAreaView>
     </View>
   );
