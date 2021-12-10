@@ -124,6 +124,8 @@ function useProvideUserConnections() {
     );
   };
 
+  const getAcceptedConnections = () => {};
+
   const totalNumberOfUsersFollowing = (currentUserId) => {
     return currentUserConnections.filter((userConnection) => {
       return (
@@ -195,5 +197,6 @@ function useProvideUserConnections() {
     hasUserPendingUserConnection,
     hasUserPendingSentRequests,
     hasUserPendingReceivedRequests,
+    currentUserConnections,
   };
 }

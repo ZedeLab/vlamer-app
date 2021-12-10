@@ -16,11 +16,12 @@ export const styles = StyleSheet.create({
     paddingTop: '0%',
   },
 
-  modal: {},
+  modal: {
+    ...theme.shadows[5],
+  },
   modalContent: {
     position: 'absolute',
     bottom: 0,
-    padding: 12,
     width: '100%',
     height: '94%',
     backgroundColor: theme.colors.common,
@@ -28,12 +29,30 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,
   },
-  modalTitle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  modalHeader: {
+    padding: 12,
+    width: '100%',
+    paddingLeft: 16,
+    backgroundColor: '#e8efee',
   },
 
-  modalTitleText: {
-    flex: 1,
+  modalHeaderTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+
+  modalTitle: {
+    marginLeft: -12,
+    fontFamily: 'openSans-bold',
+    fontSize: 14,
+  },
+  searchbar: {
+    fontSize: 12,
+    borderRadius: 12,
+    marginTop: 12,
+    height: 36,
+    fontSize: 12,
+    shadowOpacity: 0,
   },
 });
