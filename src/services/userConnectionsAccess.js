@@ -124,7 +124,11 @@ function useProvideUserConnections() {
     );
   };
 
-  const getAcceptedConnections = () => {};
+  const getFullConnections = (user) => {
+    return currentUserConnections.filter(
+      (userConnection) => userConnection.status === ConnectionTypes.status.ACCEPTED
+    );
+  };
 
   const totalNumberOfUsersFollowing = (currentUserId) => {
     return currentUserConnections.filter((userConnection) => {
@@ -197,6 +201,6 @@ function useProvideUserConnections() {
     hasUserPendingUserConnection,
     hasUserPendingSentRequests,
     hasUserPendingReceivedRequests,
-    currentUserConnections,
+    getFullConnections,
   };
 }

@@ -55,4 +55,15 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     shadowOpacity: 0,
   },
+  user: {
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+    borderBottomWidth: 0.4,
+    borderColor: 'rgba(0, 0, 0, .13)',
+  },
+  name: {
+    marginLeft: 12,
+  },
 });

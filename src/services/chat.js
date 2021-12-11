@@ -22,44 +22,46 @@ export const ChatProvider = ({ children }) => {
   const dispatch = useDispatch();
   const [chats, setChats] = useState([]);
 
-  useEffect(async () => {
+  useEffect(() => {
     let unsubscribe = null;
-    const { data, error } = await checkForIncomingMessages(user.id);
+    const listenToMessages = async () => {
+      const { data, error } = await checkForIncomingMessages(user.id);
 
-    if (data) {
-      const { eventHandler, docRef } = data;
-      let allChats = [];
-      let modifiedChat = {};
-      unsubscribe = eventHandler(docRef, (querySnapshot) => {
-        querySnapshot.docChanges().forEach(async (change) => {
-          let chat = change.doc.data();
-          if (chat) {
+      if (data) {
+        const { eventHandler, docRef } = data;
+        let allChats = [];
+        let modifiedChat = {};
+        unsubscribe = eventHandler(docRef, (querySnapshot) => {
+          querySnapshot.docChanges().forEach(async (change) => {
+            let chat = change.doc.data();
+            if (chat) {
+              const receiverId = await getSenderId(user, chat);
+              const messageReceiverProfile = await getMessageReceiverData(receiverId);
+              modifiedChat = { ...change.doc.data(), receiver: messageReceiverProfile };
+              if (chat.lastMessageSender !== user.id) {
+                setMessages([
+                  ...messages,
+                  {
+                    createdAt: chat.lastMessageDate,
+                    message: chat.lastMessage,
+                    id: chat.lastMessageId,
+                    senderId: chat.lastMessageSender,
+                  },
+                ]);
+              }
+            }
+          });
+          querySnapshot.docs.forEach(async (doc) => {
+            let chat = doc.data();
             const receiverId = await getSenderId(user, chat);
             const messageReceiverProfile = await getMessageReceiverData(receiverId);
-            modifiedChat = { ...change.doc.data(), receiver: messageReceiverProfile };
-            if (chat.lastMessageSender !== user.id) {
-              setMessages([
-                ...messages,
-                {
-                  createdAt: chat.lastMessageDate,
-                  message: chat.lastMessage,
-                  id: chat.lastMessageId,
-                  senderId: chat.lastMessageSender,
-                },
-              ]);
-            }
-          }
+            allChats.push({ ...chat, receiver: messageReceiverProfile });
+            const result = await cleanUpChatsArray(allChats, modifiedChat);
+            setChats(result);
+          });
         });
-        querySnapshot.docs.forEach(async (doc) => {
-          let chat = doc.data();
-          const receiverId = await getSenderId(user, chat);
-          const messageReceiverProfile = await getMessageReceiverData(receiverId);
-          allChats.push({ ...chat, receiver: messageReceiverProfile });
-          const result = await cleanUpChatsArray(allChats, modifiedChat);
-          setChats(result);
-        });
-      });
-    }
+      }
+    };
     listenToMessages();
     return () => {
       unsubscribe && unsubscribe();
