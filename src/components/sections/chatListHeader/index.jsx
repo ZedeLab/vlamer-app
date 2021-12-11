@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, FontAwesome } from '@expo/vector-icons';
 import { styles } from './styles';
 import { useNavigation } from '@react-navigation/native';
 
-const ChatListHeader = () => {
+const ChatListHeader = ({ onNewMessageButtonClick }) => {
   const { goBack } = useNavigation();
   return (
     <View style={styles.container}>
@@ -12,8 +12,8 @@ const ChatListHeader = () => {
         <Feather name="chevron-left" size={26} color="black" />
       </TouchableOpacity>
       <Text style={styles.title}>Chats</Text>
-      <TouchableOpacity onPress={() => {}}>
-        <Feather name="search" size={22} color="black" />
+      <TouchableOpacity onPress={onNewMessageButtonClick}>
+        <FontAwesome name="pencil-square-o" size={22} color="black" />
       </TouchableOpacity>
     </View>
   );

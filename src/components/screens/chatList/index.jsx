@@ -6,27 +6,48 @@ import MessageCard from '../../sections/messageCard';
 import { Searchbar } from 'react-native-paper';
 import { useChat } from '../../../services/chat';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import UserListModal from './userListModal';
+import { useUserConnections } from '../../../services/userConnectionsAccess';
+import { useAuth } from '../../../services/auth';
 
 export default () => {
-  const [showSearch, toggleSearch] = useState(false);
-  const { chats, fetchChats } = useChat();
+  const [searchedUsers, setSearchedUsers] = useState([]);
+  const [allFollowers, setAllFollowers] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [showUserListModal, toggleModal] = useState(false);
+  const { getFullConnections } = useUserConnections();
+  const { user } = useAuth();
+  const { chats } = useChat();
 
-  // useEffect(() => {
-  //   const getAllChats = async () => {
-  //     if (!chats.length) {
-  //       await fetchChats();
-  //     }
-  //   };
-  //   getAllChats();
-  // }, []);
+  useEffect(() => {
+    const fetchConnections = async () => {
+      const acceptedUsers = getFullConnections(user);
+      setAllFollowers(acceptedUsers);
+      setSearchedUsers(acceptedUsers);
+    };
+    fetchConnections();
+  }, []);
+
+  const searchUser = (value) => {
+    setSearchText(value);
+    const users = allFollowers.filter((item) => {
+      const user = item.__eventOwnerAccountSnapshot;
+      const name = `${user.firstName} ${user.lastName}`;
+      return name.toLowerCase().includes(value.toLowerCase());
+    });
+    setSearchedUsers(users);
+  };
+
+  const closeModal = () => {
+    setSearchedUsers(allFollowers);
+    setSearchText('');
+    toggleModal();
+  };
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
-        <ChatListHeader showSearch={showSearch} toggleSearch={toggleSearch} />
-        {showSearch && (
-          <Searchbar placeholder="Search..." style={{ paddingLeft: 8, shadowOpacity: 0.04 }} />
-        )}
+        <ChatListHeader onNewMessageButtonClick={toggleModal} />
         <View style={styles.chatList}>
           <FlatList
             data={chats}
@@ -37,6 +58,15 @@ export default () => {
             showsVerticalScrollIndicator={false}
           />
         </View>
+        {showUserListModal && (
+          <UserListModal
+            searchText={searchText}
+            setSearchText={setSearchText}
+            searchUser={searchUser}
+            users={searchedUsers}
+            toggleModal={closeModal}
+          />
+        )}
       </SafeAreaView>
     </View>
   );

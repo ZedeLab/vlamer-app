@@ -24,16 +24,35 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(async () => {
     let unsubscribe = null;
-    const { data, error } = await checkForIncomingMessages(user.id);
+    const listenToMessages = async () => {
+      const { data, error } = await checkForIncomingMessages(user.id);
 
-    if (data) {
-      const { eventHandler, docRef } = data;
-      let allChats = [];
-      let modifiedChat = {};
-      unsubscribe = eventHandler(docRef, (querySnapshot) => {
-        querySnapshot.docChanges().forEach(async (change) => {
-          let chat = change.doc.data();
-          if (chat) {
+      if (data) {
+        const { eventHandler, docRef } = data;
+        let allChats = [];
+        let modifiedChat = {};
+        unsubscribe = eventHandler(docRef, (querySnapshot) => {
+          querySnapshot.docChanges().forEach(async (change) => {
+            let chat = change.doc.data();
+            if (chat) {
+              const receiverId = await getSenderId(user, chat);
+              const messageReceiverProfile = await getMessageReceiverData(receiverId);
+              modifiedChat = { ...change.doc.data(), receiver: messageReceiverProfile };
+              if (chat.lastMessageSender !== user.id) {
+                setMessages([
+                  ...messages,
+                  {
+                    createdAt: chat.lastMessageDate,
+                    message: chat.lastMessage,
+                    id: chat.lastMessageId,
+                    senderId: chat.lastMessageSender,
+                  },
+                ]);
+              }
+            }
+          });
+          querySnapshot.docs.forEach(async (doc) => {
+            let chat = doc.data();
             const receiverId = await getSenderId(user, chat);
             const messageReceiverProfile = await getMessageReceiverData(receiverId);
             modifiedChat = { ...change.doc.data(), receiver: messageReceiverProfile };
@@ -73,22 +92,7 @@ export const ChatProvider = ({ children }) => {
         return item;
       })
       .sort((a, b) => a.lastMessageDate < b.lastMessageDate);
-
     return _.uniqBy(result, (item) => item.id);
-  };
-
-  const fetchChats = async () => {
-    const { data, error } = await getUserChats(user);
-    if (data) {
-      setChats(data);
-    } else {
-      dispatch(
-        notifyError({
-          type: 'chat',
-          message: "Couldn't load messages. Please try again",
-        })
-      );
-    }
   };
 
   const initiateChatRoom = async (chatData) => {
@@ -124,7 +128,6 @@ export const ChatProvider = ({ children }) => {
   return (
     <ChatContext.Provider
       value={{
-        fetchChats,
         chats,
         messages,
         initiateChat: initiateChatRoom,
