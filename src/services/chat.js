@@ -67,18 +67,19 @@ export const ChatProvider = ({ children }) => {
                 },
               ]);
             }
-          }
+          });
+          querySnapshot.docs.forEach(async (doc) => {
+            let chat = doc.data();
+            const receiverId = await getSenderId(user, chat);
+            const messageReceiverProfile = await getMessageReceiverData(receiverId);
+            allChats.push({ ...chat, receiver: messageReceiverProfile });
+            const result = await cleanUpChatsArray(allChats, modifiedChat);
+            setChats(result);
+          });
         });
-        querySnapshot.docs.forEach(async (doc) => {
-          let chat = doc.data();
-          const receiverId = await getSenderId(user, chat);
-          const messageReceiverProfile = await getMessageReceiverData(receiverId);
-          allChats.push({ ...chat, receiver: messageReceiverProfile });
-          const result = await cleanUpChatsArray(allChats, modifiedChat);
-          setChats(result);
-        });
-      });
-    }
+      }
+    };
+
     listenToMessages();
     return () => {
       unsubscribe && unsubscribe();
