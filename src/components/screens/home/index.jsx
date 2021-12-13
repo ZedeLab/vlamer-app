@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { selectActors } from '../../../store/actors';
 import { LottieIcon } from '../../common/animations';
 import { useAuth } from '../../../services/auth';
+import CommentModal from './commentModal';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
 
@@ -18,6 +19,9 @@ export default Home = () => {
   const [loadMoreVlams, setLoadMoreVlams] = useState(false);
   const navigation = useNavigation();
   const actors = useSelector(selectActors);
+  const [showCommentModal, toggleModal] = useState(false);
+  //for comment
+  const [focusedVlam, setFocusedVlam] = useState(null);
 
   if (!user || !actors.currentUserFeedList) {
     return <Text>Loading...</Text>;
@@ -28,6 +32,10 @@ export default Home = () => {
       <VlamPosts
         key={item.id}
         id={item.id}
+        onCommentClick={() => {
+          setFocusedVlam(item);
+          toggleModal(!showCommentModal);
+        }}
         likes={item.likes}
         likeIds={item.likeUsersIds}
         totalLikes={item.totalNumberOfLikes}
@@ -63,6 +71,7 @@ export default Home = () => {
           style={styles.iconBig}
         />
       )}
+      {showCommentModal && <CommentModal vlam={focusedVlam} toggleModal={toggleModal} />}
     </PageAux>
   );
 };
