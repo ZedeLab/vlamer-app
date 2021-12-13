@@ -14,6 +14,37 @@ import { getUserById } from '../../../db/queries/user';
 import { useNotificationsAccess } from '../../../services/notification';
 import { Notification, NotificationTypes } from '../../../db/models/notification';
 
+export const VlamMainSection = ({ data }) => {
+  const { winingPrice, numberOfParticipants } = data;
+  return (
+    <View style={styles.mainSection}>
+      <TouchableWithoutFeedback>
+        <View>
+          <View style={styles.row}>
+            <LottieIcon
+              autoPlay={true}
+              loop={false}
+              src={require('../../../../assets/lottie/gift.json')}
+              style={styles.iconBig}
+            />
+            <Text style={{ ...styles.status, ...styles.greenText }}>{winingPrice} coins</Text>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback>
+        <View>
+          <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
+            New starting
+          </Text>
+          <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
+            {numberOfParticipants} remaining
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
+};
+
 const VlamPostCard = (props) => {
   const {
     id,
@@ -27,6 +58,7 @@ const VlamPostCard = (props) => {
     numberOfParticipants,
     participatingPrice,
     winingPrice,
+    onCommentClick,
     likeIds,
     ...restProps
   } = props;
@@ -100,31 +132,7 @@ const VlamPostCard = (props) => {
       <View style={styles.messageContainer}>
         <Paragraph style={{ ...styles.text, ...styles.message }}>{message}</Paragraph>
       </View>
-      <View style={styles.mainSection}>
-        <TouchableWithoutFeedback>
-          <View>
-            <View style={styles.row}>
-              <LottieIcon
-                autoPlay={true}
-                loop={false}
-                src={require('../../../../assets/lottie/gift.json')}
-                style={styles.iconBig}
-              />
-              <Text style={{ ...styles.status, ...styles.greenText }}>{winingPrice} coins</Text>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
-          <View>
-            <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
-              New starting
-            </Text>
-            <Text style={{ ...styles.text, ...styles.greyText, ...styles.redText }}>
-              {numberOfParticipants} remaining
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+      <VlamMainSection data={props} />
       <Divider style={styles.divider} />
       <View style={styles.mainSection}>
         <TouchableWithoutFeedback>
@@ -172,7 +180,7 @@ const VlamPostCard = (props) => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onCommentClick}>
             <View style={styles.row}>
               <LottieIcon
                 autoPlay={true}
