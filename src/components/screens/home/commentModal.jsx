@@ -2,17 +2,35 @@ import React, { useState } from 'react';
 import { styles } from './styles';
 import { Modal, View, TextInput } from 'react-native';
 import { Avatar, Button, Divider, Searchbar, Text } from 'react-native-paper';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useAuth } from '../../../services/auth';
-import { AvatarIcon } from '../../common/icons';
-import { formatTime } from '../../../utils/timeManager';
 import { VlamMainSection } from '../../sections/cards/VlamPostCard';
+import { createComment } from '../../../db/queries/vlam/comments';
+import { IN_APP_NOTIFICATION_TYPES, useToast } from '../../../services/toast';
 
 const CommentModal = ({ vlam, toggleModal }) => {
   const [comment, setComment] = useState('');
   const { user } = useAuth();
-  const { navigate } = useNavigation();
+  const { toast } = useToast();
+
+  const sendReply = async () => {
+    const { data, error } = await createComment(vlam, comment, user);
+    if (data) {
+      setComment('');
+      toggleModal();
+      toast.show({
+        show: true,
+        message: 'Comment sent',
+        type: IN_APP_NOTIFICATION_TYPES.SUCCESS,
+      });
+    } else {
+      toast.show({
+        show: true,
+        message: 'Something went wrong, Please try again.',
+        type: IN_APP_NOTIFICATION_TYPES.FAILURE,
+      });
+    }
+  };
 
   const vlamOwner = vlam.__ownerAccountSnapShot;
   return (
@@ -22,8 +40,12 @@ const CommentModal = ({ vlam, toggleModal }) => {
           <TouchableOpacity onPress={toggleModal}>
             <Text style={styles.cancel}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Button labelStyle={styles.buttonTextStyle} style={styles.replyButton}>
+          <TouchableOpacity onPress={sendReply}>
+            <Button
+              disabled={comment.length > 0}
+              labelStyle={styles.buttonTextStyle}
+              style={styles.replyButton}
+            >
               Reply
             </Button>
           </TouchableOpacity>
@@ -77,8 +99,8 @@ const CommentModal = ({ vlam, toggleModal }) => {
             activeUnderlineColor="transparent"
             multiline
             value={comment}
-            onChangeText={({ value }) => {
-              [setComment(value)];
+            onChangeText={(value) => {
+              setComment(value);
             }}
           />
         </View>

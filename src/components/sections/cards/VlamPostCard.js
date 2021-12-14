@@ -53,6 +53,7 @@ const VlamPostCard = (props) => {
     createdAt,
     vlamType,
     totalLikes,
+    totalComments,
     message,
     navigation,
     numberOfParticipants,
@@ -188,7 +189,7 @@ const VlamPostCard = (props) => {
                 src={require('../../../../assets/lottie/comment.json')}
                 style={styles.icon_small}
               />
-              <Text style={{ ...styles.text, ...styles.greyText }}>0 comments</Text>
+              <Text style={{ ...styles.text, ...styles.greyText }}>{totalComments} Comments</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>

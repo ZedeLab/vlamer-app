@@ -11,6 +11,7 @@ export class Comment {
     try {
       this.data = await object({
         id: string().uuid().default(uuid()),
+        vlamId: string().uuid(),
         comment: string().required(),
         createdAt: date().default(function () {
           return new Date();
@@ -29,8 +30,8 @@ export class Comment {
     return this.data;
   }
 
-  static getDefaultMessageValue(user) {
-    const { id, username, firstName, lastName, avatarUrl } = user;
+  static getDefaultCommentValues(user) {
+    const { id, username, firstName, lastName, avatarURL } = user;
     return {
       id: uuid(),
       createdAt: new Date(),
@@ -39,7 +40,7 @@ export class Comment {
         username,
         firstName,
         lastName,
-        avatarUrl,
+        avatarURL,
       },
     };
   }
