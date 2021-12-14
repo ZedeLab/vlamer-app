@@ -12,6 +12,8 @@ import { LikesAccessProvider } from '../../services/likesAccess';
 import { CurrentUserVlamListProvider } from '../../services/userVlamListAccess';
 import { UserConnectionProvider } from '../../services/userConnectionsAccess';
 import { NotificationsAccessProvider } from '../../services/notification';
+import ToastProvider from '../../services/toast';
+import Toast from './Toast';
 
 export const ServicesProviderWrapper = (props) => {
   const { children } = props;
@@ -20,21 +22,26 @@ export const ServicesProviderWrapper = (props) => {
     <StaticDataProvider>
       <StateProvider store={store}>
         <PageProvider theme={theme}>
-          <AuthProvider>
-            <NotificationsAccessProvider>
-              <ChatProvider>
-                <UserConnectionProvider>
-                  <VoltAccessProvider>
-                    <FeedsVlamListProvider>
-                      <CurrentUserVlamListProvider>
-                        <LikesAccessProvider>{children}</LikesAccessProvider>
-                      </CurrentUserVlamListProvider>
-                    </FeedsVlamListProvider>
-                  </VoltAccessProvider>
-                </UserConnectionProvider>
-              </ChatProvider>
-            </NotificationsAccessProvider>
-          </AuthProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <NotificationsAccessProvider>
+                <ChatProvider>
+                  <UserConnectionProvider>
+                    <VoltAccessProvider>
+                      <FeedsVlamListProvider>
+                        <CurrentUserVlamListProvider>
+                          <LikesAccessProvider>
+                            {children}
+                            <Toast />
+                          </LikesAccessProvider>
+                        </CurrentUserVlamListProvider>
+                      </FeedsVlamListProvider>
+                    </VoltAccessProvider>
+                  </UserConnectionProvider>
+                </ChatProvider>
+              </NotificationsAccessProvider>
+            </AuthProvider>
+          </ToastProvider>
         </PageProvider>
       </StateProvider>
     </StaticDataProvider>

@@ -19,6 +19,7 @@ const renderVlamList = () => {
   return (
     <View>
       {profileVlamList.map((item) => {
+        console.log(item);
         return (
           <VlamPosts
             key={item.id}
@@ -34,6 +35,7 @@ const renderVlamList = () => {
             winingPrice={item.winingPrice}
             createdAt={item.createdAt}
             navigation={navigation}
+            totalComments={item.totalNumberOfComments}
           />
         );
       })}

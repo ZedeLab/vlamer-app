@@ -37,6 +37,7 @@ export default Home = () => {
           toggleModal(!showCommentModal);
         }}
         likes={item.likes}
+        totalComments={item.totalNumberOfComments}
         likeIds={item.likeUsersIds}
         totalLikes={item.totalNumberOfLikes}
         authorAccount={item.__ownerAccountSnapShot}

@@ -20,6 +20,7 @@ const renderVlamList = () => {
   return (
     <View>
       {actors.currentUserVlamList.map((item) => {
+        console.log(item);
         return (
           <VlamPosts
             key={item.id}
@@ -30,6 +31,7 @@ const renderVlamList = () => {
             likes={item.likes}
             message={item.message}
             totalLikes={item.totalNumberOfLikes}
+            totalComments={item.totalNumberOfComments}
             numberOfParticipants={item.numberOfParticipants}
             participatingPrice={item.participatingPrice}
             winingPrice={item.winingPrice}
